@@ -51,7 +51,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 }),
             IconButton(
               icon: SvgPicture.asset(
-                "assets/icons/clipboard.svg",
+                "assets/icons/user-data.svg",
                 width: 30,
                 height: 30,
                 color: inActiveIconColor,
@@ -60,7 +60,7 @@ class CustomBottomNavBar extends StatelessWidget {
             ),
             IconButton(
               icon: SvgPicture.asset(
-                "assets/icons/registration-form.svg",
+                "assets/icons/copy.svg",
                 width: 30,
                 height: 30,
                 color: MenuState.mom == selectedMenu
