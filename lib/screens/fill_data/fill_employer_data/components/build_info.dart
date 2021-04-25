@@ -41,7 +41,7 @@ class BuildPersonalInfoPage extends StatelessWidget {
                 ),
                 FillEmployerForm(),
                 SizedBox(
-                  height: getProportionateScreenWidth(20),
+                  height: getProportionateScreenWidth(30),
                 ),
                 Row(
                   children: [
@@ -65,7 +65,7 @@ class BuildPersonalInfoPage extends StatelessWidget {
                 ),
                 BuildSpouseForm(),
                 SizedBox(
-                  height: getProportionateScreenWidth(20),
+                  height: getProportionateScreenWidth(30),
                 ),
                 Row(
                   children: [

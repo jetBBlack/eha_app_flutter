@@ -1,4 +1,4 @@
-import 'package:eha_app/screens/sign_up/sign_up_screen.dart';
+import 'package:eha_app/screens/sign_up/ask_screen.dart';
 import 'package:flutter/material.dart';
 import '../constant.dart';
 import '../size_config.dart';
@@ -18,7 +18,7 @@ class NoAccountText extends StatelessWidget {
           style: TextStyle(fontSize: getProportionateScreenWidth(16)),
         ),
         GestureDetector(
-          onTap: () => Navigator.pushNamed(context, SignUpScreen.routeName),
+          onTap: () => Navigator.pushNamed(context, AskScreen.routeName),
           child: Text(
             "Sign Up",
             style: TextStyle(

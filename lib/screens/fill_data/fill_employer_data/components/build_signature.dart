@@ -1,4 +1,5 @@
 import 'package:eha_app/size_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
 
@@ -12,14 +13,12 @@ class _BuildSignaturePageState extends State<BuildSignaturePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    controller = SignatureController(penColor: Colors.white, penStrokeWidth: 6);
+    controller = SignatureController(penColor: Colors.black, penStrokeWidth: 5);
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -35,10 +34,12 @@ class _BuildSignaturePageState extends State<BuildSignaturePage> {
             height: 420,
             width: 370,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15), color: Colors.black),
+                borderRadius: BorderRadius.circular(15),
+                color: Colors.white,
+                border: Border.all(color: Colors.black)),
             child: Signature(
               controller: controller,
-              backgroundColor: Colors.black,
+              backgroundColor: Colors.white,
               height: 400,
               width: 350,
             ),
@@ -74,7 +75,7 @@ class _BuildSignaturePageState extends State<BuildSignaturePage> {
   Widget buildCheck(BuildContext context) {
     return IconButton(
         icon: Icon(
-          Icons.clear,
+          CupertinoIcons.clear_thick,
           color: Colors.red,
         ),
         onPressed: () => controller.clear());

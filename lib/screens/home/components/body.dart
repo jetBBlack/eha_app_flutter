@@ -8,7 +8,7 @@ class Body extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: SizeConfig.screenHeight * .45,
+          height: SizeConfig.screenHeight * .40,
           decoration: BoxDecoration(
             color: Color(0xFFF5CEB8),
             image: DecorationImage(
@@ -24,7 +24,7 @@ class Body extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: getProportionateScreenWidth(30),
+                  height: getProportionateScreenWidth(20),
                 ),
                 Text(
                   "We provide domestic helper \nservice",
@@ -34,7 +34,7 @@ class Body extends StatelessWidget {
                       .copyWith(fontWeight: FontWeight.w900),
                 ),
                 SizedBox(
-                  height: getProportionateScreenWidth(20),
+                  height: getProportionateScreenWidth(35),
                 ),
                 Expanded(
                   child: GridView.count(

@@ -1,11 +1,12 @@
 import 'package:eha_app/components/custom_label_container.dart';
 import 'package:eha_app/components/custom_surffix_icon.dart';
 import 'package:eha_app/components/default_button.dart';
-import 'package:eha_app/screens/complete_profile/complete_profile_1.dart';
+import 'package:eha_app/screens/sign_up/complete_profile/avator.dart';
+
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constant.dart';
+import '../../../../constant.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -78,10 +79,10 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
             height: getProportionateScreenWidth(25),
           ),
           buildPhoneNumberFormField(),
-          SizedBox(
-            height: getProportionateScreenWidth(25),
-          ),
-          builGenderContainer(),
+          // SizedBox(
+          //   height: getProportionateScreenWidth(25),
+          // ),
+          // builGenderContainer(),
           SizedBox(
             height: getProportionateScreenWidth(40),
           ),
@@ -89,7 +90,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
             text: "Continue",
             press: () {
               if (_formKey.currentState.validate()) {
-                Navigator.pushNamed(context, CompleteProfileScreen1.routeName);
+                Navigator.pushNamed(context, AvatorScreen.routeName);
               }
             },
           )

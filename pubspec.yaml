@@ -26,6 +26,11 @@ dependencies:
   
   flutter_svg: ^0.19.1
   signature: ^3.2.1
+  dropdownfield: ^1.0.3
+  http: ^0.13.1
+  provider: ^4.3.3
+  fluttertoast: ^7.1.8
+ 
   
   
 

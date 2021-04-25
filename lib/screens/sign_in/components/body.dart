@@ -20,16 +20,13 @@ class Body extends StatelessWidget {
                   height: SizeConfig.screenHeight * 0.04,
                 ),
                 Text(
-                  'Welcome Back',
+                  'Welcome to EHA',
                   style: TextStyle(
                       fontSize: getProportionateScreenWidth(28),
                       color: Colors.black,
                       fontWeight: FontWeight.bold),
                 ),
-                Text(
-                  "Sign in with your email and password  \nor continue with social media",
-                  textAlign: TextAlign.center,
-                ),
+               
                 SizedBox(height: SizeConfig.screenHeight * 0.07),
                 SignForm(),
                 SizedBox(height: SizeConfig.screenHeight * 0.07),

@@ -1,4 +1,4 @@
-import 'package:eha_app/model/employer.dart';
+import 'package:eha_app/models/employer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../size_config.dart';

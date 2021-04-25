@@ -1,9 +1,14 @@
 import 'package:eha_app/components/custom_surffix_icon.dart';
 import 'package:eha_app/components/default_button.dart';
 import 'package:eha_app/components/form_error.dart';
+import 'package:eha_app/models/login_model.dart';
+import 'package:eha_app/providers/auth.dart';
 import 'package:eha_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import 'package:provider/provider.dart';
 
 import '../../../constant.dart';
 import '../../../size_config.dart';
@@ -16,12 +21,67 @@ class SignForm extends StatefulWidget {
 class _SignFormState extends State<SignForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
-  String email;
-  String password;
-  bool remember = false;
+  LoginRequestModel loginRequestModel;
+
+  @override
+  void initState() {
+    super.initState();
+    loginRequestModel = new LoginRequestModel();
+  }
+
+  void addError({String error}) {
+    if (!errors.contains(error))
+      setState(() {
+        errors.add(error);
+      });
+  }
+
+  void removeError({String error}) {
+    if (errors.contains(error))
+      setState(() {
+        errors.remove(error);
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider auth = Provider.of<AuthProvider>(context);
+
+    var loading = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CircularProgressIndicator(),
+        Text(" Authenticating ... Please wait")
+      ],
+    );
+
+    var doLogin = () {
+      final form = _formKey.currentState;
+
+      if (form.validate()) {
+        form.save();
+
+        final Future<Map<String, dynamic>> successfulMessgae =
+            auth.login(loginRequestModel.email, loginRequestModel.password);
+        successfulMessgae.then((response) {
+          if (response['status']) {
+            Fluttertoast.showToast(
+              msg: "Login Succesfull",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+            );
+            Navigator.pushNamed(context, HomeScreen.routeName);
+          } else {
+            Fluttertoast.showToast(
+              msg: "Login Failed",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+            );
+          }
+        });
+      }
+    };
+
     return Form(
       key: _formKey,
       child: Column(
@@ -34,15 +94,7 @@ class _SignFormState extends State<SignForm> {
           ),
           Row(
             children: [
-              Checkbox(
-                  value: remember,
-                  activeColor: kPrimaryColor,
-                  onChanged: (value) {
-                    setState(() {
-                      remember = value;
-                    });
-                  }),
-              Text('Remember me'),
+              Spacer(),
               Spacer(),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(
@@ -63,15 +115,14 @@ class _SignFormState extends State<SignForm> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          DefaultButton(
-            text: "Continue",
-            press: () {
-              if (_formKey.currentState.validate()) {
-                _formKey.currentState.save();
-                Navigator.pushNamed(context, HomeScreen.routeName);
-              }
-            },
-          )
+          auth.loggedInStatus == Status.Authenticating
+              ? loading
+              : DefaultButton(
+                  text: "Continue",
+                  press: () {
+                    doLogin();
+                  },
+                )
         ],
       ),
     );
@@ -79,29 +130,23 @@ class _SignFormState extends State<SignForm> {
 
   TextFormField buildPasswordTextFormField() {
     return TextFormField(
-      onSaved: (newValue) => password = newValue,
+      onSaved: (newValue) => loginRequestModel.password = newValue,
       obscureText: true,
       onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(kPassNullError)) {
-          setState(() {
-            errors.remove(kPassNullError);
-          });
-        } else if (value.length >= 8 && errors.contains(kShortPassError)) {
-          setState(() {
-            errors.remove(kShortPassError);
-          });
+        if (value.isNotEmpty) {
+          removeError(error: kPassNullError);
+        } else if (value.length >= 8) {
+          removeError(error: kShortPassError);
         }
         return null;
       },
       validator: (value) {
-        if (value.isEmpty && !errors.contains(kPassNullError)) {
-          setState(() {
-            errors.add(kPassNullError);
-          });
-        } else if (value.length < 8 && !errors.contains(kShortPassError)) {
-          setState(() {
-            errors.add(kShortPassError);
-          });
+        if (value.isEmpty) {
+          addError(error: kPassNullError);
+          return "";
+        } else if (value.length < 8) {
+          addError(error: kShortPassError);
+          return "";
         }
         return null;
       },
@@ -119,36 +164,23 @@ class _SignFormState extends State<SignForm> {
   TextFormField buildEmailTextFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      onSaved: (newValue) => loginRequestModel.email = newValue,
       onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(kEmailNullError)) {
-          setState(() {
-            errors.remove(kEmailNullError);
-          });
-        } else if (emailValidatorRegExp.hasMatch(value) &&
-            errors.contains(kInvalidEmailError)) {
-          setState(() {
-            errors.remove(kInvalidEmailError);
-          });
+        if (value.isNotEmpty) {
+          removeError(error: kEmailPhoneNullError);
         }
         return null;
       },
       validator: (value) {
-        if (value.isEmpty && !errors.contains(kEmailNullError)) {
-          setState(() {
-            errors.add(kEmailNullError);
-          });
-        } else if (!emailValidatorRegExp.hasMatch(value) &&
-            !errors.contains(kInvalidEmailError)) {
-          setState(() {
-            errors.add(kInvalidEmailError);
-          });
+        if (value.isEmpty) {
+          addError(error: kEmailPhoneNullError);
+          return "";
         }
         return null;
       },
       decoration: InputDecoration(
-        labelText: 'Email',
-        hintText: "Phone or Email",
+        labelText: "Email or Phone",
+        hintText: "Email or Phone",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
           svgIcon: "assets/icons/Mail.svg",

@@ -51,7 +51,7 @@ class CustomBottomNavBar extends StatelessWidget {
                 }),
             IconButton(
               icon: SvgPicture.asset(
-                "assets/icons/user-data.svg",
+                "assets/icons/share.svg",
                 width: 30,
                 height: 30,
                 color: inActiveIconColor,

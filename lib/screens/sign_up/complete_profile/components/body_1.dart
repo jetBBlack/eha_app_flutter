@@ -4,7 +4,7 @@ import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constant.dart';
+import '../../../../constant.dart';
 
 class Body1 extends StatelessWidget {
   @override
