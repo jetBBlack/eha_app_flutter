@@ -1,5 +1,3 @@
-import 'package:eha_app/components/custom_bottom_navbar.dart';
-import 'package:eha_app/enums.dart';
 import 'package:flutter/material.dart';
 
 import 'components/build_contact.dart';
@@ -48,9 +46,6 @@ class FillBioDataScreen extends StatelessWidget {
             BuildPictures(),
             BuildSettings(),
           ],
-        ),
-        bottomNavigationBar: CustomBottomNavBar(
-          selectedMenu: MenuState.mom,
         ),
       ),
     );

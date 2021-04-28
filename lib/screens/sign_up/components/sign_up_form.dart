@@ -2,7 +2,6 @@ import 'package:eha_app/components/custom_surffix_icon.dart';
 import 'package:eha_app/components/default_button.dart';
 import 'package:eha_app/components/form_error.dart';
 
-import 'package:eha_app/screens/sign_up/complete_profile/complete_profile.dart';
 import 'package:eha_app/screens/sign_up/phone_sign_up_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -48,6 +47,10 @@ class _SignUpFormState extends State<SignUpForm> {
       key: _formKey,
       child: Column(
         children: [
+          buildNameFormField(),
+          SizedBox(
+            height: getProportionateScreenHeight(20),
+          ),
           buildEmailFormField(),
           GestureDetector(
             onTap: () =>
@@ -76,12 +79,36 @@ class _SignUpFormState extends State<SignUpForm> {
           DefaultButton(
             text: "Continue",
             press: () {
-              if (_formKey.currentState.validate()) {
-                Navigator.pushNamed(context, CompleteProfileScreen.routeName);
-              }
+              if (_formKey.currentState.validate()) {}
             },
           ),
         ],
+      ),
+    );
+  }
+
+  TextFormField buildNameFormField() {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      onChanged: (value) {
+        if (value.isNotEmpty) {
+          removeError(error: kNameNullError);
+        }
+      },
+      validator: (value) {
+        if (value.isEmpty) {
+          addError(error: kNameNullError);
+          return "";
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        labelText: "Name",
+        hintText: "Enter your name",
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: CustomSurffixIcon(
+          svgIcon: "assets/icons/User.svg",
+        ),
       ),
     );
   }

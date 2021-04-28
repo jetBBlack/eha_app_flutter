@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "218239925121",
+    "project_id": "employerhelperproject",
+    "storage_bucket": "employerhelperproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:218239925121:android:34982e308e719daf1f0680",
+        "android_client_info": {
+          "package_name": "com.example.eha_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "218239925121-nht6ug779jg1qui3gtr6g1ci3u295fup.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eha_app",
+            "certificate_hash": "9d3d0598ae72921edcf95b3407d306af649846e3"
+          }
+        },
+        {
+          "client_id": "218239925121-t3iufuv2e33cmffm43heamt54b3ql7bj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eha_app",
+            "certificate_hash": "8a994d613a496be9f25afc5603d964034322ff07"
+          }
+        },
+        {
+          "client_id": "218239925121-ghv2t7450rrltdkcn9humpvuhg5s5bff.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNiemSeO0N0DtsnVBmd7jrYvXZdyrKMqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "218239925121-ghv2t7450rrltdkcn9humpvuhg5s5bff.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
