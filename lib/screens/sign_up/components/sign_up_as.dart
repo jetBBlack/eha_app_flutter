@@ -2,6 +2,7 @@ import 'package:eha_app/components/default_button.dart';
 import 'package:eha_app/screens/sign_up/sign_up_screen.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:eha_app/util/shared_preference.dart';
 
 import '../../../constant.dart';
 
@@ -11,8 +12,18 @@ class SignUpAsScreen extends StatefulWidget {
 }
 
 class _SignUpAsScreenState extends State<SignUpAsScreen> {
-  static bool _checkedE = true;
-  static bool _checkedH = false;
+  String registerType = 'employer';
+  bool _checkedE = true;
+  bool _checkedH = false;
+
+  void setType(bool checked) {
+    setState(() {
+      if (checked == false) {
+        registerType = 'helper';
+      } else {}
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -71,14 +82,16 @@ class _SignUpAsScreenState extends State<SignUpAsScreen> {
               ),
               controlAffinity: ListTileControlAffinity.platform,
               onChanged: (bool value) {
-                setState(() {
-                  if (value == true) {
-                    _checkedE = false;
-                    _checkedH = value;
-                  } else {
-                    _checkedH = value;
-                  }
-                });
+                setState(
+                  () {
+                    if (value == true) {
+                      _checkedE = false;
+                      _checkedH = value;
+                    } else {
+                      _checkedH = value;
+                    }
+                  },
+                );
               },
               activeColor: Colors.white,
               checkColor: kPrimaryColor,
@@ -88,8 +101,15 @@ class _SignUpAsScreenState extends State<SignUpAsScreen> {
             ),
             DefaultButton(
               text: "Continue",
-              press: () {
-                Navigator.pushNamed(context, SignUpScreen.routeName);
+              press: () async {
+                if (_checkedE == true) {
+                  UserTypePreferences().saveType('employer');
+                } else {
+                  UserTypePreferences().saveType('helper');
+                }
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => SignUpScreen()),
+                );
               },
             ),
           ],

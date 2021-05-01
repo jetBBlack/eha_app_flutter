@@ -7,8 +7,10 @@ import 'package:eha_app/providers/auth.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
 
 import 'package:eha_app/screens/sign_up/phone_sign_up_screen.dart';
+import 'package:eha_app/util/shared_preference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constant.dart';
@@ -62,7 +64,28 @@ class _SignUpFormState extends State<SignUpForm> {
 
       if (form.validate()) {
         form.save();
-        auth.register(registerRequestModel).then((value) {});
+        registerRequestModel.registerType =
+            UserTypePreferences().getType().toString();
+        registerRequestModel.contactNoInfo =
+            _user == null ? 'null' : _user.phoneNumber;
+        final Future<Map<String, dynamic>> successfullMessage =
+            auth.register(registerRequestModel);
+        successfullMessage.then((response) {
+          if (response['status']) {
+            Fluttertoast.showToast(
+                msg: response['message'],
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.green);
+            Navigator.pushNamed(context, HomeScreen.routeName);
+          } else {
+            Fluttertoast.showToast(
+                msg: response['message'],
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.redAccent);
+          }
+        });
       }
     };
     return Form(
@@ -102,7 +125,7 @@ class _SignUpFormState extends State<SignUpForm> {
             text: "Continue",
             press: () {
               if (_formKey.currentState.validate()) {
-                Navigator.pushNamed(context, HomeScreen.routeName);
+                doRegister();
               }
             },
           ),

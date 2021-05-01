@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:eha_app/util/app_url.dart';
 
-
 enum Status {
   NotLoggedIn,
   NotRegistered,
@@ -71,8 +70,8 @@ class AuthProvider extends ChangeNotifier {
     var response = await http.post(Uri.parse(AppUrl.registerUrl),
         body: json.encode(registrationData),
         headers: {'Content-Type': 'application/json'});
-    
-     final Map<String, dynamic> responseData = json.decode(response.body);
+
+    final Map<String, dynamic> responseData = json.decode(response.body);
 
     if (response.statusCode == 200) {
       result = {
@@ -82,8 +81,8 @@ class AuthProvider extends ChangeNotifier {
     } else {
       result = {
         'status': false,
-        'message': 'Registration failed',
-        'data': responseData
+        'error': 'Registration failed',
+        'message': responseData['err']['message'],
       };
     }
     return result;

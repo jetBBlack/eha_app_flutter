@@ -1,14 +1,12 @@
+import 'package:eha_app/models/register_model.dart';
 import 'package:eha_app/providers/auth.dart';
 import 'package:eha_app/providers/social_auth.dart';
-
 import 'package:eha_app/routes.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
-
 import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
 import 'package:eha_app/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,6 +23,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final register = new RegisterRequestModel();
   @override
   Widget build(BuildContext context) {
     Future<String> checkLogin() async {
@@ -37,14 +36,23 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(create: (_) => SocialAuthProvider())
+        ChangeNotifierProvider(create: (_) => SocialAuthProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: theme(),
         initialRoute: '/',
         routes: routes,
-        home: checkLogin() == null ? SignInScreen() : HomeScreen(),
+        home: FutureBuilder(
+          future: checkLogin(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return HomeScreen();
+            } else {
+              return SignInScreen();
+            }
+          },
+        ),
       ),
     );
   }
