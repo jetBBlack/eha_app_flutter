@@ -5,7 +5,7 @@ import 'package:eha_app/models/register_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:eha_app/util/app_url.dart';
-import 'package:http/http.dart';
+
 
 enum Status {
   NotLoggedIn,
@@ -26,16 +26,19 @@ class AuthProvider extends ChangeNotifier {
 
   Future<Map<String, dynamic>> login(String email, String password) async {
     var result;
-    final queryParam = {"username": email, "password": password};
-    var url = Uri.http(AppUrl.baseUrl, 'api/login', queryParam);
+    final Map<String, dynamic> loginData = {
+      "username": email,
+      "password": password
+    };
 
-    var response = await http.get(url);
+    var response = await http.post(Uri.parse(AppUrl.loginUrl),
+        body: json.encode(loginData),
+        headers: {'Content-Type': 'application/json'});
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
 
+    final Map<String, dynamic> responseData = json.decode(response.body);
     if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-
       result = {
         'status': responseData['success'],
         'token': responseData['data']['token'],
@@ -49,39 +52,32 @@ class AuthProvider extends ChangeNotifier {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
 
-      result = {'status': false, 'error': 'Invalid username/passowrd'};
+      result = {'status': false, 'error': responseData['err']['message']};
       return result;
     }
   }
 
   Future<Map<String, dynamic>> register(
       RegisterRequestModel registerRequest) async {
+    var result;
     final Map<String, dynamic> registrationData = {
       'registerType': registerRequest.registerType,
       'name': registerRequest.name,
       'password': registerRequest.password,
       'emailInfo': registerRequest.emailInfo,
       'contactNoInfo': registerRequest.contactNoInfo,
-      'avator': registerRequest.avator,
-      'lastLogin': registerRequest.lastLogin,
     };
 
-    return await http
-        .post(Uri.parse(AppUrl.registerUrl),
-            body: registrationData,
-            headers: {'Content-Type': 'application/json'})
-        .then(onValue)
-        .catchError(onError);
-  }
-
-  static Future<FutureOr> onValue(Response response) async {
-    var result;
-    final Map<String, dynamic> responseData = json.decode(response.body);
+    var response = await http.post(Uri.parse(AppUrl.registerUrl),
+        body: json.encode(registrationData),
+        headers: {'Content-Type': 'application/json'});
+    
+     final Map<String, dynamic> responseData = json.decode(response.body);
 
     if (response.statusCode == 200) {
       result = {
         'status': true,
-        'message': 'Successfully registered',
+        'message': responseData['success'],
       };
     } else {
       result = {
@@ -91,10 +87,5 @@ class AuthProvider extends ChangeNotifier {
       };
     }
     return result;
-  }
-
-  static onError(error) {
-    print("the error is $error.detail");
-    return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
   }
 }

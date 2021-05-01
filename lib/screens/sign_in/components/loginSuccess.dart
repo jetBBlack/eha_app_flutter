@@ -19,7 +19,14 @@ class _LoginSuccessState extends State<LoginSuccess> {
 
   Future<String> _login() async {
     await Future.delayed(Duration(seconds: 1)).then((value) {
-      Navigator.pushNamed(context, PhoneSignUpScreen.routeName);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) {
+            return PhoneSignUpScreen();
+          },
+        ),
+      );
     });
 
     return "LoggedIn";

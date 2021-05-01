@@ -1,8 +1,10 @@
 import 'package:eha_app/components/custom_surffix_icon.dart';
 import 'package:eha_app/components/default_button.dart';
 import 'package:eha_app/components/form_error.dart';
+import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:eha_app/screens/sign_up/sign_up_screen.dart';
 import 'package:eha_app/size_config.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../../constant.dart';
@@ -52,6 +54,7 @@ class PhoneSignUpForm extends StatefulWidget {
 }
 
 class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
+  final _user = FirebaseAuth.instance.currentUser;
   final _formKey = GlobalKey<FormState>();
   String phone;
   String password;
@@ -87,7 +90,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, SignUpScreen.routeName),
             child: Text(
-              "Use phone number",
+              "Use email number",
               textAlign: TextAlign.left,
               style: TextStyle(fontSize: 15, color: Colors.cyan[500]),
             ),
@@ -110,7 +113,9 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
           DefaultButton(
             text: "Continue",
             press: () {
-              if (_formKey.currentState.validate()) {}
+              if (_formKey.currentState.validate()) {
+                Navigator.pushNamed(context, HomeScreen.routeName);
+              }
             },
           ),
         ],
@@ -120,6 +125,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
 
   TextFormField buildNameFormField() {
     return TextFormField(
+      initialValue: _user == null ? null : _user.displayName,
       keyboardType: TextInputType.text,
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -151,7 +157,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.isNotEmpty && value == password) {
+        } else if (password == confirmPassword) {
           removeError(error: kMatchPassError);
         }
         confirmPassword = value;
@@ -160,7 +166,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
         if (value.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if ((password != value)) {
+        } else if (password != value) {
           addError(error: kMatchPassError);
           return "";
         }
@@ -212,6 +218,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
 
   TextFormField buildPhoneFormField() {
     return TextFormField(
+      initialValue: _user == null ? null : _user.phoneNumber,
       keyboardType: TextInputType.phone,
       onSaved: (newValue) => phone = newValue,
       onChanged: (value) {
@@ -229,10 +236,10 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
       },
       decoration: InputDecoration(
         labelText: 'Phone',
-        hintText: "Enter your phone number ",
+        hintText: "+65 12345678 ",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
-          svgIcon: "assets/icons/Mail.svg",
+          svgIcon: "assets/icons/call.svg",
         ),
       ),
     );

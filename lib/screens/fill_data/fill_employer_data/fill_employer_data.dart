@@ -1,7 +1,4 @@
-import 'package:eha_app/components/custom_bottom_navbar.dart';
-import 'package:eha_app/enums.dart';
 import 'package:flutter/material.dart';
-
 import 'components/build_code.dart';
 import 'components/build_info.dart';
 import 'components/build_pic.dart';
@@ -44,9 +41,7 @@ class FillEmployerDataScreen extends StatelessWidget {
             BuildCodePage(),
           ],
         ),
-        bottomNavigationBar: CustomBottomNavBar(
-          selectedMenu: MenuState.mom,
-        ),
+       
       ),
     );
   }

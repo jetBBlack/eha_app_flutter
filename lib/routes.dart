@@ -1,3 +1,4 @@
+import 'package:eha_app/screens/account/account_screen.dart';
 import 'package:eha_app/screens/employer/employer_screen.dart';
 import 'package:eha_app/screens/fill_data/fill_biodata/fill_biodata.dart';
 import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
@@ -19,5 +20,5 @@ final Map<String, WidgetBuilder> routes = {
   FillBioDataScreen.routeName: (context) => FillBioDataScreen(),
   AskScreen.routeName: (context) => AskScreen(),
   PhoneSignUpScreen.routeName: (context) => PhoneSignUpScreen(),
-  
+  AccountScreen.routeName: (context) => AccountScreen(),
 };

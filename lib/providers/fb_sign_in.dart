@@ -28,22 +28,24 @@ class FacebookSignInProvider extends ChangeNotifier {
         isSigningIn = false;
         break;
       case FacebookLoginStatus.loggedIn:
-        try {
-          await handleLoginResult(result);
-        } catch (e) {
-          print(e);
-        }
+        final FacebookAccessToken accessToken = result.accessToken;
+        AuthCredential credential = FacebookAuthProvider.credential(
+          accessToken.token,
+        );
+
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        isSigningIn = false;
         break;
     }
   }
 
-  Future handleLoginResult(FacebookLoginResult result) async {
-    final FacebookAccessToken accessToken = result.accessToken;
-    AuthCredential credential = FacebookAuthProvider.credential(
-      accessToken.token,
-    );
+  // Future handleLoginResult(FacebookLoginResult result) async {
+  //   final FacebookAccessToken accessToken = result.accessToken;
+  //   AuthCredential credential = FacebookAuthProvider.credential(
+  //     accessToken.token,
+  //   );
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    isSigningIn = false;
-  }
+  //   await FirebaseAuth.instance.signInWithCredential(credential);
+  //   isSigningIn = false;
+  // }
 }

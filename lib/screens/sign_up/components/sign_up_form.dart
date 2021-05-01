@@ -2,8 +2,14 @@ import 'package:eha_app/components/custom_surffix_icon.dart';
 import 'package:eha_app/components/default_button.dart';
 import 'package:eha_app/components/form_error.dart';
 
+import 'package:eha_app/models/register_model.dart';
+import 'package:eha_app/providers/auth.dart';
+import 'package:eha_app/screens/home/home_screen.dart';
+
 import 'package:eha_app/screens/sign_up/phone_sign_up_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constant.dart';
 import '../../../size_config.dart';
@@ -14,12 +20,18 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  final _user = FirebaseAuth.instance.currentUser;
   final _formKey = GlobalKey<FormState>();
-  String email;
-  String password;
   String confirmPassword;
   final List<String> errors = [];
+  RegisterRequestModel registerRequestModel;
   //bool _passVisibility = true;
+
+  @override
+  void initState() {
+    super.initState();
+    registerRequestModel = new RegisterRequestModel();
+  }
 
   void addError({String error}) {
     if (!errors.contains(error))
@@ -43,6 +55,16 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider auth = Provider.of<AuthProvider>(context);
+
+    var doRegister = () {
+      final form = _formKey.currentState;
+
+      if (form.validate()) {
+        form.save();
+        auth.register(registerRequestModel).then((value) {});
+      }
+    };
     return Form(
       key: _formKey,
       child: Column(
@@ -79,7 +101,9 @@ class _SignUpFormState extends State<SignUpForm> {
           DefaultButton(
             text: "Continue",
             press: () {
-              if (_formKey.currentState.validate()) {}
+              if (_formKey.currentState.validate()) {
+                Navigator.pushNamed(context, HomeScreen.routeName);
+              }
             },
           ),
         ],
@@ -89,7 +113,9 @@ class _SignUpFormState extends State<SignUpForm> {
 
   TextFormField buildNameFormField() {
     return TextFormField(
+      initialValue: _user == null ? '' : _user.displayName,
       keyboardType: TextInputType.text,
+      onSaved: (newValue) => registerRequestModel.name = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kNameNullError);
@@ -120,7 +146,7 @@ class _SignUpFormState extends State<SignUpForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.isNotEmpty && value == password) {
+        } else if (value.isNotEmpty && value == registerRequestModel.password) {
           removeError(error: kMatchPassError);
         }
         confirmPassword = value;
@@ -129,7 +155,7 @@ class _SignUpFormState extends State<SignUpForm> {
         if (value.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if ((password != value)) {
+        } else if ((registerRequestModel.password != value)) {
           addError(error: kMatchPassError);
           return "";
         }
@@ -148,7 +174,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
-      onSaved: (newValue) => password = newValue,
+      onSaved: (newValue) => registerRequestModel.password = newValue,
       obscureText: true,
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -156,7 +182,7 @@ class _SignUpFormState extends State<SignUpForm> {
         } else if (value.length >= 8) {
           removeError(error: kShortPassError);
         }
-        password = value;
+        registerRequestModel.password = value;
       },
       validator: (value) {
         if (value.isEmpty) {
@@ -181,8 +207,9 @@ class _SignUpFormState extends State<SignUpForm> {
 
   TextFormField buildEmailFormField() {
     return TextFormField(
+      initialValue: _user == null ? '' : _user.email,
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      onSaved: (newValue) => registerRequestModel.emailInfo = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);
@@ -203,7 +230,7 @@ class _SignUpFormState extends State<SignUpForm> {
       },
       decoration: InputDecoration(
         labelText: 'Email',
-        hintText: "Phone or Email",
+        hintText: "Enter your Email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
           svgIcon: "assets/icons/Mail.svg",

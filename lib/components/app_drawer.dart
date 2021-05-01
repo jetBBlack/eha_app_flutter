@@ -1,3 +1,4 @@
+import 'package:eha_app/screens/account/account_screen.dart';
 import 'package:eha_app/screens/fill_data/fill_biodata/fill_biodata.dart';
 import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
 import 'package:eha_app/size_config.dart';
@@ -52,7 +53,9 @@ class AppDrawer extends StatelessWidget {
               'Account',
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushNamed(context, AccountScreen.routeName);
+            },
           ),
         ],
       ),

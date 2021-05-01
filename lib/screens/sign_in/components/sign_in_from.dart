@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constant.dart';
 import '../../../size_config.dart';
@@ -63,19 +64,22 @@ class _SignFormState extends State<SignForm> {
 
         final Future<Map<String, dynamic>> successfulMessgae =
             auth.login(loginRequestModel.email, loginRequestModel.password);
-        successfulMessgae.then((response) {
+        successfulMessgae.then((response) async {
           if (response['status']) {
             Fluttertoast.showToast(
-              msg: "Login Succesfull",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.BOTTOM,
-            );
+                msg: "Login Succesfull",
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.green);
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.setString('email', 'username@gmail.com');
             Navigator.pushNamed(context, HomeScreen.routeName);
           } else {
             Fluttertoast.showToast(
-              msg: "Login Failed",
+              msg: response['error'],
               toastLength: Toast.LENGTH_SHORT,
               gravity: ToastGravity.BOTTOM,
+              backgroundColor: Colors.red,
             );
           }
         });
@@ -120,8 +124,7 @@ class _SignFormState extends State<SignForm> {
               : DefaultButton(
                   text: "Continue",
                   press: () {
-                    //doLogin();
-                    Navigator.pushNamed(context, HomeScreen.routeName);
+                    doLogin();
                   },
                 )
         ],

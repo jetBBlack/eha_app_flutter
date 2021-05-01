@@ -1,7 +1,6 @@
 import 'package:eha_app/components/no_account_text.dart';
 import 'package:eha_app/components/social_card.dart';
-import 'package:eha_app/providers/fb_sign_in.dart';
-import 'package:eha_app/providers/google_sign_in.dart';
+import 'package:eha_app/providers/social_auth.dart';
 import 'package:eha_app/screens/sign_in/components/sign_in_from.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
@@ -38,19 +37,20 @@ class Body extends StatelessWidget {
                     SocialCard(
                       icon: "assets/icons/google-icon.svg",
                       press: () {
-                        final provider = Provider.of<GoogleSignInProvider>(
+                        final provider = Provider.of<SocialAuthProvider>(
                             context,
                             listen: false);
 
-                        provider.login();
+                        provider.loginGoogle();
                       },
                     ),
                     SocialCard(
                       icon: "assets/icons/facebook-2.svg",
                       press: () {
-                        final provider =
-                            Provider.of<FacebookSignInProvider>(context);
-                        provider.login();
+                        final provider = Provider.of<SocialAuthProvider>(
+                            context,
+                            listen: false);
+                        provider.loginFacebook();
                       },
                     ),
                     SocialCard(

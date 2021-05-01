@@ -1,4 +1,4 @@
-import 'package:eha_app/providers/google_sign_in.dart';
+import 'package:eha_app/providers/social_auth.dart';
 import 'package:eha_app/screens/sign_in/components/loginSuccess.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,7 +17,7 @@ class SignInScreen extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          final provider = Provider.of<GoogleSignInProvider>(context);
+          final provider = Provider.of<SocialAuthProvider>(context);
           if (provider.isSigningIn) {
             return buildLoading();
           } else if (snapshot.hasData) {
