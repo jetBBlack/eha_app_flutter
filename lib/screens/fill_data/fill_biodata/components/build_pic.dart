@@ -119,9 +119,10 @@ class _BuildPicturesState extends State<BuildPictures> {
               ? Text('Upload your image here')
               : GridView.count(
                   shrinkWrap: true,
-                  padding: EdgeInsets.all(10),
+                  physics: BouncingScrollPhysics(),
+                  padding: EdgeInsets.all(12),
                   crossAxisCount: 2,
-                  crossAxisSpacing: 20,
+                  crossAxisSpacing: 15,
                   mainAxisSpacing: 15,
                   children: List.generate(
                     _image.length,
@@ -133,13 +134,11 @@ class _BuildPicturesState extends State<BuildPictures> {
                             //   border: Border.all(color: Colors.grey[300]),
                             //   shape: BoxShape.rectangle,
                             // ),
-                            child: Image.file(
-                              _image[index],
-                              fit: BoxFit.cover,
-                              height: 180,
-                              width: 180,
-                              cacheWidth: 1920,
-                              cacheHeight: 1080,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.file(
+                                _image[index],
+                              ),
                             ),
                           ),
                           Positioned(

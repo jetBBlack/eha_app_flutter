@@ -10,6 +10,7 @@ class UserTypePreferences {
   Future<String> getType() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String type = prefs.getString('user_type');
+    print(type);
     return type;
   }
 }

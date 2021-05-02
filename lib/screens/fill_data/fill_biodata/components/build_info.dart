@@ -125,17 +125,32 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
   TextEditingController dateCtl = TextEditingController();
   List<String> genderList = ["Male", "Female"];
   String genderSelect = "Male";
+  List<String> maritalStatusList = [
+    "Divorced",
+    "Married",
+    "Separated",
+    "Single",
+    "Widowed"
+  ];
+  String maritalSelect = "Married";
   List<String> countryList = [
-    "Singapore",
-    "Malaysia",
-    "Viet Nam",
-    "Indonesia",
-    "HongKong",
-    "Thailand",
+    "Filipino",
+    "Burman",
+    "India",
+    "Sri Lanka",
+    "Bangladesh",
+    "Malaysian",
+    "Indonesian",
+    "Chinese-HongKong",
+    "Chinese-Macau",
+    "Chinese-Taiwan",
+    "Thai",
     "Korean"
   ];
-  TextEditingController citiesSelected = TextEditingController();
-  String selectCity = " ";
+  TextEditingController nationalities = TextEditingController();
+  String selectNational = " ";
+  TextEditingController birthCountry = TextEditingController();
+  String selectBirthCountry = " ";
 
   @override
   Widget build(BuildContext context) {
@@ -165,73 +180,67 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             height: getProportionateScreenWidth(20),
           ),
           DropDownContainer(
+            selectedValue: maritalSelect,
             labelText: "Martial Status",
-            valueList: genderList,
+            valueList: maritalStatusList,
             press: (String newValue) {
-              genderSelect = newValue;
+              setState(() {
+                maritalSelect = newValue;
+              });
             },
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          TextFormField(
-            controller: dateCtl,
-            onTap: () async {
-              DateTime date = DateTime(1900);
-              FocusScope.of(context).requestFocus(new FocusNode());
+          // TextFormField(
+          //   controller: dateCtl,
+          //   onTap: () async {
+          //     DateTime date = DateTime(1900);
+          //     FocusScope.of(context).requestFocus(new FocusNode());
 
-              date = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime(2050),
-              );
-              var dateparse = DateTime.parse(date.toIso8601String());
-              dateCtl.text =
-                  "${dateparse.day}-${dateparse.month}-${dateparse.year}";
-            },
-            decoration: InputDecoration(
-              labelText: "D.O.B",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-          ),
+          //     date = await showDatePicker(
+          //       context: context,
+          //       initialDate: DateTime.now(),
+          //       firstDate: DateTime(1900),
+          //       lastDate: DateTime(2050),
+          //     );
+          //     var dateparse = DateTime.parse(date.toIso8601String());
+          //     dateCtl.text =
+          //         "${dateparse.year}-${dateparse.month}-${dateparse.day}";
+          //   },
+          //   decoration: InputDecoration(
+          //     labelText: "D.O.B",
+          //     floatingLabelBehavior: FloatingLabelBehavior.always,
+          //   ),
+          // ),
           SizedBox(
-            height: getProportionateScreenWidth(20),
+            height: getProportionateScreenWidth(15),
           ),
           DropDownField(
-            controller: citiesSelected,
-            hintText: "Select any Country",
-            labelText: "Birth Country",
-            items: countryList,
-            itemsVisibleInDropdown: 4,
-            onValueChanged: (value) {
-              selectCity = value;
-            },
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          DropDownField(
-            controller: citiesSelected,
+            controller: nationalities,
             hintText: "Select any Country",
             labelText: "Nationality",
             items: countryList,
             itemsVisibleInDropdown: 4,
             onValueChanged: (value) {
-              selectCity = value;
+              selectNational = value;
             },
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: "State",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
+          DropDownField(
+            controller: birthCountry,
+            hintText: "Select any Country",
+            labelText: "Birth Country",
+            items: countryList,
+            itemsVisibleInDropdown: 4,
+            onValueChanged: (value) {
+              selectBirthCountry = value;
+            },
           ),
           SizedBox(
-            height: getProportionateScreenHeight(20),
+            height: getProportionateScreenWidth(20),
           ),
           TextFormField(
             decoration: InputDecoration(
@@ -241,34 +250,6 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           SizedBox(
             height: getProportionateScreenHeight(20),
-          ),
-          DropDownContainer(
-            labelText: "Religion",
-            valueList: genderList,
-            press: (String newValue) {
-              genderSelect = newValue;
-            },
-          ),
-          SizedBox(
-            height: getProportionateScreenHeight(20),
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: "Weight (in KG)",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: "Height (int KG)",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
           ),
           DropDownContainer(
             labelText: "Status",

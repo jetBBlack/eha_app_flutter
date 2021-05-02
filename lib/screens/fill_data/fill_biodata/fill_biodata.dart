@@ -5,16 +5,25 @@ import 'components/build_info.dart';
 import 'components/build_other_info.dart';
 import 'components/build_pic.dart';
 import 'components/build_settings.dart';
+import 'components/build_signature.dart';
 
 class FillBioDataScreen extends StatelessWidget {
   static String routeName = "/fill_biodata";
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         appBar: AppBar(
           title: Text('BIODATA'),
+          actions: <Widget>[
+            TextButton(
+                onPressed: () {},
+                child: Text(
+                  'Save',
+                  style: TextStyle(fontSize: 17),
+                ))
+          ],
           bottom: TabBar(
             indicatorColor: Colors.cyan[600],
             labelColor: Colors.cyan[600],
@@ -30,6 +39,9 @@ class FillBioDataScreen extends StatelessWidget {
                 text: "OTHER INFO",
               ),
               Tab(
+                text: "SIGNATURE",
+              ),
+              Tab(
                 text: "PICTURES",
               ),
               Tab(
@@ -43,6 +55,7 @@ class FillBioDataScreen extends StatelessWidget {
             BuildPersonalInfoPage(),
             BuildContactInfo(),
             BuildOtherInfo(),
+            BuildSignature(),
             BuildPictures(),
             BuildSettings(),
           ],

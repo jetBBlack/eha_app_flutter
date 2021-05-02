@@ -60,11 +60,10 @@ class AuthProvider extends ChangeNotifier {
       RegisterRequestModel registerRequest) async {
     var result;
     final Map<String, dynamic> registrationData = {
-      'registerType': registerRequest.registerType,
       'name': registerRequest.name,
       'password': registerRequest.password,
-      'emailInfo': registerRequest.emailInfo,
-      'contactNoInfo': registerRequest.contactNoInfo,
+      'emailAddress': registerRequest.emailAddress,
+      'contactNo': registerRequest.contactNo,
     };
 
     var response = await http.post(Uri.parse(AppUrl.registerUrl),
@@ -76,7 +75,7 @@ class AuthProvider extends ChangeNotifier {
     if (response.statusCode == 200) {
       result = {
         'status': true,
-        'message': responseData['success'],
+        'message': 'Successful',
       };
     } else {
       result = {

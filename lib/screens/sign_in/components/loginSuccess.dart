@@ -1,4 +1,4 @@
-import 'package:eha_app/screens/sign_up/phone_sign_up_screen.dart';
+import 'package:eha_app/screens/sign_up/ask_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginSuccess extends StatefulWidget {
@@ -23,7 +23,7 @@ class _LoginSuccessState extends State<LoginSuccess> {
         context,
         MaterialPageRoute(
           builder: (BuildContext context) {
-            return PhoneSignUpScreen();
+            return AskScreen();
           },
         ),
       );

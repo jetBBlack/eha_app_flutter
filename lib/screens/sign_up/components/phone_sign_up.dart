@@ -1,11 +1,18 @@
 import 'package:eha_app/components/custom_surffix_icon.dart';
 import 'package:eha_app/components/default_button.dart';
 import 'package:eha_app/components/form_error.dart';
+import 'package:eha_app/models/register_model.dart';
+import 'package:eha_app/providers/auth.dart';
+import 'package:eha_app/screens/fill_data/fill_biodata/fill_biodata.dart';
+import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:eha_app/screens/sign_up/sign_up_screen.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constant.dart';
 
@@ -56,11 +63,17 @@ class PhoneSignUpForm extends StatefulWidget {
 class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
   final _user = FirebaseAuth.instance.currentUser;
   final _formKey = GlobalKey<FormState>();
-  String phone;
-  String password;
   String confirmPassword;
   final List<String> errors = [];
+  RegisterRequestModel registerRequestModel;
   //bool _passVisibility = true;
+
+  @override
+  void initState() {
+    super.initState();
+    registerRequestModel = new RegisterRequestModel();
+    registerRequestModel.emailAddress = _user == null ? 'null' : _user.email;
+  }
 
   void addError({String error}) {
     if (!errors.contains(error))
@@ -78,6 +91,46 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider auth = Provider.of<AuthProvider>(context);
+
+    var doRegister = () {
+      final form = _formKey.currentState;
+
+      if (form.validate()) {
+        form.save();
+
+        final Future<Map<String, dynamic>> successfullMessage =
+            auth.register(registerRequestModel);
+
+        successfullMessage.then((response) async {
+          if (response['status']) {
+            Fluttertoast.showToast(
+                msg: response['message'],
+                toastLength: Toast.LENGTH_SHORT,
+                gravity: ToastGravity.BOTTOM,
+                backgroundColor: Colors.green);
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            String type = prefs.getString('user_type');
+            print(type);
+            if (type == 'helper') {
+              Navigator.pushNamed(context, FillBioDataScreen.routeName);
+            } else if (type == 'employer') {
+              Navigator.pushNamed(context, FillEmployerDataScreen.routeName);
+            } else {
+              Navigator.pushNamed(context, HomeScreen.routeName);
+            }
+          } else {
+            for (var i = 0; i <= response['message'].length; i++) {
+              Fluttertoast.showToast(
+                  msg: response['message'][i],
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: Colors.redAccent);
+            }
+          }
+        });
+      }
+    };
     return Form(
       key: _formKey,
       child: Column(
@@ -114,7 +167,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
             text: "Continue",
             press: () {
               if (_formKey.currentState.validate()) {
-                Navigator.pushNamed(context, HomeScreen.routeName);
+                doRegister();
               }
             },
           ),
@@ -126,6 +179,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
   TextFormField buildNameFormField() {
     return TextFormField(
       initialValue: _user == null ? null : _user.displayName,
+      onSaved: (newValue) => registerRequestModel.name = newValue,
       keyboardType: TextInputType.text,
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -157,7 +211,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (password == confirmPassword) {
+        } else if (registerRequestModel.password == confirmPassword) {
           removeError(error: kMatchPassError);
         }
         confirmPassword = value;
@@ -166,7 +220,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
         if (value.isEmpty) {
           addError(error: kPassNullError);
           return "";
-        } else if (password != value) {
+        } else if (registerRequestModel.password != value) {
           addError(error: kMatchPassError);
           return "";
         }
@@ -185,7 +239,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
-      onSaved: (newValue) => password = newValue,
+      onSaved: (newValue) => registerRequestModel.password = newValue,
       obscureText: true,
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -193,7 +247,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
         } else if (value.length >= 8) {
           removeError(error: kShortPassError);
         }
-        password = value;
+        registerRequestModel.password = value;
       },
       validator: (value) {
         if (value.isEmpty) {
@@ -220,7 +274,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
     return TextFormField(
       initialValue: _user == null ? null : _user.phoneNumber,
       keyboardType: TextInputType.phone,
-      onSaved: (newValue) => phone = newValue,
+      onSaved: (newValue) => registerRequestModel.contactNo = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPhoneNumberNullError);

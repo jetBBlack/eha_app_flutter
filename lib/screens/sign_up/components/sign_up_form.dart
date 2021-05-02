@@ -4,14 +4,16 @@ import 'package:eha_app/components/form_error.dart';
 
 import 'package:eha_app/models/register_model.dart';
 import 'package:eha_app/providers/auth.dart';
+import 'package:eha_app/screens/fill_data/fill_biodata/fill_biodata.dart';
+import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
 
 import 'package:eha_app/screens/sign_up/phone_sign_up_screen.dart';
-import 'package:eha_app/util/shared_preference.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constant.dart';
 import '../../../size_config.dart';
@@ -33,6 +35,15 @@ class _SignUpFormState extends State<SignUpForm> {
   void initState() {
     super.initState();
     registerRequestModel = new RegisterRequestModel();
+    if (_user == null) {
+      registerRequestModel.contactNo = 'null';
+    } else {
+      if (_user.phoneNumber.isNotEmpty) {
+        registerRequestModel.contactNo = _user.phoneNumber;
+      } else {
+        registerRequestModel.contactNo = 'null';
+      }
+    }
   }
 
   void addError({String error}) {
@@ -64,30 +75,40 @@ class _SignUpFormState extends State<SignUpForm> {
 
       if (form.validate()) {
         form.save();
-        registerRequestModel.registerType =
-            UserTypePreferences().getType().toString();
-        registerRequestModel.contactNoInfo =
-            _user == null ? 'null' : _user.phoneNumber;
+
         final Future<Map<String, dynamic>> successfullMessage =
             auth.register(registerRequestModel);
-        successfullMessage.then((response) {
+
+        successfullMessage.then((response) async {
           if (response['status']) {
             Fluttertoast.showToast(
                 msg: response['message'],
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.BOTTOM,
                 backgroundColor: Colors.green);
-            Navigator.pushNamed(context, HomeScreen.routeName);
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            String type = prefs.getString('user_type');
+            print(type);
+            if (type == 'helper') {
+              Navigator.pushNamed(context, FillBioDataScreen.routeName);
+            } else if (type == 'employer') {
+              Navigator.pushNamed(context, FillEmployerDataScreen.routeName);
+            } else {
+              Navigator.pushNamed(context, HomeScreen.routeName);
+            }
           } else {
-            Fluttertoast.showToast(
-                msg: response['message'],
-                toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.BOTTOM,
-                backgroundColor: Colors.redAccent);
+            for (var i = 0; i <= response['message'].length; i++) {
+              Fluttertoast.showToast(
+                  msg: response['message'][i],
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  backgroundColor: Colors.redAccent);
+            }
           }
         });
       }
     };
+
     return Form(
       key: _formKey,
       child: Column(
@@ -164,12 +185,13 @@ class _SignUpFormState extends State<SignUpForm> {
 
   TextFormField buildConfPasswordFormField() {
     return TextFormField(
-      onSaved: (newValue) => confirmPassword = newValue,
       obscureText: true,
+      onSaved: (newValue) => confirmPassword = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
-        } else if (value.isNotEmpty && value == registerRequestModel.password) {
+        } else if (value.isNotEmpty &&
+            registerRequestModel.password == confirmPassword) {
           removeError(error: kMatchPassError);
         }
         confirmPassword = value;
@@ -232,7 +254,7 @@ class _SignUpFormState extends State<SignUpForm> {
     return TextFormField(
       initialValue: _user == null ? '' : _user.email,
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => registerRequestModel.emailInfo = newValue,
+      onSaved: (newValue) => registerRequestModel.emailAddress = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kEmailNullError);

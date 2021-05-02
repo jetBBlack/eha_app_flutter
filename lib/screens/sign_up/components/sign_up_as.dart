@@ -1,5 +1,5 @@
 import 'package:eha_app/components/default_button.dart';
-import 'package:eha_app/screens/sign_up/sign_up_screen.dart';
+import 'package:eha_app/screens/sign_up/phone_sign_up_screen.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:eha_app/util/shared_preference.dart';
@@ -15,14 +15,6 @@ class _SignUpAsScreenState extends State<SignUpAsScreen> {
   String registerType = 'employer';
   bool _checkedE = true;
   bool _checkedH = false;
-
-  void setType(bool checked) {
-    setState(() {
-      if (checked == false) {
-        registerType = 'helper';
-      } else {}
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +100,7 @@ class _SignUpAsScreenState extends State<SignUpAsScreen> {
                   UserTypePreferences().saveType('helper');
                 }
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  MaterialPageRoute(builder: (context) => PhoneSignUpScreen()),
                 );
               },
             ),
