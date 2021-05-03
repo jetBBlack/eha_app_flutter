@@ -64,9 +64,9 @@ class SocialAuthProvider extends ChangeNotifier {
     }
   }
 
-  void logoutGoogle() async {
-    await googleSignIn.disconnect();
-    FirebaseAuth.instance.signOut();
+  Future<void> logoutGoogle() async {
+    await FirebaseAuth.instance.signOut();
+    googleSignIn.disconnect();
     isLoggedIn = false;
   }
 

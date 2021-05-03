@@ -1,5 +1,5 @@
 import 'package:eha_app/providers/social_auth.dart';
-import 'package:eha_app/screens/sign_in/components/loginSuccess.dart';
+import 'package:eha_app/screens/sign_up/components/sign_up_as.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class SignInScreen extends StatelessWidget {
           if (provider.isSigningIn) {
             return buildLoading();
           } else if (snapshot.hasData) {
-            return LoginSuccess();
+            return SignUpAsScreen();
           } else {
             return Body();
           }

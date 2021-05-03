@@ -32,7 +32,7 @@ class BuildPersonalInfoPage extends StatelessWidget {
                     ),
                     Text(
                       "GENERAL INFOMATION",
-                      style: TextStyle(color: Colors.cyan),
+                      style: TextStyle(color: Colors.cyan, fontSize: 20),
                     ),
                   ],
                 ),
@@ -80,7 +80,7 @@ class BuildPersonalInfoPage extends StatelessWidget {
                     ),
                     Text(
                       "YES/NO",
-                      style: TextStyle(color: Colors.cyan),
+                      style: TextStyle(color: Colors.cyan, fontSize: 20),
                     ),
                   ],
                 ),
@@ -101,7 +101,7 @@ class BuildPersonalInfoPage extends StatelessWidget {
                     ),
                     Text(
                       "SKILL LEVEL",
-                      style: TextStyle(color: Colors.cyan),
+                      style: TextStyle(color: Colors.cyan, fontSize: 20),
                     ),
                   ],
                 ),
@@ -192,27 +192,27 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          // TextFormField(
-          //   controller: dateCtl,
-          //   onTap: () async {
-          //     DateTime date = DateTime(1900);
-          //     FocusScope.of(context).requestFocus(new FocusNode());
+          TextFormField(
+            controller: dateCtl,
+            onTap: () async {
+              DateTime date = DateTime(1900);
+              FocusScope.of(context).requestFocus(new FocusNode());
 
-          //     date = await showDatePicker(
-          //       context: context,
-          //       initialDate: DateTime.now(),
-          //       firstDate: DateTime(1900),
-          //       lastDate: DateTime(2050),
-          //     );
-          //     var dateparse = DateTime.parse(date.toIso8601String());
-          //     dateCtl.text =
-          //         "${dateparse.year}-${dateparse.month}-${dateparse.day}";
-          //   },
-          //   decoration: InputDecoration(
-          //     labelText: "D.O.B",
-          //     floatingLabelBehavior: FloatingLabelBehavior.always,
-          //   ),
-          // ),
+              date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2050),
+              );
+              var dateparse = DateTime.parse(date.toIso8601String());
+              dateCtl.text =
+                  "${dateparse.year}-${dateparse.month}-${dateparse.day}";
+            },
+            decoration: InputDecoration(
+              labelText: "D.O.B",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
           SizedBox(
             height: getProportionateScreenWidth(15),
           ),
@@ -362,7 +362,54 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
           },
         ),
         SwitchListTile(
-          title: Text("Can eat pig"),
+          title: Text("Can eat pork"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Can handle pork"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text(
+              "Can you ensure that you will only emergency call or your employer call during your working hour"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text(
+              "Can you let your employer to keep your phone during your working hour"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Not afraid of dogs"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Prepare to wake up as early as 5am"),
           value: _can,
           onChanged: (value) {
             setState(() {
@@ -428,6 +475,103 @@ class _BuildSkillLevelState extends State<BuildSkillLevel> {
                 _veryExp = value;
               });
             })
+      ],
+    );
+  }
+}
+
+class BuildMedicalInfo extends StatefulWidget {
+  @override
+  _BuildMedicalInfoState createState() => _BuildMedicalInfoState();
+}
+
+class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
+  bool _can = false;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SwitchListTile(
+          title: Text("Asthma"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Diabetes"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Diabetes"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Diabetes"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Epilepsy"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Malaria"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Mental Illness"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Operation"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text("Tuberculosis"),
+          value: _can,
+          onChanged: (value) {
+            setState(() {
+              _can = value;
+            });
+          },
+        ),
       ],
     );
   }

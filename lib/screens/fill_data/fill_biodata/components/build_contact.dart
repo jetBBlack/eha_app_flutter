@@ -22,7 +22,7 @@ class BuildContactInfo extends StatelessWidget {
                 Row(
                   children: [
                     SvgPicture.asset(
-                      'assets/icons/question-mark.svg',
+                      'assets/icons/contact.svg',
                       height: 20,
                       width: 20,
                       color: Colors.cyan,
@@ -39,7 +39,55 @@ class BuildContactInfo extends StatelessWidget {
                 SizedBox(
                   height: getProportionateScreenWidth(20),
                 ),
-                BuildContactInfoForm()
+                BuildContactInfoForm(),
+                SizedBox(
+                  height: getProportionateScreenWidth(30),
+                ),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/address.svg',
+                      height: 20,
+                      width: 20,
+                      color: Colors.cyan,
+                    ),
+                    SizedBox(
+                      width: getProportionateScreenWidth(10),
+                    ),
+                    Text(
+                      "Singapore Address",
+                      style: TextStyle(color: Colors.cyan),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: getProportionateScreenWidth(20),
+                ),
+                SingaporeAddress(),
+                SizedBox(
+                  height: getProportionateScreenWidth(30),
+                ),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/address.svg',
+                      height: 20,
+                      width: 20,
+                      color: Colors.cyan,
+                    ),
+                    SizedBox(
+                      width: getProportionateScreenWidth(10),
+                    ),
+                    Text(
+                      "Singapore Address",
+                      style: TextStyle(color: Colors.cyan),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: getProportionateScreenWidth(20),
+                ),
+                OverseaAddress(),
               ],
             ),
           ),
@@ -63,7 +111,7 @@ class _BuildContactInfoFormState extends State<BuildContactInfoForm> {
       child: Column(
         children: [
           TextFormField(
-            keyboardType: TextInputType.phone,
+            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: "Country Code",
               hintText: "Example +65",
@@ -101,7 +149,6 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
       child: Column(
         children: [
           TextFormField(
-            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Block/House No",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -111,7 +158,6 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Unit No",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -121,7 +167,6 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Floor No",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -131,7 +176,6 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Street Name",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -142,7 +186,6 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
           ),
           TextFormField(
             initialValue: "Singapore",
-            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Country",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -152,7 +195,6 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Postal Code",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -192,7 +234,6 @@ class _OverseaAddressState extends State<OverseaAddress> {
       child: Column(
         children: [
           TextFormField(
-            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Number",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -202,7 +243,6 @@ class _OverseaAddressState extends State<OverseaAddress> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Street Name",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -225,7 +265,6 @@ class _OverseaAddressState extends State<OverseaAddress> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Postal Code",
               floatingLabelBehavior: FloatingLabelBehavior.always,

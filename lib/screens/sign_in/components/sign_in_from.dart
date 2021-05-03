@@ -23,11 +23,13 @@ class _SignFormState extends State<SignForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
   LoginRequestModel loginRequestModel;
+  bool _passwordVisible;
 
   @override
   void initState() {
     super.initState();
     loginRequestModel = new LoginRequestModel();
+    _passwordVisible = false;
   }
 
   void addError({String error}) {
@@ -135,7 +137,7 @@ class _SignFormState extends State<SignForm> {
   TextFormField buildPasswordTextFormField() {
     return TextFormField(
       onSaved: (newValue) => loginRequestModel.password = newValue,
-      obscureText: true,
+      obscureText: _passwordVisible,
       onChanged: (value) {
         if (value.isNotEmpty) {
           removeError(error: kPassNullError);
@@ -159,7 +161,14 @@ class _SignFormState extends State<SignForm> {
         hintText: "Password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSurffixIcon(
-          svgIcon: "assets/icons/Lock.svg",
+          svgIcon: _passwordVisible
+              ? "assets/icons/invisibility .svg"
+              : "assets/icons/visibility.svg",
+          press: () {
+            setState(() {
+              _passwordVisible = !_passwordVisible;
+            });
+          },
         ),
       ),
     );

@@ -109,11 +109,6 @@ class _BuildPicturesState extends State<BuildPictures> {
             },
             child: Text('Upload Image'),
           ),
-          // CircleAvatar(
-          //   child: _image.isEmpty
-          //       ? Image.asset('assets/images/avator.jpg')
-          //       : Image.file(_image[0]),
-          // ),
           SizedBox(height: getProportionateScreenWidth(20)),
           _image.isEmpty
               ? Text('Upload your image here')

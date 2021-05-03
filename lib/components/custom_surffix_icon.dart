@@ -7,17 +7,22 @@ class CustomSurffixIcon extends StatelessWidget {
   const CustomSurffixIcon({
     Key key,
     @required this.svgIcon,
+    this.press,
   }) : super(key: key);
-
+  final Function press;
   final String svgIcon;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(0, getProportionateScreenWidth(20),
           getProportionateScreenWidth(20), getProportionateScreenWidth(20)),
-      child: SvgPicture.asset(
-        svgIcon,
-        height: getProportionateScreenWidth(18),
+      child: GestureDetector(
+        onTap: press,
+        child: SvgPicture.asset(
+          svgIcon,
+          height: getProportionateScreenWidth(18),
+        ),
       ),
     );
   }

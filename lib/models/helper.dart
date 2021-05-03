@@ -102,13 +102,15 @@ class PersonalInfo {
       this.birthCountry,
       this.maritalStatus});
 
-  PersonalInfo.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    gender = json['gender'];
-    province = json['province'];
-    nationality = json['nationality'];
-    birthCountry = json['birthCountry'];
-    maritalStatus = json['maritalStatus'];
+  factory PersonalInfo.fromJson(Map<String, dynamic> json) {
+    return PersonalInfo(
+      name: json['name'],
+      gender: json['gender'],
+      province: json['province'],
+      nationality: json['nationality'],
+      birthCountry: json['birthCountry'],
+      maritalStatus: json['maritalStatus'],
+    );
   }
 
   Map<String, dynamic> toJson() {

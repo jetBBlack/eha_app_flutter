@@ -72,7 +72,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
   void initState() {
     super.initState();
     registerRequestModel = new RegisterRequestModel();
-    registerRequestModel.emailAddress = _user == null ? 'null' : _user.email;
+    registerRequestModel.emailAddress = _user == null ? null : _user.email;
   }
 
   void addError({String error}) {
@@ -143,7 +143,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, SignUpScreen.routeName),
             child: Text(
-              "Use email number",
+              "Use email",
               textAlign: TextAlign.left,
               style: TextStyle(fontSize: 15, color: Colors.cyan[500]),
             ),
