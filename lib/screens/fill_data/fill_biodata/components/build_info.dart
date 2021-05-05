@@ -1,5 +1,6 @@
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:eha_app/components/drop_down_container.dart';
+import 'package:eha_app/components/single_choice.dart';
 import 'package:eha_app/constant.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,7 +33,7 @@ class BuildPersonalInfoPage extends StatelessWidget {
                     ),
                     Text(
                       "GENERAL INFOMATION",
-                      style: TextStyle(color: Colors.cyan, fontSize: 20),
+                      style: TextStyle(color: Colors.cyan, fontSize: 18),
                     ),
                   ],
                 ),
@@ -56,7 +57,7 @@ class BuildPersonalInfoPage extends StatelessWidget {
                     ),
                     Text(
                       "Q & A",
-                      style: TextStyle(color: Colors.cyan),
+                      style: TextStyle(color: Colors.cyan, fontSize: 18),
                     ),
                   ],
                 ),
@@ -80,7 +81,7 @@ class BuildPersonalInfoPage extends StatelessWidget {
                     ),
                     Text(
                       "YES/NO",
-                      style: TextStyle(color: Colors.cyan, fontSize: 20),
+                      style: TextStyle(color: Colors.cyan, fontSize: 18),
                     ),
                   ],
                 ),
@@ -101,11 +102,32 @@ class BuildPersonalInfoPage extends StatelessWidget {
                     ),
                     Text(
                       "SKILL LEVEL",
-                      style: TextStyle(color: Colors.cyan, fontSize: 20),
+                      style: TextStyle(color: Colors.cyan, fontSize: 18),
                     ),
                   ],
                 ),
-                BuildSkillLevel()
+                BuildSkillLevel(),
+                SizedBox(
+                  height: getProportionateScreenWidth(30),
+                ),
+                Row(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/question.svg',
+                      height: 20,
+                      width: 20,
+                      color: Colors.cyan,
+                    ),
+                    SizedBox(
+                      width: getProportionateScreenWidth(10),
+                    ),
+                    Text(
+                      "MEDICAL INFO",
+                      style: TextStyle(color: Colors.cyan, fontSize: 18),
+                    ),
+                  ],
+                ),
+                BuildMedicalInfo()
               ],
             ),
           ),
@@ -261,24 +283,24 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           SizedBox(
             height: getProportionateScreenWidth(5),
           ),
-          Text(
-            "Transer => You are  currently working in Singapore and you are looking for another employer. You must get release paper form your currnt employer in order to do the transfer.\n New => You have never worked as domestic helper in Singapore before. You want to come to Singapore to work as domestic helper",
-            style: TextStyle(
-              color: kTextColor,
-              fontSize: 13,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          DropDownContainer(
-            labelText: "Ethnic Group",
-            valueList: genderList,
-            press: (String newValue) {
-              genderSelect = newValue;
-            },
-          ),
+          // Text(
+          //   "Transer => You are  currently working in Singapore and you are looking for another employer. You must get release paper form your currnt employer in order to do the transfer.\n New => You have never worked as domestic helper in Singapore before. You want to come to Singapore to work as domestic helper",
+          //   style: TextStyle(
+          //     color: kTextColor,
+          //     fontSize: 13,
+          //     fontStyle: FontStyle.italic,
+          //   ),
+          // ),
+          // SizedBox(
+          //   height: getProportionateScreenWidth(20),
+          // ),
+          // DropDownContainer(
+          //   labelText: "Ethnic Group",
+          //   valueList: genderList,
+          //   press: (String newValue) {
+          //     genderSelect = newValue;
+          //   },
+          // ),
         ],
       ),
     );
@@ -296,40 +318,78 @@ class _BuildQAFormState extends State<BuildQAForm> {
     return Form(
       child: Column(
         children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(10)),
+            child: Text(
+              'Home many children do you have?',
+              style: TextStyle(color: kTextColor, fontSize: 14),
+            ),
+          ),
+          SizedBox(height: 5),
           TextFormField(
-            maxLines: 3,
+            maxLines: 2,
             decoration: InputDecoration(
-              labelText: "Home many children do you have?",
+              labelText: 'Your answer',
               hintText: "e.g 2 girls age 8 and 6, 1 boy age at 15",
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
           SizedBox(height: getProportionateScreenWidth(20)),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(10)),
+            child: Text(
+              'Home many siblings do you have?',
+              style: TextStyle(color: kTextColor, fontSize: 14),
+            ),
+          ),
+          SizedBox(height: 5),
           TextFormField(
-            maxLines: 3,
+            maxLines: 2,
             decoration: InputDecoration(
-              labelText: "Home many siblings do you have?",
+              labelText: "Your answer",
               hintText: "e.g 2 girls age 8 and 6, 1 boy age at 15",
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
           SizedBox(height: getProportionateScreenWidth(20)),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(10)),
+            child: Text(
+              'What is something you expect from employer?',
+              style: TextStyle(color: kTextColor, fontSize: 14),
+            ),
+          ),
+          SizedBox(height: 5),
           TextFormField(
-            maxLines: 3,
+            maxLines: 2,
             decoration: InputDecoration(
-              errorMaxLines: 2,
-              labelText: "What is something you expect from employer?",
+              isDense: true,
+              labelText: "Your answer",
               hintText:
                   "e.g Employer should provide a minimum of 9 hours for resting",
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
           SizedBox(height: getProportionateScreenWidth(20)),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(10)),
+            child: Text(
+              'What is something you want your employer to know?',
+              style: TextStyle(color: kTextColor, fontSize: 14),
+            ),
+          ),
+          SizedBox(height: 5),
           TextFormField(
-            maxLines: 3,
+            maxLines: 2,
             decoration: InputDecoration(
               isDense: true,
-              labelText: "What is something you want your employer to know?",
+              //labelText: "What is something you want your employer to know?",
+              labelText: 'Your answer',
+              labelStyle: TextStyle(),
               hintText:
                   "e.g I always take care of of infant and chilren and I like children very much",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -428,9 +488,15 @@ class BuildSkillLevel extends StatefulWidget {
 }
 
 class _BuildSkillLevelState extends State<BuildSkillLevel> {
-  bool _average = true;
-  bool _noExp = false;
-  bool _veryExp = false;
+  List<String> skillLevel = ['Average', 'No Experience', 'Very Experience'];
+  String selectedValue;
+
+  @override
+  void initState() {
+    selectedValue = skillLevel.first;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -442,39 +508,15 @@ class _BuildSkillLevelState extends State<BuildSkillLevel> {
           style: TextStyle(
               fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
         ),
-        CheckboxListTile(
-            title: Text(
-              'Average',
-              style: TextStyle(color: Colors.black),
-            ),
-            value: _average,
-            onChanged: (bool value) {
-              setState(() {
-                _average = value;
-              });
-            }),
-        CheckboxListTile(
-            title: Text(
-              'No Experience',
-              style: TextStyle(color: Colors.black),
-            ),
-            value: _noExp,
-            onChanged: (bool value) {
-              setState(() {
-                _noExp = value;
-              });
-            }),
-        CheckboxListTile(
-            title: Text(
-              'Very Experience',
-              style: TextStyle(color: Colors.black),
-            ),
-            value: _veryExp,
-            onChanged: (bool value) {
-              setState(() {
-                _veryExp = value;
-              });
-            })
+        SingleChoice(
+          itemList: skillLevel,
+          selectedValue: selectedValue,
+          press: (newValue) {
+            setState(() {
+              selectedValue = newValue;
+            });
+          },
+        )
       ],
     );
   }

@@ -40,6 +40,10 @@ dependencies:
   get_it: ^6.1.1
   flutter_twitter_login: ^1.1.0
   font_awesome_flutter: ^9.0.0
+  search_choices: ^2.0.3
+  date_range_picker: ^1.0.7
+  intl: ^0.17.0
+
  
   
   

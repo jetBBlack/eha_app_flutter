@@ -47,8 +47,9 @@ class _BodyState extends State<Body> {
           press: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             prefs.remove('email');
-            final provider = Provider.of<SocialAuthProvider>(context);
-            provider.loginFacebook();
+            final provider =
+                Provider.of<SocialAuthProvider>(context, listen: false);
+            provider.logoutGoogle();
             Navigator.pushNamed(context, SignInScreen.routeName);
           },
         ),

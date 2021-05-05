@@ -40,7 +40,7 @@ const String kNameNullError = "Please Enter your name";
 
 final otpInputDecoration = InputDecoration(
   contentPadding:
-      EdgeInsets.symmetric(vertical: getProportionateScreenWidth(15)),
+      EdgeInsets.symmetric(vertical: getProportionateScreenWidth(10)),
   border: outlineInputBorder(),
   focusedBorder: outlineInputBorder(),
   enabledBorder: outlineInputBorder(),

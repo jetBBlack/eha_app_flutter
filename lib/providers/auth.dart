@@ -5,6 +5,7 @@ import 'package:eha_app/models/register_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:eha_app/util/app_url.dart';
+import 'package:flutter/foundation.dart';
 
 enum Status {
   NotLoggedIn,

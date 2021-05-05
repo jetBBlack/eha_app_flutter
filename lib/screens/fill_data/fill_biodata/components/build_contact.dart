@@ -1,4 +1,5 @@
 import 'package:dropdownfield/dropdownfield.dart';
+import 'package:eha_app/screens/fill_data/fill_biodata/components/build_other_info.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,7 +33,7 @@ class BuildContactInfo extends StatelessWidget {
                     ),
                     Text(
                       "CONTACT INFOMATION",
-                      style: TextStyle(color: Colors.cyan),
+                      style: TextStyle(color: Colors.cyan, fontSize: 18),
                     ),
                   ],
                 ),
@@ -56,7 +57,7 @@ class BuildContactInfo extends StatelessWidget {
                     ),
                     Text(
                       "Singapore Address",
-                      style: TextStyle(color: Colors.cyan),
+                      style: TextStyle(color: Colors.cyan, fontSize: 18),
                     ),
                   ],
                 ),
@@ -79,8 +80,8 @@ class BuildContactInfo extends StatelessWidget {
                       width: getProportionateScreenWidth(10),
                     ),
                     Text(
-                      "Singapore Address",
-                      style: TextStyle(color: Colors.cyan),
+                      "Oversea Address",
+                      style: TextStyle(color: Colors.cyan, fontSize: 18),
                     ),
                   ],
                 ),
@@ -88,6 +89,22 @@ class BuildContactInfo extends StatelessWidget {
                   height: getProportionateScreenWidth(20),
                 ),
                 OverseaAddress(),
+                SizedBox(
+                  height: getProportionateScreenWidth(15),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Align(
+                    alignment: FractionalOffset.bottomRight,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Next',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
