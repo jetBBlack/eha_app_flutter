@@ -1,5 +1,6 @@
 import 'package:eha_app/models/register_model.dart';
 import 'package:eha_app/providers/auth.dart';
+import 'package:eha_app/providers/helper_provider.dart';
 import 'package:eha_app/providers/social_auth.dart';
 import 'package:eha_app/routes.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
@@ -37,6 +38,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => SocialAuthProvider()),
+        ChangeNotifierProvider(create: (_) => HelperProvider())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

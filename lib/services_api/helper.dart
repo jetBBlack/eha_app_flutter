@@ -4,7 +4,7 @@ import 'package:eha_app/util/app_url.dart';
 import 'package:eha_app/models/helper.dart';
 import 'package:http/http.dart' as http;
 
-class HelperProvider {
+class HelperService {
   Future<Helper> getHelperbyId(String id) async {
     final Map<String, dynamic> idData = {
       'id': id,

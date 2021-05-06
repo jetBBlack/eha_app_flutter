@@ -72,7 +72,7 @@ class SocialAuthProvider extends ChangeNotifier {
 
   Future loginFacebook() async {
     isSigningIn = true;
-    final result = await facebookSignIn.logIn(['email']);
+    final result = await facebookSignIn.logIn(['public_profile']);
 
     switch (result.status) {
       case FacebookLoginStatus.cancelledByUser:

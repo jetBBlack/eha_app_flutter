@@ -7,8 +7,15 @@ import 'components/build_pic.dart';
 import 'components/build_settings.dart';
 import 'components/build_signature.dart';
 
-class FillBioDataScreen extends StatelessWidget {
+class FillBioDataScreen extends StatefulWidget {
+  const FillBioDataScreen({Key key}) : super(key: key);
   static String routeName = "/fill_biodata";
+
+  @override
+  _FillBioDataScreenState createState() => _FillBioDataScreenState();
+}
+
+class _FillBioDataScreenState extends State<FillBioDataScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

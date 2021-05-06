@@ -1,15 +1,25 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:dropdownfield/dropdownfield.dart';
 import 'package:eha_app/components/drop_down_container.dart';
 import 'package:eha_app/components/single_choice.dart';
 import 'package:eha_app/constant.dart';
+import 'package:eha_app/providers/helper_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
-class BuildPersonalInfoPage extends StatelessWidget {
+class BuildPersonalInfoPage extends StatefulWidget {
+  @override
+  _BuildPersonalInfoPageState createState() => _BuildPersonalInfoPageState();
+}
+
+class _BuildPersonalInfoPageState extends State<BuildPersonalInfoPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
@@ -135,6 +145,9 @@ class BuildPersonalInfoPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class BuildGeneralInfo extends StatefulWidget {
@@ -144,6 +157,8 @@ class BuildGeneralInfo extends StatefulWidget {
 
 class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
   Key _formKey = GlobalKey<FormState>();
+  TextEditingController _name = TextEditingController();
+  TextEditingController _province = TextEditingController();
   TextEditingController dateCtl = TextEditingController();
   List<String> genderList = ["Male", "Female"];
   String genderSelect = "Male";
@@ -169,18 +184,38 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     "Thai",
     "Korean"
   ];
-  TextEditingController nationalities = TextEditingController();
+  TextEditingController _nationality = TextEditingController();
   String selectNational = " ";
   TextEditingController birthCountry = TextEditingController();
   String selectBirthCountry = " ";
 
   @override
+  void initState() {
+    final myProvider = Provider.of<HelperProvider>(context, listen: false);
+    super.initState();
+    _name = TextEditingController(text: myProvider.name);
+    _nationality = TextEditingController(text: myProvider.nationality);
+    _province = TextEditingController(text: myProvider.province);
+  }
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _nationality.dispose();
+    _province.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final HelperProvider myProvider = Provider.of<HelperProvider>(context);
     return Form(
       key: _formKey,
       child: Column(
         children: [
           TextFormField(
+            controller: _name,
+            onChanged: myProvider.setname,
             decoration: InputDecoration(
               labelText: "Name",
               hintText: "Enter your name",
@@ -195,7 +230,10 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             selectedValue: genderSelect,
             valueList: genderList,
             press: (String newValue) {
-              genderSelect = newValue;
+              myProvider.setgender(newValue);
+              setState(() {
+                genderSelect = newValue;
+              });
             },
           ),
           SizedBox(
@@ -206,6 +244,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             labelText: "Martial Status",
             valueList: maritalStatusList,
             press: (String newValue) {
+              myProvider.setmaritalStatus(newValue);
               setState(() {
                 maritalSelect = newValue;
               });
@@ -214,39 +253,35 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          TextFormField(
-            controller: dateCtl,
-            onTap: () async {
-              DateTime date = DateTime(1900);
-              FocusScope.of(context).requestFocus(new FocusNode());
+          // TextFormField(
+          //   controller: dateCtl,
+          //   onTap: () async {
+          //     DateTime date = DateTime(1900);
+          //     FocusScope.of(context).requestFocus(new FocusNode());
 
-              date = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime(2050),
-              );
-              var dateparse = DateTime.parse(date.toIso8601String());
-              dateCtl.text =
-                  "${dateparse.year}-${dateparse.month}-${dateparse.day}";
-            },
-            decoration: InputDecoration(
-              labelText: "D.O.B",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(15),
-          ),
-          DropDownField(
-            controller: nationalities,
-            hintText: "Select any Country",
-            labelText: "Nationality",
+          //     date = await showDatePicker(
+          //       context: context,
+          //       initialDate: DateTime.now(),
+          //       firstDate: DateTime(1900),
+          //       lastDate: DateTime(2050),
+          //     );
+          //     var dateparse = DateTime.parse(date.toIso8601String());
+          //     dateCtl.text =
+          //         "${dateparse.year}-${dateparse.month}-${dateparse.day}";
+          //   },
+          //   decoration: InputDecoration(
+          //     labelText: "D.O.B",
+          //     floatingLabelBehavior: FloatingLabelBehavior.always,
+          //   ),
+          // ),
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
             items: countryList,
-            itemsVisibleInDropdown: 4,
-            onValueChanged: (value) {
-              selectNational = value;
-            },
+            label: 'Nationality',
+            searchBoxController: _nationality,
+            onChanged: myProvider.setnationality,
+            selectedItem: countryList[0],
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -265,6 +300,8 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
+            controller: _province,
+            onChanged: myProvider.setprovince,
             decoration: InputDecoration(
               labelText: "Provine",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -273,16 +310,16 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           SizedBox(
             height: getProportionateScreenHeight(20),
           ),
-          DropDownContainer(
-            labelText: "Status",
-            valueList: genderList,
-            press: (String newValue) {
-              genderSelect = newValue;
-            },
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(5),
-          ),
+          // DropDownContainer(
+          //   labelText: "Status",
+          //   valueList: genderList,
+          //   press: (String newValue) {
+          //     genderSelect = newValue;
+          //   },
+          // ),
+          // SizedBox(
+          //   height: getProportionateScreenWidth(5),
+          // ),
           // Text(
           //   "Transer => You are  currently working in Singapore and you are looking for another employer. You must get release paper form your currnt employer in order to do the transfer.\n New => You have never worked as domestic helper in Singapore before. You want to come to Singapore to work as domestic helper",
           //   style: TextStyle(

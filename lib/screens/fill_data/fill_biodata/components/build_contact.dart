@@ -1,12 +1,18 @@
 import 'package:dropdownfield/dropdownfield.dart';
-import 'package:eha_app/screens/fill_data/fill_biodata/components/build_other_info.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class BuildContactInfo extends StatelessWidget {
+class BuildContactInfo extends StatefulWidget {
+  @override
+  _BuildContactInfoState createState() => _BuildContactInfoState();
+}
+
+class _BuildContactInfoState extends State<BuildContactInfo>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
@@ -92,19 +98,6 @@ class BuildContactInfo extends StatelessWidget {
                 SizedBox(
                   height: getProportionateScreenWidth(15),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Align(
-                    alignment: FractionalOffset.bottomRight,
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      child: Text(
-                        'Next',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -112,6 +105,9 @@ class BuildContactInfo extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class BuildContactInfoForm extends StatefulWidget {
