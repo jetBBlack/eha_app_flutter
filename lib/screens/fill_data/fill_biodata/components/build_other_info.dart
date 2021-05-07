@@ -11,10 +11,12 @@ class BuildOtherInfo extends StatefulWidget {
   _BuildOtherInfoState createState() => _BuildOtherInfoState();
 }
 
-class _BuildOtherInfoState extends State<BuildOtherInfo> {
+class _BuildOtherInfoState extends State<BuildOtherInfo>
+    with AutomaticKeepAliveClientMixin {
   int _count = 0;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
@@ -110,6 +112,9 @@ class _BuildOtherInfoState extends State<BuildOtherInfo> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class BuildExpectInfo extends StatefulWidget {

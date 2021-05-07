@@ -11,7 +11,8 @@ class BuildPictures extends StatefulWidget {
   _BuildPicturesState createState() => _BuildPicturesState();
 }
 
-class _BuildPicturesState extends State<BuildPictures> {
+class _BuildPicturesState extends State<BuildPictures>
+    with AutomaticKeepAliveClientMixin {
   List<File> _image = [];
   final picker = ImagePicker();
 
@@ -45,6 +46,7 @@ class _BuildPicturesState extends State<BuildPictures> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: Column(
         children: [
@@ -162,4 +164,7 @@ class _BuildPicturesState extends State<BuildPictures> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

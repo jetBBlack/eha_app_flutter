@@ -5,7 +5,7 @@ import 'package:eha_app/models/helper.dart';
 import 'package:http/http.dart' as http;
 
 class HelperService {
-  Future<Helper> getHelperbyId(String id) async {
+  Future<HelperModel> getHelperbyId(String id) async {
     final Map<String, dynamic> idData = {
       'id': id,
     };
@@ -14,14 +14,14 @@ class HelperService {
         headers: {'Content-Type': 'application/json'});
 
     if (response.statusCode == 200) {
-      return Helper.fromJson(json.decode(response.body));
+      return HelperModel.fromJson(json.decode(response.body));
     } else {
       throw Exception("Faild to load Helper");
     }
   }
 
-  Future<String> createHelper(Helper helper) async {
-    var id;
+  Future<Map<String, dynamic>> createHelper(HelperModel helper) async {
+    var result;
     final Map<String, dynamic> helperData = {
       'personalInfo': helper.personalInfo,
       'contactNo': helper.contactNo,
@@ -44,10 +44,17 @@ class HelperService {
 
     final Map<String, dynamic> responseData = json.decode(response.body);
     if (response.statusCode == 201) {
-      id = responseData['id'];
-      return id;
+      result = {
+        'status': true,
+        'id': responseData['id'],
+      };
+      return result;
     } else {
-      throw Exception("Faild to create Helper");
+      result = {
+        'status': false,
+        'msg': responseData['err']['error'],
+      };
+      return result;
     }
   }
 

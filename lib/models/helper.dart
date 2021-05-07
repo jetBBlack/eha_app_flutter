@@ -1,4 +1,4 @@
-class Helper {
+class HelperModel {
   PersonalInfo personalInfo;
   List<ContactNo> contactNo;
   SingaporeAddress singaporeAddress;
@@ -14,7 +14,7 @@ class Helper {
   String employmentHistory;
   String signature;
 
-  Helper(
+  HelperModel(
       {this.personalInfo,
       this.contactNo,
       this.singaporeAddress,
@@ -30,7 +30,7 @@ class Helper {
       this.employmentHistory,
       this.signature});
 
-  Helper.fromJson(Map<String, dynamic> json) {
+  HelperModel.fromJson(Map<String, dynamic> json) {
     personalInfo = json['personalInfo'] != null
         ? new PersonalInfo.fromJson(json['personalInfo'])
         : null;

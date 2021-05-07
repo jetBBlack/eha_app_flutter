@@ -1,4 +1,6 @@
+import 'package:eha_app/providers/helper_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'components/build_contact.dart';
 import 'components/build_info.dart';
@@ -18,6 +20,7 @@ class FillBioDataScreen extends StatefulWidget {
 class _FillBioDataScreenState extends State<FillBioDataScreen> {
   @override
   Widget build(BuildContext context) {
+    HelperProvider provider = Provider.of<HelperProvider>(context);
     return DefaultTabController(
       length: 6,
       child: Scaffold(
@@ -25,7 +28,9 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
           title: Text('BIODATA'),
           actions: <Widget>[
             TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  provider.createHelperWithData();
+                },
                 child: Text(
                   'Save',
                   style: TextStyle(fontSize: 17),

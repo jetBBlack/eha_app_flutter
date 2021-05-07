@@ -8,7 +8,8 @@ class BuildSignature extends StatefulWidget {
   _BuildSignatureState createState() => _BuildSignatureState();
 }
 
-class _BuildSignatureState extends State<BuildSignature> {
+class _BuildSignatureState extends State<BuildSignature>
+    with AutomaticKeepAliveClientMixin {
   SignatureController controller;
 
   @override
@@ -24,6 +25,7 @@ class _BuildSignatureState extends State<BuildSignature> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: Column(
         children: [
@@ -80,4 +82,7 @@ class _BuildSignatureState extends State<BuildSignature> {
         ),
         onPressed: () => controller.clear());
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

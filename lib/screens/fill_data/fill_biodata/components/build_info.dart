@@ -215,10 +215,11 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
         children: [
           TextFormField(
             controller: _name,
-            onChanged: myProvider.setname,
+            onChanged: (value) => myProvider.setname(value),
             decoration: InputDecoration(
               labelText: "Name",
               hintText: "Enter your name",
+              errorText: myProvider.error,
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
@@ -293,6 +294,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             items: countryList,
             itemsVisibleInDropdown: 4,
             onValueChanged: (value) {
+              myProvider.setbirthCountry(value);
               selectBirthCountry = value;
             },
           ),
@@ -304,6 +306,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             onChanged: myProvider.setprovince,
             decoration: InputDecoration(
               labelText: "Provine",
+              errorText: myProvider.error,
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
