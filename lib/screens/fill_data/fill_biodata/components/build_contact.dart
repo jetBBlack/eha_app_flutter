@@ -191,7 +191,7 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
 
   @override
   void initState() {
-    final addressProvider = Provider.of<HelperProvider>(context);
+    final addressProvider = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
     _blkNo = TextEditingController(text: addressProvider.blkNo);
     _unitNo = TextEditingController(text: addressProvider.unitNo);
@@ -264,7 +264,6 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            initialValue: "Singapore",
             controller: _country,
             onChanged: addressProvider.setcountry,
             decoration: InputDecoration(
@@ -317,7 +316,7 @@ class _OverseaAddressState extends State<OverseaAddress> {
 
   @override
   void initState() {
-    final overseaProvider = Provider.of<HelperProvider>(context);
+    final overseaProvider = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
     _no = TextEditingController(text: overseaProvider.no);
     _streetname = TextEditingController(text: overseaProvider.seaStreetName);

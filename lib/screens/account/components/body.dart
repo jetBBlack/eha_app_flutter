@@ -1,6 +1,7 @@
 import 'package:eha_app/providers/social_auth.dart';
 import 'package:eha_app/screens/account/components/profile_pic.dart';
 import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
+import 'package:eha_app/screens/user_details/user_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +25,9 @@ class _BodyState extends State<Body> {
         AccountMenu(
           icon: 'assets/icons/User Icon.svg',
           text: 'My Profile',
-          press: () {},
+          press: () {
+            Navigator.pushNamed(context, UserDetailScreen.routeName);
+          },
         ),
         AccountMenu(
           icon: 'assets/icons/User Icon.svg',
@@ -38,7 +41,7 @@ class _BodyState extends State<Body> {
         ),
         AccountMenu(
           icon: 'assets/icons/User Icon.svg',
-          text: 'My Proflue',
+          text: 'My Profile',
           press: () {},
         ),
         AccountMenu(

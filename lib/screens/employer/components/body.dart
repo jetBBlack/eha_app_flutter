@@ -176,7 +176,7 @@ class _BodyState extends State<Body> {
                   child: Center(
                     child: Text(
                       r"$" + employer.description + "/h",
-                      style: TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: 16),
                     ),
                   ),
                 ),

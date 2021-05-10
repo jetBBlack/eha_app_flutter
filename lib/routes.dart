@@ -8,6 +8,7 @@ import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
 import 'package:eha_app/screens/sign_up/ask_screen.dart';
 import 'package:eha_app/screens/sign_up/phone_sign_up_screen.dart';
 import 'package:eha_app/screens/sign_up/sign_up_screen.dart';
+import 'package:eha_app/screens/user_details/user_detail_screen.dart';
 import 'package:flutter/widgets.dart';
 
 final Map<String, WidgetBuilder> routes = {
@@ -21,4 +22,5 @@ final Map<String, WidgetBuilder> routes = {
   AskScreen.routeName: (context) => AskScreen(),
   PhoneSignUpScreen.routeName: (context) => PhoneSignUpScreen(),
   AccountScreen.routeName: (context) => AccountScreen(),
+  UserDetailScreen.routeName: (context) => UserDetailScreen(),
 };
