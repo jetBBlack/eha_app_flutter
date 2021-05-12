@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
 
 enum LoginProvider {
   GOOOLE,
@@ -72,13 +73,16 @@ class SocialAuthProvider extends ChangeNotifier {
 
   Future loginFacebook() async {
     isSigningIn = true;
-    final result = await facebookSignIn.logIn(['public_profile']);
-
+    var facebookLogin = new FacebookLogin();
+    facebookLogin.loginBehavior = FacebookLoginBehavior.webOnly;
+    final result = await facebookLogin.logInWithReadPermissions(['email']);
+    debugPrint(result.status.toString());
     switch (result.status) {
       case FacebookLoginStatus.cancelledByUser:
         isSigningIn = false;
         break;
       case FacebookLoginStatus.error:
+        print('error');
         isSigningIn = false;
         break;
       case FacebookLoginStatus.loggedIn:
@@ -86,7 +90,7 @@ class SocialAuthProvider extends ChangeNotifier {
         AuthCredential credential = FacebookAuthProvider.credential(
           accessToken.token,
         );
-
+        print('success');
         await FirebaseAuth.instance.signInWithCredential(credential);
         isSigningIn = false;
         break;

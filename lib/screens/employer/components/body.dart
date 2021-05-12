@@ -136,6 +136,7 @@ class _BodyState extends State<Body> {
           ),
           SizedBox(height: 16),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Container(
@@ -175,7 +176,7 @@ class _BodyState extends State<Body> {
                 child: Container(
                   child: Center(
                     child: Text(
-                      r"$" + employer.description + "/h",
+                      employer.description,
                       style: TextStyle(fontSize: 16),
                     ),
                   ),

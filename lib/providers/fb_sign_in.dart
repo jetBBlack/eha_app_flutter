@@ -18,7 +18,7 @@ class FacebookSignInProvider extends ChangeNotifier {
 
   Future login() async {
     isSigningIn = true;
-    final result = await fbSignIn.logIn(['email']);
+    final result = await fbSignIn.logInWithReadPermissions(['email']);
 
     switch (result.status) {
       case FacebookLoginStatus.cancelledByUser:

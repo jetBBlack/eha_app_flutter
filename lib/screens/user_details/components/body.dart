@@ -262,45 +262,106 @@ class BuildWorkHistoy extends StatelessWidget {
           SizedBox(
             height: 12,
           ),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.grey[200],
-                border: Border.all(color: Colors.grey[400]),
-                borderRadius: BorderRadius.circular(5)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Text(
-                      '${DateFormat('MM/dd/yyyy').format(_startDate).toString()}',
-                      style: TextStyle(fontSize: 15, color: Colors.black),
+          Padding(
+            padding: EdgeInsets.only(left: 14),
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(color: Colors.grey[400]),
+                  borderRadius: BorderRadius.circular(5)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Text(
+                        '${DateFormat('MM/dd/yyyy').format(_startDate).toString()}',
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                      Text('-',
+                          style: TextStyle(fontSize: 18, color: Colors.black)),
+                      Text(
+                          '${DateFormat('MM/dd/yyyy').format(_endDate).toString()}',
+                          style: TextStyle(fontSize: 18, color: Colors.black)),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Container(
+                      height: 2,
+                      decoration: BoxDecoration(
+                        color: kTextColor,
+                      ),
                     ),
-                    Text(
-                        '${DateFormat('MM/dd/yyyy').format(_endDate).toString()}',
-                        style: TextStyle(fontSize: 15, color: Colors.black)),
-                  ],
-                ),
-                Container(
-                  height: 2,
-                  decoration: BoxDecoration(
-                    color: kTextColor,
                   ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(16),
+                  SizedBox(
+                    height: 10,
                   ),
-                  child: Text(
-                    'Caring of children',
-                    style: TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                )
-              ],
+                  Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Wrap(
+                        runSpacing: 10,
+                        spacing: 10,
+                        direction: Axis.horizontal,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              'Caring of children',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              'Cleaning',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              'Cook food',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              'Driver',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
+          ),
+          SizedBox(
+            height: 10,
           ),
         ],
       ),
@@ -340,7 +401,7 @@ class BuildSkillLevel extends StatelessWidget {
             height: 12,
           ),
           Padding(
-            padding: EdgeInsets.only(left: 16),
+            padding: EdgeInsets.only(left: 14),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -354,16 +415,18 @@ class BuildSkillLevel extends StatelessWidget {
                   ),
                   alignment: Alignment.centerLeft,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         ' Can cook Basic food',
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 17,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
                         ' Very Experience',
+                        textAlign: TextAlign.start,
                         style: TextStyle(
                           fontSize: 14,
                           color: kTextColor,
@@ -385,11 +448,12 @@ class BuildSkillLevel extends StatelessWidget {
                   ),
                   alignment: Alignment.centerLeft,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
                         ' Can cook Indian food',
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 17,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
@@ -444,64 +508,101 @@ class BuildYesNo extends StatelessWidget {
             height: 12,
           ),
           Padding(
-            padding: EdgeInsets.only(left: 16),
+            padding: EdgeInsets.only(left: 14),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
-                  height: 40,
+                  height: 60,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     border: Border.all(color: Colors.grey[500]),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    ' Can cook beef',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        ' Can drive',
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        ' No',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: kTextColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Container(
-                  height: 40,
+                  height: 60,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     border: Border.all(color: Colors.grey[500]),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Text(
-                    ' Can cook chinese food',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        ' Can cook beef',
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        ' Yes',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: kTextColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 Container(
-                  height: 40,
+                  height: 60,
                   width: double.infinity,
                   decoration: BoxDecoration(
                     color: Colors.grey[200],
                     border: Border.all(color: Colors.grey[500]),
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   alignment: Alignment.centerLeft,
-                  child: Text(
-                    ' Can take care children',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.black,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        ' Can take care children',
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        ' Yes',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: kTextColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
