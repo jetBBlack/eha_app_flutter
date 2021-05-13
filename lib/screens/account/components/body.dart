@@ -52,7 +52,7 @@ class _BodyState extends State<Body> {
             prefs.remove('email');
             final provider =
                 Provider.of<SocialAuthProvider>(context, listen: false);
-            provider.logoutGoogle();
+            provider.logout();
             Navigator.pushNamed(context, SignInScreen.routeName);
           },
         ),

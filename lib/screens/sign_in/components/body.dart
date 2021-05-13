@@ -55,7 +55,12 @@ class Body extends StatelessWidget {
                     ),
                     SocialCard(
                       icon: "assets/icons/twitter.svg",
-                      press: () {},
+                      press: () {
+                        final provider = Provider.of<SocialAuthProvider>(
+                            context,
+                            listen: false);
+                        provider.loginTwitter();
+                      },
                     ),
                     SocialCard(
                       icon: "assets/icons/linkedin.svg",

@@ -35,15 +35,15 @@ class _SignUpFormState extends State<SignUpForm> {
   void initState() {
     super.initState();
     registerRequestModel = new RegisterRequestModel();
-    if (_user == null) {
-      registerRequestModel.contactNo = 'null';
-    } else {
-      if (_user.phoneNumber.isNotEmpty) {
-        registerRequestModel.contactNo = _user.phoneNumber;
-      } else {
-        registerRequestModel.contactNo = 'null';
-      }
-    }
+    // if (_user == null) {
+    //   registerRequestModel.contactNo = 'null';
+    // } else {
+    //   if (_user.phoneNumber.isNotEmpty) {
+    //     registerRequestModel.contactNo = _user.phoneNumber;
+    //   } else {
+    //     registerRequestModel.contactNo = 'null';
+    //   }
+    // }
   }
 
   void addError({String error}) {

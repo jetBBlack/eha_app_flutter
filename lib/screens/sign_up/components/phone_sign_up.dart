@@ -273,7 +273,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
   TextFormField buildPhoneFormField() {
     return TextFormField(
       initialValue: _user == null ? null : _user.phoneNumber,
-      keyboardType: TextInputType.phone,
+      //keyboardType: TextInputType.phone,
       onSaved: (newValue) => registerRequestModel.contactNo = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {

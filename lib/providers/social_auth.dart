@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
 
 enum LoginProvider {
   GOOOLE,
@@ -12,7 +12,6 @@ enum LoginProvider {
 
 class SocialAuthProvider extends ChangeNotifier {
   final googleSignIn = GoogleSignIn();
-  final facebookSignIn = FacebookLogin();
   bool _isSigningIn;
   bool _isLoggedIn;
 
@@ -65,18 +64,27 @@ class SocialAuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> logoutGoogle() async {
+  Future<void> logout() async {
+    final facebookLogin = FacebookLogin();
+    await facebookLogin.logOut();
+    final twitterLogin = new TwitterLogin(
+      consumerKey: 'nBrFIZmla7pPEyiwcT3poU8ph',
+      consumerSecret: 'lSY6AEDhSff4sueXHItVnIwjp43Yv9Y7LlT3rwP3f07U4RTEfP',
+    );
+    await twitterLogin.logOut();
+    await googleSignIn.signOut();
     await FirebaseAuth.instance.signOut();
-    googleSignIn.disconnect();
     isLoggedIn = false;
   }
 
   Future loginFacebook() async {
     isSigningIn = true;
     var facebookLogin = new FacebookLogin();
-    facebookLogin.loginBehavior = FacebookLoginBehavior.webOnly;
-    final result = await facebookLogin.logInWithReadPermissions(['email']);
+    facebookLogin.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
+    final result = await facebookLogin
+        .logInWithReadPermissions(['email', 'public_profile']);
     debugPrint(result.status.toString());
+
     switch (result.status) {
       case FacebookLoginStatus.cancelledByUser:
         isSigningIn = false;
@@ -90,16 +98,39 @@ class SocialAuthProvider extends ChangeNotifier {
         AuthCredential credential = FacebookAuthProvider.credential(
           accessToken.token,
         );
-        print('success');
         await FirebaseAuth.instance.signInWithCredential(credential);
         isSigningIn = false;
         break;
     }
   }
 
-  void logOutFacebook() async {
-    await facebookSignIn.logOut();
-    FirebaseAuth.instance.signOut();
-    isLoggedIn = false;
+  Future loginTwitter() async {
+    isSigningIn = true;
+
+    var twitterLogin = new TwitterLogin(
+      consumerKey: 'nBrFIZmla7pPEyiwcT3poU8ph',
+      consumerSecret: 'lSY6AEDhSff4sueXHItVnIwjp43Yv9Y7LlT3rwP3f07U4RTEfP',
+    );
+
+    final TwitterLoginResult result = await twitterLogin.authorize();
+    debugPrint(result.status.toString());
+    switch (result.status) {
+      case TwitterLoginStatus.loggedIn:
+        var session = result.session;
+        print(session.username);
+        final accessToken = session.token;
+        AuthCredential credential = FacebookAuthProvider.credential(
+          accessToken,
+        );
+        await FirebaseAuth.instance.signInWithCredential(credential);
+        isSigningIn = false;
+        break;
+      case TwitterLoginStatus.cancelledByUser:
+        isSigningIn = false;
+        break;
+      case TwitterLoginStatus.error:
+        isSigningIn = false;
+        break;
+    }
   }
 }
