@@ -1,4 +1,5 @@
 import 'package:dropdownfield/dropdownfield.dart';
+import 'package:eha_app/components/info_title.dart';
 import 'package:eha_app/providers/helper_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
@@ -28,22 +29,9 @@ class _BuildContactInfoState extends State<BuildContactInfo>
                 SizedBox(
                   height: getProportionateScreenWidth(20),
                 ),
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/contact.svg',
-                      height: 20,
-                      width: 20,
-                      color: Colors.cyan,
-                    ),
-                    SizedBox(
-                      width: getProportionateScreenWidth(10),
-                    ),
-                    Text(
-                      "CONTACT INFOMATION",
-                      style: TextStyle(color: Colors.cyan, fontSize: 18),
-                    ),
-                  ],
+                InfoTitle(
+                  icon: 'assets/icons/contact.svg',
+                  title: 'CONTACT INFOMATION',
                 ),
                 SizedBox(
                   height: getProportionateScreenWidth(20),

@@ -2,16 +2,16 @@ class Agency {
   String name;
   String address;
   String image;
-
-  Agency(this.name, this.address, this.image);
+  List<String> services;
+  Agency(this.name, this.address,this.services ,this.image,);
 }
 
 List<Agency> getAgencies() {
   return <Agency>[
-    Agency("Uber", "Singapore", "assets/images/uber.png"),
-    Agency("Apple", "Singapore", "assets/images/apple.png"),
-    Agency("Google", "Singapore", "assets/images/google.png"),
-    Agency("Nike", "Singapore", "assets/images/nike.png"),
-    Agency("Amazon", "Singapore", "assets/images/amazon.jpg"),
+    Agency("Uber", "Singapore", ['Training', 'Renewal', 'Local Hire', 'Overseas Hire'],"assets/images/agency.png"),
+    Agency("Apple", "Singapore",['Training', 'Renewal', 'Local Hire', 'Overseas Hire'], "assets/images/agency.png"),
+    Agency("Google", "Singapore",['Training', 'Renewal', 'Local Hire', 'Overseas Hire'], "assets/images/agency.png"),
+    Agency("Nike", "Singapore",['Training', 'Renewal', 'Local Hire', 'Overseas Hire'] ,"assets/images/agency.png"),
+    Agency("Amazon", "Singapore",['Training', 'Renewal', 'Local Hire', 'Overseas Hire'], "assets/images/agency.jpg"),
   ];
 }

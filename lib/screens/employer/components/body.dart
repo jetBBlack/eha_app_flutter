@@ -31,7 +31,7 @@ class _BodyState extends State<Body> {
                     padding: EdgeInsets.symmetric(
                         horizontal: getProportionateScreenWidth(20)),
                     child: Text(
-                      "Helper list",
+                      "Employer",
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -176,8 +176,8 @@ class _BodyState extends State<Body> {
                 child: Container(
                   child: Center(
                     child: Text(
-                      employer.description,
-                      style: TextStyle(fontSize: 16),
+                      r"$" + employer.price,
+                      style: TextStyle(fontSize: 18),
                     ),
                   ),
                 ),

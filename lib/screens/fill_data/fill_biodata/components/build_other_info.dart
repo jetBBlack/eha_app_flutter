@@ -13,9 +13,12 @@ class BuildOtherInfo extends StatefulWidget {
 
 class _BuildOtherInfoState extends State<BuildOtherInfo>
     with AutomaticKeepAliveClientMixin {
-  int _count = 0;
+  int _count = 1;
+  @override
   @override
   Widget build(BuildContext context) {
+    List<Widget> _histories =
+        new List.generate(_count, (int i) => new BuildWorkHistory());
     super.build(context);
     return SafeArea(
       child: SizedBox(
@@ -74,37 +77,35 @@ class _BuildOtherInfoState extends State<BuildOtherInfo>
                 SizedBox(
                   height: getProportionateScreenWidth(10),
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _count += 1;
-                      });
-                    },
-                    child: FaIcon(FontAwesomeIcons.plusSquare)),
                 Container(
-                  child: ListView.separated(
+                  child: ListView.builder(
                     shrinkWrap: true,
                     physics: BouncingScrollPhysics(),
                     scrollDirection: Axis.vertical,
-                    itemCount: _count,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        const Divider(),
-                    itemBuilder: (BuildContext context, int index) {
+                    itemBuilder: (context, index) {
+                      final history = _histories[index];
                       return Dismissible(
-                        child: BuildWorkHistory(),
+                        key: UniqueKey(),
+                        child: history,
                         background: Container(
-                          color: Colors.blueAccent,
+                          color: Colors.cyan,
                         ),
-                        key: ValueKey<int>(index),
                         onDismissed: (DismissDirection direction) {
                           setState(() {
-                            _count--;
+                            _histories.removeAt(index);
                           });
                         },
                       );
                     },
                   ),
                 ),
+                ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _count = _count + 1;
+                      });
+                    },
+                    child: FaIcon(FontAwesomeIcons.plusSquare)),
               ],
             ),
           ),
@@ -168,6 +169,9 @@ class _BuildExpectInfoState extends State<BuildExpectInfo> {
 }
 
 class BuildWorkHistory extends StatefulWidget {
+  const BuildWorkHistory({
+    Key key,
+  }) : super(key: key);
   @override
   _BuildWorkHistoryState createState() => _BuildWorkHistoryState();
 }
@@ -260,10 +264,11 @@ class _BuildWorkHistoryState extends State<BuildWorkHistory> {
             children: <Widget>[
               Text(
                 '${DateFormat('MM/dd/yyyy').format(_startDate).toString()}',
-                style: TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 16),
               ),
+              Text('-', style: TextStyle(fontSize: 15, color: Colors.black)),
               Text('${DateFormat('MM/dd/yyyy').format(_endDate).toString()}',
-                  style: TextStyle(fontSize: 15)),
+                  style: TextStyle(fontSize: 16)),
             ],
           ),
         ],

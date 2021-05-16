@@ -1,6 +1,7 @@
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:eha_app/components/app_drawer.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'components/body.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -12,6 +13,15 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFF5CEB8),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(
+              FontAwesomeIcons.bars,
+              color: Colors.black87,
+            ),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
       ),
       backgroundColor: Color(0xFFF8F8F8),
       body: Body(),

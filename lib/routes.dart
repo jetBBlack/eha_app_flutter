@@ -3,6 +3,7 @@ import 'package:eha_app/screens/employer/employer_screen.dart';
 import 'package:eha_app/screens/fill_data/fill_biodata/fill_biodata.dart';
 import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
 import 'package:eha_app/screens/forgot_password/forgot_password_screen.dart';
+import 'package:eha_app/screens/helper/helper_screen.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
 import 'package:eha_app/screens/sign_up/ask_screen.dart';
@@ -23,4 +24,5 @@ final Map<String, WidgetBuilder> routes = {
   PhoneSignUpScreen.routeName: (context) => PhoneSignUpScreen(),
   AccountScreen.routeName: (context) => AccountScreen(),
   UserDetailScreen.routeName: (context) => UserDetailScreen(),
+  HelperScreen.routeName: (context) => HelperScreen(),
 };

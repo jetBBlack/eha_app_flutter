@@ -1,6 +1,5 @@
 import 'package:eha_app/providers/social_auth.dart';
 import 'package:eha_app/screens/account/account_screen.dart';
-import 'package:eha_app/screens/sign_up/components/sign_up_as.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

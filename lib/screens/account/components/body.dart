@@ -1,5 +1,6 @@
 import 'package:eha_app/providers/social_auth.dart';
 import 'package:eha_app/screens/account/components/profile_pic.dart';
+import 'package:eha_app/screens/account/favorite_me_screen.dart';
 import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
 import 'package:eha_app/screens/user_details/user_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -30,22 +31,30 @@ class _BodyState extends State<Body> {
           },
         ),
         AccountMenu(
-          icon: 'assets/icons/User Icon.svg',
-          text: 'My Profile',
+          icon: 'assets/icons/subscription.svg',
+          text: 'My Subscriptions',
           press: () {},
         ),
         AccountMenu(
-          icon: 'assets/icons/Bell.svg',
-          text: 'Notificatons',
+          icon: 'assets/icons/heart add.svg',
+          text: 'My Favorite',
+          press: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => FavoriteScreen()));
+          },
+        ),
+        AccountMenu(
+          icon: 'assets/icons/heart.svg',
+          text: 'Who Favorite Me',
           press: () {},
         ),
         AccountMenu(
-          icon: 'assets/icons/User Icon.svg',
-          text: 'My Profile',
+          icon: 'assets/icons/share_profile.svg',
+          text: 'Share EHA',
           press: () {},
         ),
         AccountMenu(
-          icon: 'assets/icons/User Icon.svg',
+          icon: 'assets/icons/exit.svg',
           text: 'Log out',
           press: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();

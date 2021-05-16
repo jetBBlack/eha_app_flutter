@@ -48,119 +48,142 @@ class _BuildPicturesState extends State<BuildPictures>
   Widget build(BuildContext context) {
     super.build(context);
     return SafeArea(
-      child: Column(
-        children: [
-          Divider(),
-          TextButton(
-            style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.deepOrange,
-                onSurface: Colors.grey,
-                textStyle: TextStyle(
-                  fontSize: 25,
-                )),
-            onPressed: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Container(
-                      height: 150,
-                      color: Colors.grey[200],
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: getProportionateScreenWidth(20)),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            GestureDetector(
+      child: Padding(
+        padding:
+            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                SvgPicture.asset(
+                  'assets/icons/image-gallery.svg',
+                  color: Colors.cyan,
+                ),
+                SizedBox(
+                  width: getProportionateScreenWidth(10),
+                ),
+                Text(
+                  "PICTURES",
+                  style: TextStyle(color: Colors.cyan, fontSize: 18),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: getProportionateScreenWidth(20),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.deepOrange,
+                  onSurface: Colors.grey,
+                  textStyle: TextStyle(
+                    fontSize: 25,
+                  )),
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: 150,
+                        color: Colors.grey[200],
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: getProportionateScreenWidth(20)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    getImageFromCamera();
+                                  },
+                                  child: Text(
+                                    "Upload from camera",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                              GestureDetector(
                                 onTap: () {
-                                  getImageFromCamera();
+                                  getImageFromGallery();
                                 },
                                 child: Text(
-                                  "Upload from camera",
+                                  "Upload from gallery",
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
-                                )),
-                            GestureDetector(
-                              onTap: () {
-                                getImageFromGallery();
-                              },
-                              child: Text(
-                                "Upload from gallery",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                "Cancel",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-            },
-            child: Text('Upload Image'),
-          ),
-          SizedBox(height: getProportionateScreenWidth(20)),
-          _image.isEmpty
-              ? Text('Upload your image here')
-              : GridView.count(
-                  shrinkWrap: true,
-                  physics: BouncingScrollPhysics(),
-                  padding: EdgeInsets.all(12),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                  children: List.generate(
-                    _image.length,
-                    (index) {
-                      return Stack(
-                        children: [
-                          Container(
-                            // decoration: BoxDecoration(
-                            //   border: Border.all(color: Colors.grey[300]),
-                            //   shape: BoxShape.rectangle,
-                            // ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.file(
-                                _image[index],
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: -5,
-                            top: -10,
-                            child: Container(
-                              child: IconButton(
-                                icon: SvgPicture.asset(
-                                  'assets/icons/Close.svg',
-                                  height: 25,
-                                  width: 25,
                                 ),
-                                color: Colors.red,
-                                onPressed: () {
-                                  clearImage(index);
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pop(context);
                                 },
+                                child: Text(
+                                  "Cancel",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    });
+              },
+              child: Text('Upload Image'),
+            ),
+            SizedBox(height: getProportionateScreenWidth(20)),
+            _image.isEmpty
+                ? Text('Upload your image here')
+                : GridView.count(
+                    shrinkWrap: true,
+                    physics: BouncingScrollPhysics(),
+                    padding: EdgeInsets.all(12),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                    children: List.generate(
+                      _image.length,
+                      (index) {
+                        return Stack(
+                          children: [
+                            Container(
+                              // decoration: BoxDecoration(
+                              //   border: Border.all(color: Colors.grey[300]),
+                              //   shape: BoxShape.rectangle,
+                              // ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.file(
+                                  _image[index],
+                                ),
                               ),
                             ),
-                          )
-                        ],
-                      );
-                    },
+                            Positioned(
+                              right: -5,
+                              top: -10,
+                              child: Container(
+                                child: IconButton(
+                                  icon: SvgPicture.asset(
+                                    'assets/icons/Close.svg',
+                                    height: 25,
+                                    width: 25,
+                                  ),
+                                  color: Colors.red,
+                                  onPressed: () {
+                                    clearImage(index);
+                                  },
+                                ),
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
-        ],
+          ],
+        ),
       ),
     );
   }

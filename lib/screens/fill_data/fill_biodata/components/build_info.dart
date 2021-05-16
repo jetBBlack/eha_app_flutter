@@ -1,5 +1,4 @@
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:dropdownfield/dropdownfield.dart';
 import 'package:eha_app/components/drop_down_container.dart';
 import 'package:eha_app/components/single_choice.dart';
 import 'package:eha_app/constant.dart';
@@ -186,7 +185,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
   ];
   TextEditingController _nationality = TextEditingController();
   String selectNational = " ";
-  TextEditingController birthCountry = TextEditingController();
+  TextEditingController _birthCountry = TextEditingController();
   String selectBirthCountry = " ";
 
   @override
@@ -287,17 +286,26 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          DropDownField(
-            controller: birthCountry,
-            hintText: "Select any Country",
-            labelText: "Birth Country",
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
             items: countryList,
-            itemsVisibleInDropdown: 4,
-            onValueChanged: (value) {
-              myProvider.setbirthCountry(value);
-              selectBirthCountry = value;
-            },
+            label: 'Birth Country',
+            searchBoxController: _birthCountry,
+            onChanged: myProvider.setbirthCountry,
+            selectedItem: countryList[0],
           ),
+          // DropDownField(
+          //   controller: _birthCountry,
+          //   hintText: "Select any Country",
+          //   labelText: "Birth Country",
+          //   items: countryList,
+          //   itemsVisibleInDropdown: 4,
+          //   onValueChanged: (value) {
+          //     myProvider.setbirthCountry(value);
+          //     selectBirthCountry = value;
+          //   },
+          // ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),

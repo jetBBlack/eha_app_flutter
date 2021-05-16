@@ -32,22 +32,31 @@ class AppDrawer extends StatelessWidget {
             ),
             onTap: () {},
           ),
+          Divider(),
           ListTile(
-            title: Text('My Info',
+            title: Text('My Info (Employer)',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)),
             onTap: () {
               Navigator.pushNamed(context, FillEmployerDataScreen.routeName);
             },
           ),
+          Divider(),
+          ListTile(
+            title: Text('My Info (Helper)',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)),
+            onTap: () {
+              Navigator.pushNamed(context, FillBioDataScreen.routeName);
+            },
+          ),
+          Divider(),
           ListTile(
             title: Text(
               'Other Service',
               style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
             ),
-            onTap: () {
-              Navigator.pushNamed(context, FillBioDataScreen.routeName);
-            },
+            onTap: () {},
           ),
+          Divider(),
           ListTile(
             title: Text(
               'Account',
@@ -57,6 +66,7 @@ class AppDrawer extends StatelessWidget {
               Navigator.pushNamed(context, AccountScreen.routeName);
             },
           ),
+          Divider(),
         ],
       ),
     );

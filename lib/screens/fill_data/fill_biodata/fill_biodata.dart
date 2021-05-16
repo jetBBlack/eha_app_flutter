@@ -18,6 +18,8 @@ class FillBioDataScreen extends StatefulWidget {
 }
 
 class _FillBioDataScreenState extends State<FillBioDataScreen> {
+  PageController pageController = PageController(initialPage: 0);
+
   @override
   Widget build(BuildContext context) {
     HelperProvider provider = Provider.of<HelperProvider>(context);
@@ -28,13 +30,17 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
           title: Text('BIODATA'),
           actions: <Widget>[
             TextButton(
-                onPressed: () {
-                  provider.createHelperWithData();
-                },
-                child: Text(
-                  'Save',
-                  style: TextStyle(fontSize: 17),
-                ))
+              onPressed: () {
+                provider.createHelperWithData();
+              },
+              child: Text(
+                'Create',
+                style: TextStyle(fontSize: 17),
+              ),
+            ),
+            SizedBox(
+              width: 5,
+            )
           ],
           bottom: TabBar(
             indicatorColor: Colors.cyan[600],

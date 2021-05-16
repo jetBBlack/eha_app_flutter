@@ -1,4 +1,5 @@
 import 'package:eha_app/screens/employer/employer_screen.dart';
+import 'package:eha_app/screens/helper/helper_screen.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'category_card.dart';
@@ -47,7 +48,9 @@ class Body extends StatelessWidget {
                       CategoryCard(
                         title: "Find Helper",
                         svgSrc: "assets/icons/team.svg",
-                        press: () {},
+                        press: () {
+                          Navigator.pushNamed(context, HelperScreen.routeName);
+                        },
                       ),
                       CategoryCard(
                         title: "Find Employer",

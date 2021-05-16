@@ -113,14 +113,13 @@ class SocialAuthProvider extends ChangeNotifier {
     );
 
     final TwitterLoginResult result = await twitterLogin.authorize();
-    debugPrint(result.status.toString());
     switch (result.status) {
       case TwitterLoginStatus.loggedIn:
         var session = result.session;
-        print(session.username);
         final accessToken = session.token;
-        AuthCredential credential = FacebookAuthProvider.credential(
-          accessToken,
+        AuthCredential credential = TwitterAuthProvider.credential(
+          accessToken: accessToken,
+          secret: session.secret,
         );
         await FirebaseAuth.instance.signInWithCredential(credential);
         isSigningIn = false;
