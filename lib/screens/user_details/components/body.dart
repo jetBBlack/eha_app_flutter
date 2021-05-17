@@ -355,7 +355,7 @@ class BuildWorkHistoy extends StatelessWidget {
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

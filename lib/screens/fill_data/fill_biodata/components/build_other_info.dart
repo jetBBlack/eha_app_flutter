@@ -78,25 +78,26 @@ class _BuildOtherInfoState extends State<BuildOtherInfo>
                   height: getProportionateScreenWidth(10),
                 ),
                 Container(
-                  child: ListView.builder(
+                  child: ListView.separated(
+                    itemCount: _count,
                     shrinkWrap: true,
                     physics: BouncingScrollPhysics(),
                     scrollDirection: Axis.vertical,
-                    itemBuilder: (context, index) {
-                      final history = _histories[index];
+                    itemBuilder: (BuildContext context, int index) {
+                      final histoty = _histories[index];
                       return Dismissible(
-                        key: UniqueKey(),
-                        child: history,
-                        background: Container(
-                          color: Colors.cyan,
-                        ),
+                        key: ValueKey<Widget>(_histories[index]),
+                        child: histoty,
                         onDismissed: (DismissDirection direction) {
                           setState(() {
                             _histories.removeAt(index);
+                            _count--;
                           });
                         },
                       );
                     },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const Divider(),
                   ),
                 ),
                 ElevatedButton(

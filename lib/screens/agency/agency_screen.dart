@@ -10,9 +10,7 @@ class AgencyScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Agency'),
       ),
-      body: Body(
-        
-      ),
+      body: Body(),
     );
   }
 }

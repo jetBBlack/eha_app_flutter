@@ -1,3 +1,4 @@
+import 'package:eha_app/screens/agency/agency_screen.dart';
 import 'package:eha_app/screens/employer/employer_screen.dart';
 import 'package:eha_app/screens/helper/helper_screen.dart';
 import 'package:eha_app/size_config.dart';
@@ -63,7 +64,9 @@ class Body extends StatelessWidget {
                       CategoryCard(
                         title: "Find Agency",
                         svgSrc: "assets/icons/agency.svg",
-                        press: () {},
+                        press: () {
+                          Navigator.pushNamed(context, AgencyScreen.routeName);
+                        },
                       ),
                       CategoryCard(
                         title: "Service",
