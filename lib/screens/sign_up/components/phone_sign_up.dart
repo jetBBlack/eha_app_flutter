@@ -3,8 +3,7 @@ import 'package:eha_app/components/default_button.dart';
 import 'package:eha_app/components/form_error.dart';
 import 'package:eha_app/models/register_model.dart';
 import 'package:eha_app/providers/auth.dart';
-import 'package:eha_app/screens/fill_data/fill_biodata/fill_biodata.dart';
-import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
+
 import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:eha_app/screens/sign_up/sign_up_screen.dart';
 import 'package:eha_app/size_config.dart';
@@ -12,7 +11,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../../../constant.dart';
 
@@ -109,16 +108,16 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.BOTTOM,
                 backgroundColor: Colors.green);
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            String type = prefs.getString('user_type');
-            print(type);
-            if (type == 'helper') {
-              Navigator.pushNamed(context, FillBioDataScreen.routeName);
-            } else if (type == 'employer') {
-              Navigator.pushNamed(context, FillEmployerDataScreen.routeName);
-            } else {
-              Navigator.pushNamed(context, HomeScreen.routeName);
-            }
+            // SharedPreferences prefs = await SharedPreferences.getInstance();
+            // String type = prefs.getString('user_type');
+            // if (type == 'helper') {
+            //   Navigator.pushNamed(context, FillBioDataScreen.routeName);
+            // } else if (type == 'employer') {
+            //   Navigator.pushNamed(context, FillEmployerDataScreen.routeName);
+            // } else {
+            //   Navigator.pushNamed(context, HomeScreen.routeName);
+            // }
+            Navigator.pushNamed(context, HomeScreen.routeName);
           } else {
             for (var i = 0; i <= response['message'].length; i++) {
               Fluttertoast.showToast(
@@ -165,7 +164,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
           ),
           DefaultButton(
             text: "Continue",
-            press: () {
+            press: () async {
               if (_formKey.currentState.validate()) {
                 doRegister();
               }

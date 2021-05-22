@@ -24,10 +24,10 @@ class AuthProvider extends ChangeNotifier {
   Status get loggedInStatus => _loggedInStatus;
   Status get registeredInStatus => _registeredInStatus;
 
-  Future<Map<String, dynamic>> login(String email, String password) async {
+  Future<Map<String, dynamic>> login(String username, String password) async {
     var result;
     final Map<String, dynamic> loginData = {
-      "username": email,
+      "username": username,
       "password": password
     };
 

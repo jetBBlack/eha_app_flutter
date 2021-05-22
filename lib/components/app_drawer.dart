@@ -1,6 +1,6 @@
 import 'package:eha_app/screens/account/account_screen.dart';
-import 'package:eha_app/screens/fill_data/fill_biodata/fill_biodata.dart';
-import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
+import 'package:eha_app/screens/fill_helper_data/fill_biodata/fill_biodata.dart';
+import 'package:eha_app/screens/fill_helper_data/fill_mom_data/fill_mom_data.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +37,7 @@ class AppDrawer extends StatelessWidget {
             title: Text('My Info (Employer)',
                 style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20)),
             onTap: () {
-              Navigator.pushNamed(context, FillEmployerDataScreen.routeName);
+              Navigator.pushNamed(context, FillMoMDataScreen.routeName);
             },
           ),
           Divider(),

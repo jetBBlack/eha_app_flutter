@@ -1,4 +1,4 @@
-import 'package:eha_app/models/employer.dart';
+import 'package:eha_app/models/employer_fake.dart';
 import 'package:eha_app/screens/user_details/user_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -183,7 +183,7 @@ class _BodyState extends State<Body> {
                   child: Container(
                     child: Center(
                       child: Text(
-                        'Can cook beef',
+                        'Can cook beef...',
                         style: TextStyle(fontSize: 16),
                       ),
                     ),

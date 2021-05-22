@@ -1,8 +1,9 @@
 import 'package:eha_app/screens/account/account_screen.dart';
 import 'package:eha_app/screens/agency/agency_screen.dart';
 import 'package:eha_app/screens/employer/employer_screen.dart';
-import 'package:eha_app/screens/fill_data/fill_biodata/fill_biodata.dart';
-import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
+import 'package:eha_app/screens/fill_employer_data/fill_info/fill_info_screen.dart';
+import 'package:eha_app/screens/fill_helper_data/fill_biodata/fill_biodata.dart';
+import 'package:eha_app/screens/fill_helper_data/fill_mom_data/fill_mom_data.dart';
 import 'package:eha_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:eha_app/screens/helper/helper_screen.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
@@ -19,8 +20,9 @@ final Map<String, WidgetBuilder> routes = {
   SignInScreen.routeName: (context) => SignInScreen(),
   ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
   SignUpScreen.routeName: (context) => SignUpScreen(),
-  FillEmployerDataScreen.routeName: (context) => FillEmployerDataScreen(),
+  FillMoMDataScreen.routeName: (context) => FillMoMDataScreen(),
   FillBioDataScreen.routeName: (context) => FillBioDataScreen(),
+  FillEmployerInfoScreen.routeName: (context) => FillEmployerInfoScreen(),
   AskScreen.routeName: (context) => AskScreen(),
   PhoneSignUpScreen.routeName: (context) => PhoneSignUpScreen(),
   AccountScreen.routeName: (context) => AccountScreen(),

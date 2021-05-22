@@ -1,10 +1,9 @@
-import 'package:eha_app/components/custom_label_container.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eha_app/components/drop_down_container.dart';
+import 'package:eha_app/constant.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../../constant.dart';
 
 class BuildPersonalInfoPage extends StatelessWidget {
   @override
@@ -25,6 +24,8 @@ class BuildPersonalInfoPage extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       'assets/icons/User.svg',
+                      height: 20,
+                      width: 20,
                       color: Colors.cyan,
                     ),
                     SizedBox(
@@ -39,7 +40,7 @@ class BuildPersonalInfoPage extends StatelessWidget {
                 SizedBox(
                   height: getProportionateScreenWidth(20),
                 ),
-                FillEmployerForm(),
+                FillGeneralForm(),
                 SizedBox(
                   height: getProportionateScreenWidth(30),
                 ),
@@ -47,8 +48,8 @@ class BuildPersonalInfoPage extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       'assets/icons/wives.svg',
-                      height: 16,
-                      width: 16,
+                      height: 20,
+                      width: 20,
                       color: Colors.cyan,
                     ),
                     SizedBox(
@@ -71,8 +72,8 @@ class BuildPersonalInfoPage extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       'assets/icons/clipboard.svg',
-                      height: 16,
-                      width: 16,
+                      height: 20,
+                      width: 20,
                       color: Colors.cyan,
                     ),
                     SizedBox(
@@ -88,6 +89,24 @@ class BuildPersonalInfoPage extends StatelessWidget {
                   height: getProportionateScreenWidth(20),
                 ),
                 BuildMalaysiaForm(),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  children: [
+                    Spacer(),
+                    Column(
+                      children: [
+                        Icon(
+                          Icons.arrow_back,
+                          size: 30,
+                          color: kPrimaryColor,
+                        ),
+                        Text('Swipe to continue'),
+                      ],
+                    )
+                  ],
+                )
               ],
             ),
           ),
@@ -97,15 +116,49 @@ class BuildPersonalInfoPage extends StatelessWidget {
   }
 }
 
-class FillEmployerForm extends StatefulWidget {
+class FillGeneralForm extends StatefulWidget {
   @override
-  _FillEmployerFormState createState() => _FillEmployerFormState();
+  _FillGeneralFormState createState() => _FillGeneralFormState();
 }
 
-class _FillEmployerFormState extends State<FillEmployerForm> {
+class _FillGeneralFormState extends State<FillGeneralForm> {
   final _formKey = GlobalKey<FormState>();
-  List<String> gender = ["Male", "Female", "Unknown"];
+  List<String> gender = ["Male", "Female"];
+  List<String> has8yeducation = ["Yes", "No"];
+  String selectedEducation = 'Yes';
   String genderSelect = "Male";
+  List<String> passType = [
+    'Not In Singapore Yet',
+    'Socail Visit Pass',
+    'Special Pass',
+    'work pass(includs WP, ER, REP and S pass)'
+  ];
+
+  List<String> maritalStatusList = [
+    "Divorced",
+    "Married",
+    "Separated",
+    "Single",
+    "Widowed"
+  ];
+  String maritalSelect = "Married";
+  List<String> countryList = [
+    "Filipino",
+    "Burman",
+    "India",
+    "Sri Lanka",
+    "Bangladesh",
+    "Malaysian",
+    "Indonesian",
+    "Chinese-HongKong",
+    "Chinese-Macau",
+    "Chinese-Taiwan",
+    "Thai",
+    "Korean"
+  ];
+  TextEditingController _nationality = TextEditingController();
+  TextEditingController _birthCountry = TextEditingController();
+  TextEditingController _passTypeController = TextEditingController();
   TextEditingController dateCtl = TextEditingController();
 
   @override
@@ -137,12 +190,12 @@ class _FillEmployerFormState extends State<FillEmployerForm> {
           TextFormField(
             decoration: InputDecoration(
               labelText: "Work Permit Number",
-              hintText: "For Exmaple, 1234567",
+              hintText: "For Exmaple, 12345678",
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
           SizedBox(
-            height: getProportionateScreenWidth(12),
+            height: getProportionateScreenWidth(15),
           ),
           TextFormField(
             decoration: InputDecoration(
@@ -151,7 +204,7 @@ class _FillEmployerFormState extends State<FillEmployerForm> {
             ),
           ),
           SizedBox(
-            height: getProportionateScreenWidth(15),
+            height: getProportionateScreenWidth(20),
           ),
           TextFormField(
             decoration: InputDecoration(
@@ -160,7 +213,7 @@ class _FillEmployerFormState extends State<FillEmployerForm> {
             ),
           ),
           SizedBox(
-            height: getProportionateScreenWidth(15),
+            height: getProportionateScreenWidth(20),
           ),
           TextFormField(
             controller: dateCtl,
@@ -194,41 +247,81 @@ class _FillEmployerFormState extends State<FillEmployerForm> {
               });
             },
           ),
-        ],
-      ),
-    );
-  }
-
-  CustomContainer buildCustomContainer() {
-    return CustomContainer(
-      labelText: "Gender",
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            getProportionateScreenWidth(25),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
           ),
-          border: Border.all(color: kTextColor)),
-      child: DropdownButton(
-        isExpanded: true,
-        value: genderSelect,
-        icon: Icon(Icons.arrow_drop_down),
-        iconSize: getProportionateScreenWidth(25),
-        elevation: 10,
-        underline: Container(
-          color: kTextColor,
-        ),
-        style: TextStyle(
-            color: kTextColor, fontSize: getProportionateScreenWidth(16)),
-        onChanged: (String newValue) {
-          setState(() {
-            genderSelect = newValue;
-          });
-        },
-        items: gender.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem(
-            child: Text(value),
-            value: value,
-          );
-        }).toList(),
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            items: passType,
+            label: 'Immigration Pass Type',
+            searchBoxController: _passTypeController,
+            //onChanged: myProvider.setnationality,
+            selectedItem: passType[0],
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          DropDownContainer(
+            labelText: "Has 8 years of education",
+            selectedValue: selectedEducation,
+            valueList: has8yeducation,
+            press: (String newValue) {
+              setState(() {
+                selectedEducation = newValue;
+              });
+            },
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            items: passType,
+            label: 'Education',
+            searchBoxController: _passTypeController,
+            //onChanged: myProvider.setnationality,
+            selectedItem: passType[0],
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          DropDownContainer(
+            selectedValue: maritalSelect,
+            labelText: "Martial Status",
+            valueList: maritalStatusList,
+            press: (String newValue) {
+              setState(() {
+                maritalSelect = newValue;
+              });
+            },
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            items: countryList,
+            label: 'Nationality',
+            searchBoxController: _nationality,
+            //onChanged: myProvider.setnationality,
+            selectedItem: countryList[0],
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            items: countryList,
+            label: 'Birth Country',
+            searchBoxController: _birthCountry,
+            //onChanged: myProvider.setbirthCountry,
+            selectedItem: countryList[0],
+          ),
+        ],
       ),
     );
   }
@@ -298,6 +391,8 @@ class BuildMalaysiaForm extends StatefulWidget {
 }
 
 class _BuildMalaysiaFormState extends State<BuildMalaysiaForm> {
+  List<String> colorList = ['Pink', 'Blue'];
+  String selectedColor = 'Blue';
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -312,12 +407,16 @@ class _BuildMalaysiaFormState extends State<BuildMalaysiaForm> {
           SizedBox(
             height: getProportionateScreenWidth(15),
           ),
-          TextFormField(
-            decoration: InputDecoration(
-              labelText: "IC Color",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
-          )
+          DropDownContainer(
+            selectedValue: selectedColor,
+            labelText: "IC Color",
+            valueList: colorList,
+            press: (String newValue) {
+              setState(() {
+                selectedColor = newValue;
+              });
+            },
+          ),
         ],
       ),
     );

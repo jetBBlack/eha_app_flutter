@@ -184,9 +184,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     "Korean"
   ];
   TextEditingController _nationality = TextEditingController();
-  String selectNational = " ";
   TextEditingController _birthCountry = TextEditingController();
-  String selectBirthCountry = " ";
 
   @override
   void initState() {

@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class HelperModel {
   PersonalInfo personalInfo;
   List<ContactNo> contactNo;
@@ -7,7 +9,7 @@ class HelperModel {
   String medicalInfo;
   String yesNo;
   String slider;
-  String photo;
+  FileImage photo;
   String selfDescription;
   String otherInfo;
   String settings;

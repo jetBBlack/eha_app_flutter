@@ -1,4 +1,5 @@
 import 'package:eha_app/providers/helper_provider.dart';
+import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,7 +32,8 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                provider.createHelperWithData();
+                //provider.createHelperWithData();
+                Navigator.pushNamed(context, HomeScreen.routeName);
               },
               child: Text(
                 'Create',
@@ -39,7 +41,7 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
               ),
             ),
             SizedBox(
-              width: 5,
+              width: 8,
             )
           ],
           bottom: TabBar(

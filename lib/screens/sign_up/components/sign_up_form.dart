@@ -1,19 +1,14 @@
 import 'package:eha_app/components/custom_surffix_icon.dart';
 import 'package:eha_app/components/default_button.dart';
 import 'package:eha_app/components/form_error.dart';
-
 import 'package:eha_app/models/register_model.dart';
 import 'package:eha_app/providers/auth.dart';
-import 'package:eha_app/screens/fill_data/fill_biodata/fill_biodata.dart';
-import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
-
 import 'package:eha_app/screens/sign_up/phone_sign_up_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../constant.dart';
 import '../../../size_config.dart';
@@ -35,15 +30,15 @@ class _SignUpFormState extends State<SignUpForm> {
   void initState() {
     super.initState();
     registerRequestModel = new RegisterRequestModel();
-    // if (_user == null) {
-    //   registerRequestModel.contactNo = 'null';
-    // } else {
-    //   if (_user.phoneNumber.isNotEmpty) {
-    //     registerRequestModel.contactNo = _user.phoneNumber;
-    //   } else {
-    //     registerRequestModel.contactNo = 'null';
-    //   }
-    // }
+    if (_user == null) {
+      registerRequestModel.contactNo = 'null';
+    } else {
+      if (_user.phoneNumber != null) {
+        registerRequestModel.contactNo = _user.phoneNumber;
+      } else {
+        registerRequestModel.contactNo = 'null';
+      }
+    }
   }
 
   void addError({String error}) {
@@ -86,16 +81,17 @@ class _SignUpFormState extends State<SignUpForm> {
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.BOTTOM,
                 backgroundColor: Colors.green);
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            String type = prefs.getString('user_type');
-            print(type);
-            if (type == 'helper') {
-              Navigator.pushNamed(context, FillBioDataScreen.routeName);
-            } else if (type == 'employer') {
-              Navigator.pushNamed(context, FillEmployerDataScreen.routeName);
-            } else {
-              Navigator.pushNamed(context, HomeScreen.routeName);
-            }
+            // SharedPreferences prefs = await SharedPreferences.getInstance();
+            // String type = prefs.getString('user_type');
+            // print(type);
+            // if (type == 'helper') {
+            //   Navigator.pushNamed(context, FillBioDataScreen.routeName);
+            // } else if (type == 'employer') {
+            //   Navigator.pushNamed(context, FillEmployerDataScreen.routeName);
+            // } else {
+            //   Navigator.pushNamed(context, HomeScreen.routeName);
+            // }
+            Navigator.pushNamed(context, HomeScreen.routeName);
           } else {
             for (var i = 0; i <= response['message'].length; i++) {
               Fluttertoast.showToast(
@@ -121,10 +117,13 @@ class _SignUpFormState extends State<SignUpForm> {
           GestureDetector(
             onTap: () =>
                 Navigator.pushNamed(context, PhoneSignUpScreen.routeName),
-            child: Text(
-              "Use phone number",
-              textAlign: TextAlign.left,
-              style: TextStyle(fontSize: 15, color: Colors.cyan[500]),
+            child: Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Use phone number",
+                textAlign: TextAlign.left,
+                style: TextStyle(fontSize: 15, color: Colors.cyan[500]),
+              ),
             ),
           ),
           SizedBox(
@@ -144,7 +143,7 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
           DefaultButton(
             text: "Continue",
-            press: () {
+            press: () async {
               if (_formKey.currentState.validate()) {
                 doRegister();
               }

@@ -1,5 +1,8 @@
 import 'package:eha_app/screens/agency/agency_screen.dart';
 import 'package:eha_app/screens/employer/employer_screen.dart';
+import 'package:eha_app/screens/fill_employer_data/fill_info/fill_info_screen.dart';
+import 'package:eha_app/screens/fill_helper_data/fill_biodata/fill_biodata.dart';
+import 'package:eha_app/screens/fill_helper_data/fill_mom_data/fill_mom_data.dart';
 import 'package:eha_app/screens/helper/helper_screen.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
@@ -69,10 +72,28 @@ class Body extends StatelessWidget {
                         },
                       ),
                       CategoryCard(
-                        title: "Service",
-                        svgSrc: "assets/icons/service.svg",
-                        press: () {},
+                        title: "Fill Up BioData",
+                        svgSrc: "assets/icons/tax.svg",
+                        press: () {
+                          // Navigator.pushNamed(
+                          //     context, FillBioDataScreen.routeName);
+                          Navigator.pushNamed(
+                              context, FillEmployerInfoScreen.routeName);
+                        },
                       ),
+                      CategoryCard(
+                        title: "M.O.M",
+                        svgSrc: "assets/icons/mom.svg",
+                        press: () {
+                          Navigator.pushNamed(
+                              context, FillMoMDataScreen.routeName);
+                        },
+                      ),
+                      // CategoryCard(
+                      //   title: "Service",
+                      //   svgSrc: "assets/icons/service.svg",
+                      //   press: () {},
+                      // ),
                     ],
                   ),
                 )

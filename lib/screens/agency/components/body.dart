@@ -1,4 +1,4 @@
-import 'package:eha_app/models/agency.dart';
+import 'package:eha_app/models/agency_fake.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,7 +21,44 @@ class _BodyState extends State<Body> {
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Column(
-            children: buildAgencies(),
+            children: [
+              SizedBox(
+                height: getProportionateScreenWidth(20),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenWidth(20)),
+                    child: Text(
+                      "Agency",
+                      style: TextStyle(
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                        height: 1.2,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: getProportionateScreenWidth(50),
+                    height: getProportionateScreenHeight(50),
+                    padding: EdgeInsets.all(getProportionateScreenWidth(12)),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      shape: BoxShape.circle,
+                    ),
+                    child: SvgPicture.asset('assets/icons/filter.svg'),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: getProportionateScreenWidth(20),
+              ),
+              Column(
+                children: buildAgencies(),
+              ),
+            ],
           ),
         ),
       ),

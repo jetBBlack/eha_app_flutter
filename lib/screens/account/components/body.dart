@@ -46,7 +46,10 @@ class _BodyState extends State<Body> {
         AccountMenu(
           icon: 'assets/icons/heart.svg',
           text: 'Who Favorite Me',
-          press: () {},
+          press: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => FavoriteScreen()));
+          },
         ),
         AccountMenu(
           icon: 'assets/icons/share_profile.svg',

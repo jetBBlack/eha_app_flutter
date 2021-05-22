@@ -1,4 +1,4 @@
-import 'package:eha_app/screens/fill_data/fill_employer_data/fill_employer_data.dart';
+import 'package:eha_app/screens/fill_helper_data/fill_mom_data/fill_mom_data.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -68,7 +68,7 @@ class CustomBottomNavBar extends StatelessWidget {
                     : inActiveIconColor,
               ),
               onPressed: () {
-                Navigator.pushNamed(context, FillEmployerDataScreen.routeName);
+                Navigator.pushNamed(context, FillMoMDataScreen.routeName);
               },
             ),
             IconButton(

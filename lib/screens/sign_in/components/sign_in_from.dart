@@ -126,8 +126,8 @@ class _SignFormState extends State<SignForm> {
               : DefaultButton(
                   text: "Continue",
                   press: () {
-                    //doLogin();
-                    Navigator.pushNamed(context, HomeScreen.routeName);
+                    doLogin();
+                    //Navigator.pushNamed(context, HomeScreen.routeName);
                   },
                 )
         ],
