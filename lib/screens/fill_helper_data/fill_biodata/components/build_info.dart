@@ -1,5 +1,5 @@
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:eha_app/components/drop_down_container.dart';
+
 import 'package:eha_app/components/single_choice.dart';
 import 'package:eha_app/constant.dart';
 import 'package:eha_app/providers/helper_provider.dart';
@@ -223,30 +223,28 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          DropDownContainer(
-            labelText: "Gender",
-            selectedValue: genderSelect,
-            valueList: genderList,
-            press: (String newValue) {
-              myProvider.setgender(newValue);
-              setState(() {
-                genderSelect = newValue;
-              });
-            },
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            items: ['Male', 'Female'],
+            label: 'Gender',
+            onChanged: myProvider.setgender,
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          DropDownContainer(
-            selectedValue: maritalSelect,
-            labelText: "Martial Status",
-            valueList: maritalStatusList,
-            press: (String newValue) {
-              myProvider.setmaritalStatus(newValue);
-              setState(() {
-                maritalSelect = newValue;
-              });
-            },
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            items: maritalStatusList,
+            label: 'Marital Status',
+            onChanged: myProvider.setmaritalStatus,
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -280,6 +278,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             searchBoxController: _nationality,
             onChanged: myProvider.setnationality,
             selectedItem: countryList[0],
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -292,6 +293,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             searchBoxController: _birthCountry,
             onChanged: myProvider.setbirthCountry,
             selectedItem: countryList[0],
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
           ),
           // DropDownField(
           //   controller: _birthCountry,

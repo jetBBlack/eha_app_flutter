@@ -1,63 +1,67 @@
-import 'package:flutter/cupertino.dart';
-
 class HelperModel {
   PersonalInfo personalInfo;
-  List<ContactNo> contactNo;
-  SingaporeAddress singaporeAddress;
-  OverseasAddress overseasAddress;
-  String questionAnswer;
-  String medicalInfo;
-  String yesNo;
-  String slider;
-  FileImage photo;
+  List<YesNoQuestions> yesNoQuestions;
+  List<Medicals> medicals;
+  List<Skills> skills;
+  List<EmploymentHistories> employmentHistories;
+  OtherInfo otherInfo;
   String selfDescription;
-  String otherInfo;
-  String settings;
-  String employmentHistory;
-  String signature;
+  List<Photo> photo;
+  String searchable;
+  String agencyId;
 
   HelperModel(
       {this.personalInfo,
-      this.contactNo,
-      this.singaporeAddress,
-      this.overseasAddress,
-      this.questionAnswer,
-      this.medicalInfo,
-      this.yesNo,
-      this.slider,
-      this.photo,
-      this.selfDescription,
+      this.yesNoQuestions,
+      this.medicals,
+      this.skills,
+      this.employmentHistories,
       this.otherInfo,
-      this.settings,
-      this.employmentHistory,
-      this.signature});
+      this.selfDescription,
+      this.photo,
+      this.searchable,
+      this.agencyId});
 
   HelperModel.fromJson(Map<String, dynamic> json) {
     personalInfo = json['personalInfo'] != null
         ? new PersonalInfo.fromJson(json['personalInfo'])
         : null;
-    if (json['contactNo'] != null) {
-      List<ContactNo> contactNo = [];
-      json['contactNo'].forEach((v) {
-        contactNo.add(new ContactNo.fromJson(v));
+    if (json['yesNoQuestions'] != null) {
+      List<YesNoQuestions> yesNoQuestions = [];
+      json['yesNoQuestions'].forEach((v) {
+        yesNoQuestions.add(new YesNoQuestions.fromJson(v));
       });
     }
-    singaporeAddress = json['singaporeAddress'] != null
-        ? new SingaporeAddress.fromJson(json['singaporeAddress'])
+    if (json['medicals'] != null) {
+      List<Medicals> medicals = [];
+      json['medicals'].forEach((v) {
+        medicals.add(new Medicals.fromJson(v));
+      });
+    }
+    if (json['skills'] != null) {
+      List<Skills> skills = [];
+      json['skills'].forEach((v) {
+        skills.add(new Skills.fromJson(v));
+      });
+    }
+    if (json['employmentHistories'] != null) {
+      List<EmploymentHistories> employmentHistories = [];
+      json['employmentHistories'].forEach((v) {
+        employmentHistories.add(new EmploymentHistories.fromJson(v));
+      });
+    }
+    otherInfo = json['otherInfo'] != null
+        ? new OtherInfo.fromJson(json['otherInfo'])
         : null;
-    overseasAddress = json['overseasAddress'] != null
-        ? new OverseasAddress.fromJson(json['overseasAddress'])
-        : null;
-    questionAnswer = json['questionAnswer'];
-    medicalInfo = json['medicalInfo'];
-    yesNo = json['yesNo'];
-    slider = json['slider'];
-    photo = json['photo'];
     selfDescription = json['selfDescription'];
-    otherInfo = json['otherInfo'];
-    settings = json['settings'];
-    employmentHistory = json['employmentHistory'];
-    signature = json['signature'];
+    if (json['photo'] != null) {
+      List<Photo> photo = [];
+      json['photo'].forEach((v) {
+        photo.add(new Photo.fromJson(v));
+      });
+    }
+    searchable = json['searchable'];
+    agencyId = json['agencyId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -65,25 +69,29 @@ class HelperModel {
     if (this.personalInfo != null) {
       data['personalInfo'] = this.personalInfo.toJson();
     }
-    if (this.contactNo != null) {
-      data['contactNo'] = this.contactNo.map((v) => v.toJson()).toList();
+    if (this.yesNoQuestions != null) {
+      data['yesNoQuestions'] =
+          this.yesNoQuestions.map((v) => v.toJson()).toList();
     }
-    if (this.singaporeAddress != null) {
-      data['singaporeAddress'] = this.singaporeAddress.toJson();
+    if (this.medicals != null) {
+      data['medicals'] = this.medicals.map((v) => v.toJson()).toList();
     }
-    if (this.overseasAddress != null) {
-      data['overseasAddress'] = this.overseasAddress.toJson();
+    if (this.skills != null) {
+      data['skills'] = this.skills.map((v) => v.toJson()).toList();
     }
-    data['questionAnswer'] = this.questionAnswer;
-    data['medicalInfo'] = this.medicalInfo;
-    data['yesNo'] = this.yesNo;
-    data['slider'] = this.slider;
-    data['photo'] = this.photo;
+    if (this.employmentHistories != null) {
+      data['employmentHistories'] =
+          this.employmentHistories.map((v) => v.toJson()).toList();
+    }
+    if (this.otherInfo != null) {
+      data['otherInfo'] = this.otherInfo.toJson();
+    }
     data['selfDescription'] = this.selfDescription;
-    data['otherInfo'] = this.otherInfo;
-    data['settings'] = this.settings;
-    data['employmentHistory'] = this.employmentHistory;
-    data['signature'] = this.signature;
+    if (this.photo != null) {
+      data['photo'] = this.photo.map((v) => v.toJson()).toList();
+    }
+    data['searchable'] = this.searchable;
+    data['agencyId'] = this.agencyId;
     return data;
   }
 }
@@ -104,15 +112,13 @@ class PersonalInfo {
       this.birthCountry,
       this.maritalStatus});
 
-  factory PersonalInfo.fromJson(Map<String, dynamic> json) {
-    return PersonalInfo(
-      name: json['name'],
-      gender: json['gender'],
-      province: json['province'],
-      nationality: json['nationality'],
-      birthCountry: json['birthCountry'],
-      maritalStatus: json['maritalStatus'],
-    );
+  PersonalInfo.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    gender = json['gender'];
+    province = json['province'];
+    nationality = json['nationality'];
+    birthCountry = json['birthCountry'];
+    maritalStatus = json['maritalStatus'];
   }
 
   Map<String, dynamic> toJson() {
@@ -127,83 +133,135 @@ class PersonalInfo {
   }
 }
 
-class ContactNo {
-  String countryCode;
-  String phoneNo;
+class YesNoQuestions {
+  String id;
+  String value;
 
-  ContactNo({this.countryCode, this.phoneNo});
+  YesNoQuestions({this.id, this.value});
 
-  ContactNo.fromJson(Map<String, dynamic> json) {
-    countryCode = json['countryCode'];
-    phoneNo = json['phoneNo'];
+  YesNoQuestions.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    value = json['value'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['countryCode'] = this.countryCode;
-    data['phoneNo'] = this.phoneNo;
+    data['id'] = this.id;
+    data['value'] = this.value;
     return data;
   }
 }
 
-class SingaporeAddress {
-  String blkNo;
-  String unitNo;
-  String floorNo;
-  String streetName;
-  String country;
-  String postalCode;
+class Medicals {
+  String id;
+  String value;
 
-  SingaporeAddress(
-      {this.blkNo,
-      this.unitNo,
-      this.floorNo,
-      this.streetName,
-      this.country,
-      this.postalCode});
-
-  SingaporeAddress.fromJson(Map<String, dynamic> json) {
-    blkNo = json['blkNo'];
-    unitNo = json['unitNo'];
-    floorNo = json['floorNo'];
-    streetName = json['streetName'];
-    country = json['country'];
-    postalCode = json['postalCode'];
+  Medicals({this.id, this.value});
+  Medicals.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    value = json['value'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['blkNo'] = this.blkNo;
-    data['unitNo'] = this.unitNo;
-    data['floorNo'] = this.floorNo;
-    data['streetName'] = this.streetName;
-    data['country'] = this.country;
-    data['postalCode'] = this.postalCode;
+    data['id'] = this.id;
+    data['value'] = this.value;
     return data;
   }
 }
 
-class OverseasAddress {
-  String no;
-  String streetName;
-  String country;
-  String postalCode;
+class Skills {
+  String id;
+  String value;
 
-  OverseasAddress({this.no, this.streetName, this.country, this.postalCode});
+  Skills({this.id, this.value});
 
-  OverseasAddress.fromJson(Map<String, dynamic> json) {
-    no = json['no'];
-    streetName = json['streetName'];
-    country = json['country'];
-    postalCode = json['postalCode'];
+  Skills.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    value = json['value'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['no'] = this.no;
-    data['streetName'] = this.streetName;
-    data['country'] = this.country;
-    data['postalCode'] = this.postalCode;
+    data['id'] = this.id;
+    data['value'] = this.value;
+    return data;
+  }
+}
+
+class EmploymentHistories {
+  String startOn;
+  String endOn;
+  List<String> duties;
+  String leavingReason;
+
+  EmploymentHistories(
+      {this.startOn, this.endOn, this.duties, this.leavingReason});
+
+  EmploymentHistories.fromJson(Map<String, dynamic> json) {
+    startOn = json['startOn'];
+    endOn = json['endOn'];
+    duties = json['duties'].cast<String>();
+    leavingReason = json['leavingReason'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['startOn'] = this.startOn;
+    data['endOn'] = this.endOn;
+    data['duties'] = this.duties;
+    data['leavingReason'] = this.leavingReason;
+    return data;
+  }
+}
+
+class OtherInfo {
+  String noLeavesPerMonth;
+  int expectedSalary;
+  String hasReleasePaper;
+  String earliestJoiningOn;
+
+  OtherInfo(
+      {this.noLeavesPerMonth,
+      this.expectedSalary,
+      this.hasReleasePaper,
+      this.earliestJoiningOn});
+
+  OtherInfo.fromJson(Map<String, dynamic> json) {
+    noLeavesPerMonth = json['noLeavesPerMonth'];
+    expectedSalary = json['expectedSalary'];
+    hasReleasePaper = json['hasReleasePaper'];
+    earliestJoiningOn = json['earliestJoiningOn'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['noLeavesPerMonth'] = this.noLeavesPerMonth;
+    data['expectedSalary'] = this.expectedSalary;
+    data['hasReleasePaper'] = this.hasReleasePaper;
+    data['earliestJoiningOn'] = this.earliestJoiningOn;
+    return data;
+  }
+}
+
+class Photo {
+  String fileName;
+  String mimeType;
+  int order;
+
+  Photo({this.fileName, this.mimeType, this.order});
+
+  Photo.fromJson(Map<String, dynamic> json) {
+    fileName = json['fileName'];
+    mimeType = json['mimeType'];
+    order = json['order'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['fileName'] = this.fileName;
+    data['mimeType'] = this.mimeType;
+    data['order'] = this.order;
     return data;
   }
 }

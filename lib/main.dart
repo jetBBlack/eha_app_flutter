@@ -40,20 +40,29 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => SocialAuthProvider()),
         ChangeNotifierProvider(create: (_) => HelperProvider())
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: theme(),
-        initialRoute: '/',
-        routes: routes,
-        home: FutureBuilder(
-          future: checkLogin(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return HomeScreen();
-            } else {
-              return SignInScreen();
-            }
-          },
+      child: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+
+          if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
+            FocusManager.instance.primaryFocus.unfocus();
+          }
+        },
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: theme(),
+          initialRoute: '/',
+          routes: routes,
+          home: FutureBuilder(
+            future: checkLogin(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return HomeScreen();
+              } else {
+                return SignInScreen();
+              }
+            },
+          ),
         ),
       ),
     );

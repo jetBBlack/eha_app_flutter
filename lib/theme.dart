@@ -19,6 +19,7 @@ InputDecorationTheme inputDecorationTheme() {
     gapPadding: 10,
   );
   return InputDecorationTheme(
+    labelStyle: TextStyle(fontSize: 16),
     floatingLabelBehavior: FloatingLabelBehavior.always,
     contentPadding: EdgeInsets.symmetric(horizontal: 45, vertical: 20),
     enabledBorder: outlineInputBorder,

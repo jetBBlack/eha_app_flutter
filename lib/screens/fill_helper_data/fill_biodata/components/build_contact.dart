@@ -1,4 +1,3 @@
-import 'package:dropdownfield/dropdownfield.dart';
 import 'package:eha_app/components/info_title.dart';
 import 'package:eha_app/providers/helper_provider.dart';
 import 'package:eha_app/size_config.dart';
@@ -114,8 +113,6 @@ class _BuildContactInfoFormState extends State<BuildContactInfoForm> {
   void initState() {
     final provider = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
-    _countryCode = TextEditingController(text: provider.countryCode);
-    _phoneNumber = TextEditingController(text: provider.phoneNo);
   }
 
   @override
@@ -134,7 +131,7 @@ class _BuildContactInfoFormState extends State<BuildContactInfoForm> {
         children: [
           TextFormField(
             controller: _countryCode,
-            onChanged: (value) => provider.setcountryCode(value),
+            //onChanged: (value) => provider.setcountryCode(value),
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Country Code",
@@ -148,7 +145,7 @@ class _BuildContactInfoFormState extends State<BuildContactInfoForm> {
           ),
           TextFormField(
             controller: _phoneNumber,
-            onChanged: (value) => provider.setphoneNo(value),
+            //onChanged: (value) => provider.setphoneNo(value),
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               labelText: "Phone Number",
@@ -181,12 +178,12 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
   void initState() {
     final addressProvider = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
-    _blkNo = TextEditingController(text: addressProvider.blkNo);
-    _unitNo = TextEditingController(text: addressProvider.unitNo);
-    _floorNo = TextEditingController(text: addressProvider.floorNo);
-    _streetName = TextEditingController(text: addressProvider.streetName);
-    _country = TextEditingController(text: addressProvider.country);
-    _postalCode = TextEditingController(text: addressProvider.postalCode);
+    // _blkNo = TextEditingController(text: addressProvider.blkNo);
+    // _unitNo = TextEditingController(text: addressProvider.unitNo);
+    // _floorNo = TextEditingController(text: addressProvider.floorNo);
+    // _streetName = TextEditingController(text: addressProvider.streetName);
+    // _country = TextEditingController(text: addressProvider.country);
+    // _postalCode = TextEditingController(text: addressProvider.postalCode);
   }
 
   @override
@@ -209,7 +206,7 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
         children: [
           TextFormField(
             controller: _blkNo,
-            onChanged: addressProvider.setbklNo,
+            //onChanged: addressProvider.setbklNo,
             decoration: InputDecoration(
               labelText: "Block/House No",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -220,7 +217,7 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
           ),
           TextFormField(
             controller: _unitNo,
-            onChanged: addressProvider.setunitNo,
+            //onChanged: addressProvider.setunitNo,
             decoration: InputDecoration(
               labelText: "Unit No",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -231,7 +228,7 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
           ),
           TextFormField(
             controller: _floorNo,
-            onChanged: addressProvider.setfloorNo,
+            //onChanged: addressProvider.setfloorNo,
             decoration: InputDecoration(
               labelText: "Floor No",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -242,7 +239,7 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
           ),
           TextFormField(
             controller: _streetName,
-            onChanged: addressProvider.setstreetName,
+            //onChanged: addressProvider.setstreetName,
             decoration: InputDecoration(
               labelText: "Street Name",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -253,7 +250,7 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
           ),
           TextFormField(
             controller: _country,
-            onChanged: addressProvider.setcountry,
+            //onChanged: addressProvider.setcountry,
             decoration: InputDecoration(
               labelText: "Country",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -264,7 +261,7 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
           ),
           TextFormField(
             controller: _postalCode,
-            onChanged: addressProvider.setpostalCode,
+            //onChanged: addressProvider.setpostalCode,
             decoration: InputDecoration(
               labelText: "Postal Code",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -306,10 +303,10 @@ class _OverseaAddressState extends State<OverseaAddress> {
   void initState() {
     final overseaProvider = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
-    _no = TextEditingController(text: overseaProvider.no);
-    _streetname = TextEditingController(text: overseaProvider.seaStreetName);
-    _postalCode = TextEditingController(text: overseaProvider.seaPostalCode);
-    _nationalities = TextEditingController(text: overseaProvider.seaCountry);
+    // _no = TextEditingController(text: overseaProvider.no);
+    // _streetname = TextEditingController(text: overseaProvider.seaStreetName);
+    // _postalCode = TextEditingController(text: overseaProvider.seaPostalCode);
+    // _nationalities = TextEditingController(text: overseaProvider.seaCountry);
   }
 
   @override
@@ -329,7 +326,7 @@ class _OverseaAddressState extends State<OverseaAddress> {
         children: [
           TextFormField(
             controller: _no,
-            onChanged: overseaProvider.setno,
+            //onChanged: overseaProvider.setno,
             decoration: InputDecoration(
               labelText: "Number",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -340,7 +337,7 @@ class _OverseaAddressState extends State<OverseaAddress> {
           ),
           TextFormField(
             controller: _streetname,
-            onChanged: overseaProvider.setseaStreetName,
+            //onChanged: overseaProvider.setseaStreetName,
             decoration: InputDecoration(
               labelText: "Street Name",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -349,23 +346,12 @@ class _OverseaAddressState extends State<OverseaAddress> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          DropDownField(
-            controller: _nationalities,
-            hintText: "Select any Country",
-            labelText: "Nationality",
-            items: countryList,
-            itemsVisibleInDropdown: 4,
-            onValueChanged: (value) {
-              overseaProvider.setoverseaCountry(value);
-              selectNational = value;
-            },
-          ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
             controller: _postalCode,
-            onChanged: overseaProvider.setseaPostalCode,
+            //onChanged: overseaProvider.setseaPostalCode,
             decoration: InputDecoration(
               labelText: "Postal Code",
               floatingLabelBehavior: FloatingLabelBehavior.always,

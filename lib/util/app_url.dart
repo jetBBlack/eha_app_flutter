@@ -8,4 +8,6 @@ class AppUrl {
   static const String deleteHelper = baseUrl + "api/helpers/delete-helper";
   static const String getHelper = baseUrl + "api/helpers/get-helper";
   static const String getHelperList = baseUrl + "api/helpers/get-helper-list";
+  static const String uploadHelperImage =
+      baseUrl + "api/helpers/helper-upload-photos";
 }

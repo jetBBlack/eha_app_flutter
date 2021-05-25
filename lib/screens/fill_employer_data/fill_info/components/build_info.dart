@@ -47,7 +47,11 @@ class _BuildEmployerPersonalInfoState extends State<BuildEmployerPersonalInfo>
                 SizedBox(
                   height: getProportionateScreenWidth(30),
                 ),
-                InfoTitle(icon: 'assets/icons/house.svg', title: 'HOUSE INFO')
+                InfoTitle(icon: 'assets/icons/house.svg', title: 'HOUSE INFO'),
+                SizedBox(
+                  height: getProportionateScreenWidth(20),
+                ),
+                BuildHouseInfo(),
               ],
             ),
           ),
@@ -115,6 +119,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: ['Male', 'Female'],
             label: 'Gender',
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -124,6 +131,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: maritalStatusList,
             label: 'Marital Status',
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -133,6 +143,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: countryList,
             label: 'Nationality',
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -142,6 +155,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: countryList,
             label: 'Religion',
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -151,6 +167,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: ethnicGroupList,
             label: 'Ethnic Group',
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -234,6 +253,59 @@ class _BuildFamilyInfoState extends State<BuildFamilyInfo> {
             decoration: InputDecoration(
                 labelText: "No of people in the same house",
                 floatingLabelBehavior: FloatingLabelBehavior.always),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class BuildHouseInfo extends StatefulWidget {
+  @override
+  _BuildHouseInfoState createState() => _BuildHouseInfoState();
+}
+
+class _BuildHouseInfoState extends State<BuildHouseInfo> {
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      child: Column(
+        children: [
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            items: [],
+            label: "Housing Type",
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: "No of rooms"),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: "No of bathrooms"),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: "No of toilets"),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(labelText: "No of floors"),
           )
         ],
       ),
