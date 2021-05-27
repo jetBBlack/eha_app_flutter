@@ -10,22 +10,21 @@ class SingleChoice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       shrinkWrap: true,
       itemBuilder: (context, index) {
-        return Container(
-          child: Row(
-            children: <Widget>[
-              Radio(
-                value: itemList[index],
-                groupValue: selectedValue,
-                onChanged: press,
-              ),
-              Text(
-                itemList[index],
-                style: TextStyle(fontSize: 14),
-              )
-            ],
-          ),
+        return Row(
+          children: <Widget>[
+            Radio(
+              value: itemList[index],
+              groupValue: selectedValue,
+              onChanged: press,
+            ),
+            Text(
+              itemList[index],
+              style: TextStyle(fontSize: 14),
+            )
+          ],
         );
       },
       itemCount: itemList.length,

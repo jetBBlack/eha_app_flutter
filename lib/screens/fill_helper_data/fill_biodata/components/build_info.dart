@@ -1,7 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
-
-import 'package:eha_app/components/single_choice.dart';
 import 'package:eha_app/constant.dart';
+import 'package:eha_app/models/helper.dart';
 import 'package:eha_app/providers/helper_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/cupertino.dart';
@@ -155,12 +154,18 @@ class BuildGeneralInfo extends StatefulWidget {
 }
 
 class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
-  Key _formKey = GlobalKey<FormState>();
+  Key _formKey = GlobalKey<FormState>(); //key
+
+  //Controller var
   TextEditingController _name = TextEditingController();
   TextEditingController _province = TextEditingController();
   TextEditingController dateCtl = TextEditingController();
+  TextEditingController _nationality = TextEditingController();
+  TextEditingController _birthCountry = TextEditingController();
+  TextEditingController _gender = TextEditingController();
+  TextEditingController _maritalStatus = TextEditingController();
+  //Data var
   List<String> genderList = ["Male", "Female"];
-  String genderSelect = "Male";
   List<String> maritalStatusList = [
     "Divorced",
     "Married",
@@ -168,7 +173,6 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     "Single",
     "Widowed"
   ];
-  String maritalSelect = "Married";
   List<String> countryList = [
     "Filipino",
     "Burman",
@@ -183,21 +187,25 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     "Thai",
     "Korean"
   ];
-  TextEditingController _nationality = TextEditingController();
-  TextEditingController _birthCountry = TextEditingController();
 
   @override
   void initState() {
     final myProvider = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
     _name = TextEditingController(text: myProvider.name);
+    _gender = TextEditingController(text: myProvider.gender);
+    _maritalStatus = TextEditingController(text: myProvider.maritalStatus);
     _nationality = TextEditingController(text: myProvider.nationality);
+    _birthCountry = TextEditingController(text: myProvider.birthCountry);
     _province = TextEditingController(text: myProvider.province);
   }
 
   @override
   void dispose() {
     _name.dispose();
+    _gender.dispose();
+    _maritalStatus.dispose();
+    _birthCountry.dispose();
     _nationality.dispose();
     _province.dispose();
     super.dispose();
@@ -216,7 +224,6 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             decoration: InputDecoration(
               labelText: "Name",
               hintText: "Enter your name",
-              errorText: myProvider.error,
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
@@ -228,6 +235,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: ['Male', 'Female'],
             label: 'Gender',
+            searchBoxController: _gender,
             onChanged: myProvider.setgender,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
@@ -241,6 +249,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: maritalStatusList,
             label: 'Marital Status',
+            searchBoxController: _maritalStatus,
             onChanged: myProvider.setmaritalStatus,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
@@ -249,27 +258,31 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          // TextFormField(
-          //   controller: dateCtl,
-          //   onTap: () async {
-          //     DateTime date = DateTime(1900);
-          //     FocusScope.of(context).requestFocus(new FocusNode());
+          TextFormField(
+            controller: dateCtl,
+            inputFormatters: [],
+            onTap: () async {
+              DateTime date = DateTime(1900);
+              FocusScope.of(context).requestFocus(new FocusNode());
 
-          //     date = await showDatePicker(
-          //       context: context,
-          //       initialDate: DateTime.now(),
-          //       firstDate: DateTime(1900),
-          //       lastDate: DateTime(2050),
-          //     );
-          //     var dateparse = DateTime.parse(date.toIso8601String());
-          //     dateCtl.text =
-          //         "${dateparse.year}-${dateparse.month}-${dateparse.day}";
-          //   },
-          //   decoration: InputDecoration(
-          //     labelText: "D.O.B",
-          //     floatingLabelBehavior: FloatingLabelBehavior.always,
-          //   ),
-          // ),
+              date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2050),
+              );
+              var dateparse = DateTime.parse(date.toIso8601String());
+              dateCtl.text =
+                  "${dateparse.year}-${dateparse.month}-${dateparse.day}";
+            },
+            decoration: InputDecoration(
+              labelText: "D.O.B",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
           DropdownSearch<String>(
             mode: Mode.MENU,
             showSelectedItem: true,
@@ -297,17 +310,6 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
           ),
-          // DropDownField(
-          //   controller: _birthCountry,
-          //   hintText: "Select any Country",
-          //   labelText: "Birth Country",
-          //   items: countryList,
-          //   itemsVisibleInDropdown: 4,
-          //   onValueChanged: (value) {
-          //     myProvider.setbirthCountry(value);
-          //     selectBirthCountry = value;
-          //   },
-          // ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
@@ -316,7 +318,6 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             onChanged: myProvider.setprovince,
             decoration: InputDecoration(
               labelText: "Provine",
-              errorText: myProvider.error,
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
@@ -457,74 +458,112 @@ class BuildYesNoForm extends StatefulWidget {
 }
 
 class _BuildYesNoFormState extends State<BuildYesNoForm> {
-  bool _can = false;
+  bool _canEatBeef = false;
+  bool _canEatPork = false;
+  bool _canHandlePork = false;
+  bool _canCall = false;
+  bool _canNotCall = false;
+  bool _afraidDog = false;
+  bool _canWakeUpEarly = false;
+
   @override
   Widget build(BuildContext context) {
+    final yesNoProvider = Provider.of<HelperProvider>(context);
     return Column(
       children: [
         SwitchListTile(
           title: Text("Can eat beef"),
-          value: _can,
+          value: _canEatBeef,
           onChanged: (value) {
+            if (value == true) {
+              yesNoProvider.setYesNoData(
+                  YesNoQuestions(id: 'Can eat beef', value: 'yes'));
+            }
             setState(() {
-              _can = value;
+              _canEatBeef = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Can eat pork"),
-          value: _can,
+          value: _canEatPork,
           onChanged: (value) {
+            if (value == true) {
+              yesNoProvider.setYesNoData(
+                  YesNoQuestions(id: 'Can eat pork', value: 'yes'));
+            }
             setState(() {
-              _can = value;
+              _canEatPork = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Can handle pork"),
-          value: _can,
+          value: _canHandlePork,
           onChanged: (value) {
+            if (value == true) {
+              yesNoProvider.setYesNoData(
+                  YesNoQuestions(id: 'Can handle pork', value: 'yes'));
+            }
             setState(() {
-              _can = value;
+              _canHandlePork = value;
             });
           },
         ),
         SwitchListTile(
           title: Text(
               "Can you ensure that you will only emergency call or your employer call during your working hour"),
-          value: _can,
+          value: _canCall,
           onChanged: (value) {
+            if (value == true) {
+              yesNoProvider.setYesNoData(YesNoQuestions(
+                  id: 'Can you ensure that you will only emergency call or your employer call during your working hour',
+                  value: 'yes'));
+            }
             setState(() {
-              _can = value;
+              _canCall = value;
             });
           },
         ),
         SwitchListTile(
           title: Text(
               "Can you let your employer to keep your phone during your working hour"),
-          value: _can,
+          value: _canNotCall,
           onChanged: (value) {
+            if (value == true) {
+              yesNoProvider.setYesNoData(YesNoQuestions(
+                  id: 'Can you let your employer to keep your phone during your working hour',
+                  value: 'yes'));
+            }
             setState(() {
-              _can = value;
+              _canNotCall = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Not afraid of dogs"),
-          value: _can,
+          value: _afraidDog,
           onChanged: (value) {
+            if (value == true) {
+              yesNoProvider.setYesNoData(
+                  YesNoQuestions(id: 'Not afraid of dogs', value: 'yes'));
+            }
             setState(() {
-              _can = value;
+              _afraidDog = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Prepare to wake up as early as 5am"),
-          value: _can,
+          value: _canWakeUpEarly,
           onChanged: (value) {
             setState(() {
-              _can = value;
+              _canWakeUpEarly = value;
             });
+            if (value == true) {
+              yesNoProvider.setYesNoData(YesNoQuestions(
+                  id: 'Prepare to wake up as early as 5am', value: 'yes'));
+            }
           },
         ),
       ],
@@ -539,35 +578,89 @@ class BuildSkillLevel extends StatefulWidget {
 
 class _BuildSkillLevelState extends State<BuildSkillLevel> {
   List<String> skillLevel = ['Average', 'No Experience', 'Very Experience'];
-  String selectedValue;
+  List<String> skills = [
+    "Can cook Basic food ?",
+    "Can cook India food ?",
+    "Can cook Chinese food ?",
+    "Can cook Malay food ?",
+    "Can cook Western food ?",
+    "Can speak Chinese ?",
+    "Can speak Indian ?",
+  ];
+  List<String> selectedLevel = [];
 
   @override
   void initState() {
-    selectedValue = skillLevel.first;
+    // TODO: implement initState
     super.initState();
+    for (int i = 0; i < skills.length; i++) {
+      selectedLevel.add(skillLevel.first);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Can cook basic food ?",
-          //textAlign: TextAlign.start,
-          style: TextStyle(
-              fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        SingleChoice(
-          itemList: skillLevel,
-          selectedValue: selectedValue,
-          press: (newValue) {
-            setState(() {
-              selectedValue = newValue;
-            });
-          },
-        )
-      ],
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
+      itemCount: skills.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              skills[index],
+              style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
+            ),
+            Column(
+              children: [
+                RadioListTile(
+                    title: Text('Average'),
+                    value: skillLevel.first,
+                    groupValue: selectedLevel[index],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLevel[index] = value;
+                      });
+                    }),
+                RadioListTile(
+                    title: Text('No Experience'),
+                    value: skillLevel[1],
+                    groupValue: selectedLevel[index],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLevel[index] = value;
+                      });
+                    }),
+                RadioListTile(
+                    title: Text('Very Experience'),
+                    value: skillLevel[2],
+                    groupValue: selectedLevel[index],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedLevel[index] = value;
+                      });
+                    })
+              ],
+            ),
+            // SingleChoice(
+            //   itemList: skillLevel,
+            //   selectedValue: selectedValue,
+            //   press: (newValue) {
+            //     setState(() {
+            //       selectedValue = newValue;
+            //     });
+            //   },
+            // ),
+            SizedBox(
+              height: getProportionateScreenWidth(20),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -578,89 +671,82 @@ class BuildMedicalInfo extends StatefulWidget {
 }
 
 class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
-  bool _can = false;
+  bool _asthma = false;
+  bool _diabetes = false;
+  bool _malaria = false;
+  bool _epilepsy = false;
+  bool _mentalIllness = false;
+  bool _operation = false;
+  bool _tuberculosis = false;
   @override
   Widget build(BuildContext context) {
+    final medicalProvider = Provider.of<HelperProvider>(context);
     return Column(
       children: [
         SwitchListTile(
           title: Text("Asthma"),
-          value: _can,
+          value: _asthma,
           onChanged: (value) {
+            if (value == true) {
+              medicalProvider
+                  .setMedicalInfoData(Medicals(id: 'Asthmas', value: 'yes'));
+            }
             setState(() {
-              _can = value;
+              _asthma = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Diabetes"),
-          value: _can,
+          value: _diabetes,
           onChanged: (value) {
             setState(() {
-              _can = value;
-            });
-          },
-        ),
-        SwitchListTile(
-          title: Text("Diabetes"),
-          value: _can,
-          onChanged: (value) {
-            setState(() {
-              _can = value;
-            });
-          },
-        ),
-        SwitchListTile(
-          title: Text("Diabetes"),
-          value: _can,
-          onChanged: (value) {
-            setState(() {
-              _can = value;
+              _diabetes = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Epilepsy"),
-          value: _can,
+          value: _epilepsy,
           onChanged: (value) {
             setState(() {
-              _can = value;
+              _epilepsy = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Malaria"),
-          value: _can,
+          value: _malaria,
           onChanged: (value) {
             setState(() {
-              _can = value;
+              _malaria = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Mental Illness"),
-          value: _can,
+          value: _mentalIllness,
           onChanged: (value) {
             setState(() {
-              _can = value;
+              _mentalIllness = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Operation"),
-          value: _can,
+          value: _operation,
           onChanged: (value) {
             setState(() {
-              _can = value;
+              _operation = value;
             });
           },
         ),
         SwitchListTile(
           title: Text("Tuberculosis"),
-          value: _can,
+          value: _tuberculosis,
           onChanged: (value) {
             setState(() {
-              _can = value;
+              _tuberculosis = value;
             });
           },
         ),

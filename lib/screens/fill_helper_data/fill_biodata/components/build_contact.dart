@@ -346,9 +346,6 @@ class _OverseaAddressState extends State<OverseaAddress> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
           TextFormField(
             controller: _postalCode,
             //onChanged: overseaProvider.setseaPostalCode,

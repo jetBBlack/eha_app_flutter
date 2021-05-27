@@ -8,8 +8,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HelperProvider extends ChangeNotifier {
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   HelperModel newHelper = new HelperModel();
+  List<YesNoQuestions> yesNoQuestions = <YesNoQuestions>[];
   String _error;
   PersonalInfo personalInfo = new PersonalInfo();
+
   //ContactNo contactNo = new ContactNo();
   //List<ContactNo> contactList = [];
   //SingaporeAddress singaporeAddress = new SingaporeAddress();
@@ -18,12 +20,7 @@ class HelperProvider extends ChangeNotifier {
 
   String get name => personalInfo.name;
   setname(String name) {
-    if (name.isNotEmpty) {
-      personalInfo.name = name;
-      _error = null;
-    } else {
-      _error = "Must not be empty";
-    }
+    personalInfo.name = name;
     notifyListeners();
   }
 
@@ -35,12 +32,7 @@ class HelperProvider extends ChangeNotifier {
 
   String get province => personalInfo.province;
   setprovince(String province) {
-    if (province.isNotEmpty) {
-      personalInfo.province = province;
-      _error = null;
-    } else {
-      _error = "Must not be empty";
-    }
+    personalInfo.province = province;
     notifyListeners();
   }
 
@@ -59,6 +51,24 @@ class HelperProvider extends ChangeNotifier {
   String get maritalStatus => personalInfo.maritalStatus;
   setmaritalStatus(String maritalStatus) {
     personalInfo.maritalStatus = maritalStatus;
+    notifyListeners();
+  }
+
+  //add data to YesNoQuestion List
+  setYesNoData(YesNoQuestions yesNoQuestion) {
+    yesNoQuestions.add(yesNoQuestion);
+    notifyListeners();
+  }
+
+  //add data to SkillLevel List
+  setSkillLevelData(Skills skill) {
+    newHelper.skills.add(skill);
+    notifyListeners();
+  }
+
+  //add data to Medical Info List
+  setMedicalInfoData(Medicals medical) {
+    newHelper.medicals.add(medical);
     notifyListeners();
   }
 
@@ -147,10 +157,6 @@ class HelperProvider extends ChangeNotifier {
   HelperService _service = new HelperService();
   void createHelperWithData() {
     newHelper.personalInfo = personalInfo;
-    // contactList.add(contactNo);
-    // newHelper.contactNo = contactList;
-    // newHelper.singaporeAddress = singaporeAddress;
-    // newHelper.overseasAddress = overseasAddress;
     final Future<Map<String, dynamic>> successfulMessage =
         _service.createHelper(newHelper);
     successfulMessage.then((response) async {

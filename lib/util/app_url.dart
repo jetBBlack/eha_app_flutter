@@ -10,4 +10,5 @@ class AppUrl {
   static const String getHelperList = baseUrl + "api/helpers/get-helper-list";
   static const String uploadHelperImage =
       baseUrl + "api/helpers/helper-upload-photos";
+  static const String getImage = baseUrl + 'api/files/';
 }

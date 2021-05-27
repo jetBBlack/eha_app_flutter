@@ -1,7 +1,6 @@
 import 'package:eha_app/screens/agency/agency_screen.dart';
 import 'package:eha_app/screens/employer/employer_screen.dart';
 import 'package:eha_app/screens/fill_employer_data/fill_info/fill_info_screen.dart';
-import 'package:eha_app/screens/fill_helper_data/fill_biodata/fill_biodata.dart';
 import 'package:eha_app/screens/fill_helper_data/fill_mom_data/fill_mom_data.dart';
 import 'package:eha_app/screens/helper/helper_screen.dart';
 import 'package:eha_app/size_config.dart';

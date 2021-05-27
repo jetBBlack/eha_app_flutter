@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eha_app/size_config.dart';
@@ -17,10 +16,12 @@ class BuildPictures extends StatefulWidget {
 
 class _BuildPicturesState extends State<BuildPictures>
     with AutomaticKeepAliveClientMixin {
-  List<File> _image = [];
+  File _singleImage;
   final picker = ImagePicker();
   List<Asset> _assets = <Asset>[];
-  String _error = 'No Error Dectected';
+  String error = 'No Error Dectected';
+  bool _isUploading = false;
+  bool _useCamera = false;
 
   Future<void> getImageFromGallery() async {
     List<Asset> resultList = <Asset>[];
@@ -28,7 +29,6 @@ class _BuildPicturesState extends State<BuildPictures>
     try {
       resultList = await MultiImagePicker.pickImages(
         maxImages: 100,
-        //enableCamera: true,
         selectedAssets: _assets,
         cupertinoOptions: CupertinoOptions(
           takePhotoIcon: "chat",
@@ -49,7 +49,8 @@ class _BuildPicturesState extends State<BuildPictures>
 
     setState(() {
       _assets = resultList;
-      _error = error;
+      error = error;
+      _isUploading = true;
     });
   }
 
@@ -57,17 +58,18 @@ class _BuildPicturesState extends State<BuildPictures>
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     setState(() {
       if (pickedFile != null) {
-        _image.add(File(pickedFile.path));
+        _singleImage = File(pickedFile.path);
       } else {
-        print("No Image Selected");
+        print('No image selected');
       }
+      _isUploading = true;
     });
   }
 
   List<String> imgPath = <String>[];
   Future uploadMultipleImage() async {
     List<MultipartFile> multipartImageList = [];
-    if (_image != null) {
+    if (_assets != null) {
       for (Asset asset in _assets) {
         ByteData byteData = await asset.getByteData();
         List<int> imageData = byteData.buffer.asUint8List();
@@ -87,13 +89,45 @@ class _BuildPicturesState extends State<BuildPictures>
       var response = await dio.post(AppUrl.uploadHelperImage, data: formData);
 
       if (response.statusCode == 200) {
-        final List<dynamic> responseData = json.decode(response.data);
+        final List<dynamic> responseData = response.data;
         for (var item in responseData) {
-          final Map<String, dynamic> responseItem = item;
-          imgPath.add(responseItem['fileName']);
+          Map<String, dynamic> responseItem = item;
+          print(responseItem['fileName']);
+          imgPath.add(responseItem['fileName'].toString());
         }
       }
     }
+  }
+
+  Future uploadImage() async {
+    List<MultipartFile> multipartImageList = [];
+    if (_singleImage != null) {
+      MultipartFile multipartFile = await MultipartFile.fromFile(
+          _singleImage.path,
+          contentType: MediaType('image', 'jpg'));
+      multipartImageList.add(multipartFile);
+      FormData formData = new FormData.fromMap({
+        "photos": multipartImageList,
+      });
+
+      Dio dio = new Dio();
+      var response = await dio.post(AppUrl.uploadHelperImage, data: formData);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = response.data;
+        for (var item in responseData) {
+          Map<String, dynamic> responseItem = item;
+          print(responseItem['fileName']);
+          imgPath.add(responseItem['fileName'].toString());
+        }
+      }
+    }
+  }
+
+  void removeImage(String value) {
+    setState(() {
+      imgPath.remove(value);
+    });
   }
 
   @override
@@ -148,6 +182,9 @@ class _BuildPicturesState extends State<BuildPictures>
                               GestureDetector(
                                   onTap: () {
                                     getImageFromCamera();
+                                    setState(() {
+                                      _useCamera = true;
+                                    });
                                   },
                                   child: Text(
                                     "Upload from camera",
@@ -158,6 +195,9 @@ class _BuildPicturesState extends State<BuildPictures>
                               GestureDetector(
                                 onTap: () {
                                   getImageFromGallery();
+                                  setState(() {
+                                    _useCamera = false;
+                                  });
                                 },
                                 child: Text(
                                   "Upload from gallery",
@@ -186,10 +226,12 @@ class _BuildPicturesState extends State<BuildPictures>
               child: Text('Upload Image'),
             ),
             SizedBox(height: getProportionateScreenWidth(20)),
-            _assets.isEmpty
+            _isUploading == false
                 ? Text('Upload your image here')
                 : FutureBuilder(
-                    future: uploadMultipleImage(),
+                    future: _useCamera == true
+                        ? uploadImage()
+                        : uploadMultipleImage(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       switch (snapshot.connectionState) {
                         case ConnectionState.none:
@@ -215,54 +257,37 @@ class _BuildPicturesState extends State<BuildPictures>
       physics: BouncingScrollPhysics(),
       padding: EdgeInsets.all(12),
       crossAxisCount: 2,
-      crossAxisSpacing: 15,
-      mainAxisSpacing: 15,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 10,
       children: List.generate(
-        _assets.length,
+        imgPath.length,
         (index) {
-          Asset asset = _assets[index];
-          return AssetThumb(
-            asset: asset,
-            width: 200,
-            height: 200,
+          String path = imgPath[index];
+          return Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(15),
+                child: Image(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(AppUrl.getImage + path),
+                ),
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Container(
+                  child: IconButton(
+                    icon: SvgPicture.asset(
+                      'assets/icons/Close.svg',
+                      height: 22,
+                      width: 22,
+                    ),
+                    color: Colors.red,
+                    onPressed: () {},
+                  ),
+                ),
+              )
+            ],
           );
-          // return Stack(
-          //   children: [
-          //     Container(
-          //       // decoration: BoxDecoration(
-          //       //   border: Border.all(color: Colors.grey[300]),
-          //       //   shape: BoxShape.rectangle,
-          //       // ),
-          //       child: ClipRRect(
-          //         borderRadius: BorderRadius.circular(16),
-          //         child: Image(
-          //           fit: BoxFit.fill,
-          //           image: AssetEntityImageProvider(
-          //             _assets[index],
-          //             isOriginal: false,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //     Positioned(
-          //       right: -5,
-          //       top: -10,
-          //       child: Container(
-          //         child: IconButton(
-          //           icon: SvgPicture.asset(
-          //             'assets/icons/Close.svg',
-          //             height: 25,
-          //             width: 25,
-          //           ),
-          //           color: Colors.red,
-          //           onPressed: () {
-          //             clearImage(index);
-          //           },
-          //         ),
-          //       ),
-          //     )
-          //   ],
-          // );
         },
       ),
     );
