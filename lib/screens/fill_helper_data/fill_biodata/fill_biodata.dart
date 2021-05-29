@@ -23,7 +23,7 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    HelperProvider provider = Provider.of<HelperProvider>(context);
+    final HelperProvider provider = Provider.of<HelperProvider>(context);
     return DefaultTabController(
       length: 6,
       child: Scaffold(

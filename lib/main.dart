@@ -1,19 +1,27 @@
 import 'package:eha_app/models/register_model.dart';
 import 'package:eha_app/providers/auth.dart';
+import 'package:eha_app/providers/helper_mom_provider.dart';
 import 'package:eha_app/providers/helper_provider.dart';
 import 'package:eha_app/providers/social_auth.dart';
 import 'package:eha_app/routes.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
+import 'package:eha_app/services_api/helper_mom_services.dart';
 import 'package:eha_app/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+void setupLocator() {
+  GetIt.I.registerLazySingleton(() => HelperMomService());
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  setupLocator();
   runApp(MyApp());
 }
 
@@ -38,7 +46,8 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => SocialAuthProvider()),
-        ChangeNotifierProvider(create: (_) => HelperProvider())
+        ChangeNotifierProvider(create: (_) => HelperProvider()),
+        ChangeNotifierProvider(create: (_) => HelperMomProvider())
       ],
       child: GestureDetector(
         onTap: () {

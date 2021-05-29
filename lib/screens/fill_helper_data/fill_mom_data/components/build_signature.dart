@@ -1,7 +1,12 @@
+import 'dart:typed_data';
+
+import 'package:dio/dio.dart';
 import 'package:eha_app/size_config.dart';
+import 'package:eha_app/util/app_url.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:signature/signature.dart';
+import 'package:http_parser/http_parser.dart';
 
 class BuildSignaturePage extends StatefulWidget {
   @override
@@ -9,12 +14,13 @@ class BuildSignaturePage extends StatefulWidget {
 }
 
 class _BuildSignaturePageState extends State<BuildSignaturePage> {
-  SignatureController controller;
+  SignatureController _controller;
 
   @override
   void initState() {
     super.initState();
-    controller = SignatureController(penColor: Colors.black, penStrokeWidth: 5);
+    _controller =
+        SignatureController(penColor: Colors.black, penStrokeWidth: 5);
   }
 
   @override
@@ -22,30 +28,57 @@ class _BuildSignaturePageState extends State<BuildSignaturePage> {
     super.dispose();
   }
 
+  Future uploadImage(Uint8List signature) async {
+    List<MultipartFile> multipartImageList = [];
+    if (signature != null) {
+      MultipartFile multipartFile = new MultipartFile.fromBytes(
+        signature,
+        contentType: MediaType('image', 'jpg'),
+      );
+      multipartImageList.add(multipartFile);
+      FormData formData = new FormData.fromMap({
+        "photos": multipartImageList,
+      });
+
+      Dio dio = new Dio();
+      var response = await dio.post(AppUrl.uploadHelperImage, data: formData);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = response.data;
+        for (var item in responseData) {
+          Map<String, dynamic> responseItem = item;
+          print(responseItem['fileName']);
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        children: [
-          SizedBox(
-            height: getProportionateScreenWidth(30),
-          ),
-          Container(
-            height: 420,
-            width: 370,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: Colors.white,
-                border: Border.all(color: Colors.black)),
-            child: Signature(
-              controller: controller,
-              backgroundColor: Colors.white,
-              height: 400,
-              width: 350,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: getProportionateScreenWidth(30),
             ),
-          ),
-          buildBottom(context),
-        ],
+            Container(
+              height: 420,
+              width: 370,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black)),
+              child: Signature(
+                controller: _controller,
+                backgroundColor: Colors.white,
+                height: 400,
+                width: 350,
+              ),
+            ),
+            buildBottom(context),
+          ],
+        ),
       ),
     );
   }
@@ -63,21 +96,26 @@ class _BuildSignaturePageState extends State<BuildSignaturePage> {
     );
   }
 
-  Widget buildClear(BuildContext context) {
+  Widget buildCheck(BuildContext context) {
     return IconButton(
         icon: Icon(
           Icons.check,
           color: Colors.green,
         ),
-        onPressed: () {});
+        onPressed: () async {
+          if (_controller.isNotEmpty) {
+            final Uint8List data = await _controller.toPngBytes();
+            uploadImage(data);
+          }
+        });
   }
 
-  Widget buildCheck(BuildContext context) {
+  Widget buildClear(BuildContext context) {
     return IconButton(
         icon: Icon(
           CupertinoIcons.clear_thick,
           color: Colors.red,
         ),
-        onPressed: () => controller.clear());
+        onPressed: () => _controller.clear());
   }
 }

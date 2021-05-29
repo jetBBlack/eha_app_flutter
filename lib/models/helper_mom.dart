@@ -1,4 +1,4 @@
-class HelperMom {
+class HelperMomModelWithoutID {
   Mom mom;
   Malaysia malaysia;
   Spouse spouse;
@@ -6,7 +6,7 @@ class HelperMom {
   String signature;
   String code;
 
-  HelperMom(
+  HelperMomModelWithoutID(
       {this.mom,
       this.malaysia,
       this.spouse,
@@ -14,7 +14,7 @@ class HelperMom {
       this.signature,
       this.code});
 
-  HelperMom.fromJson(Map<String, dynamic> json) {
+  HelperMomModelWithoutID.fromJson(Map<String, dynamic> json) {
     mom = json['mom'] != null ? new Mom.fromJson(json['mom']) : null;
     malaysia = json['malaysia'] != null
         ? new Malaysia.fromJson(json['malaysia'])
@@ -22,7 +22,7 @@ class HelperMom {
     spouse =
         json['spouse'] != null ? new Spouse.fromJson(json['spouse']) : null;
     if (json['photo'] != null) {
-      photo = [];
+      photo = <Photo>[];
       json['photo'].forEach((v) {
         photo.add(new Photo.fromJson(v));
       });
@@ -51,113 +51,173 @@ class HelperMom {
   }
 }
 
-class Mom {
-  String wp;
-  String fin;
-  String name;
-  String gender;
-  String education;
-  String marriedOn;
-  String passportNo;
-  String ethnicGroup;
-  String nationality;
-  String birthCountry;
-  String maritalStatus;
-  String passportExpiredOn;
-  String has8YearsEducation;
-  String immigrationPassType;
-  String citizenGrantedAtStateProvince;
+class HelperMomModel {
+  Mom mom;
+  Malaysia malaysia;
+  Spouse spouse;
+  List<Photo> photo;
+  String signature;
+  String code;
+  String id;
 
-  Mom(
-      {this.wp,
-      this.fin,
-      this.name,
-      this.gender,
-      this.education,
-      this.marriedOn,
-      this.passportNo,
-      this.ethnicGroup,
-      this.nationality,
-      this.birthCountry,
-      this.maritalStatus,
-      this.passportExpiredOn,
-      this.has8YearsEducation,
-      this.immigrationPassType,
-      this.citizenGrantedAtStateProvince});
+  HelperMomModel(
+      {this.mom,
+      this.malaysia,
+      this.spouse,
+      this.photo,
+      this.signature,
+      this.code,
+      this.id});
 
-  Mom.fromJson(Map<String, dynamic> json) {
-    wp = json['wp'];
-    fin = json['fin'];
-    name = json['name'];
-    gender = json['gender'];
-    education = json['education'];
-    marriedOn = json['marriedOn'];
-    passportNo = json['passportNo'];
-    ethnicGroup = json['ethnicGroup'];
-    nationality = json['nationality'];
-    birthCountry = json['birthCountry'];
-    maritalStatus = json['maritalStatus'];
-    passportExpiredOn = json['passportExpiredOn'];
-    has8YearsEducation = json['has8YearsEducation'];
-    immigrationPassType = json['immigrationPassType'];
-    citizenGrantedAtStateProvince = json['citizenGrantedAtStateProvince'];
+  HelperMomModel.fromJson(Map<String, dynamic> json) {
+    mom = json['mom'] != null ? new Mom.fromJson(json['mom']) : null;
+    malaysia = json['malaysia'] != null
+        ? new Malaysia.fromJson(json['malaysia'])
+        : null;
+    spouse =
+        json['spouse'] != null ? new Spouse.fromJson(json['spouse']) : null;
+    if (json['photo'] != null) {
+      photo = <Photo>[];
+      json['photo'].forEach((v) {
+        photo.add(new Photo.fromJson(v));
+      });
+    }
+    signature = json['signature'];
+    code = json['code'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['wp'] = this.wp;
-    data['fin'] = this.fin;
+    if (this.mom != null) {
+      data['mom'] = this.mom.toJson();
+    }
+    if (this.malaysia != null) {
+      data['malaysia'] = this.malaysia.toJson();
+    }
+    if (this.spouse != null) {
+      data['spouse'] = this.spouse.toJson();
+    }
+    if (this.photo != null) {
+      data['photo'] = this.photo.map((v) => v.toJson()).toList();
+    }
+    data['signature'] = this.signature;
+    data['code'] = this.code;
+    data['id'] = this.id;
+    return data;
+  }
+}
+
+class Mom {
+  String name;
+  String fin;
+  String workPromoteNo;
+  String citizenGrantedOnState;
+  String passportNo;
+  String passportExpiredOn;
+  String gender;
+  String immigrationPassType;
+  String has8YearsEducation;
+  String educationLevel;
+  String marriedOn;
+  String maritalStatus;
+  String birthCountry;
+  String nationality;
+  String ethnicGroup;
+
+  Mom(
+      {this.name,
+      this.fin,
+      this.workPromoteNo,
+      this.citizenGrantedOnState,
+      this.passportNo,
+      this.passportExpiredOn,
+      this.gender,
+      this.immigrationPassType,
+      this.has8YearsEducation,
+      this.educationLevel,
+      this.marriedOn,
+      this.maritalStatus,
+      this.birthCountry,
+      this.nationality,
+      this.ethnicGroup});
+
+  Mom.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    fin = json['fin'];
+    workPromoteNo = json['workPromoteNo'];
+    citizenGrantedOnState = json['citizenGrantedOnState'];
+    passportNo = json['passportNo'];
+    passportExpiredOn = json['passportExpiredOn'];
+    gender = json['gender'];
+    immigrationPassType = json['immigrationPassType'];
+    has8YearsEducation = json['has8YearsEducation'];
+    educationLevel = json['educationLevel'];
+    marriedOn = json['marriedOn'];
+    maritalStatus = json['maritalStatus'];
+    birthCountry = json['birthCountry'];
+    nationality = json['nationality'];
+    ethnicGroup = json['ethnicGroup'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['gender'] = this.gender;
-    data['education'] = this.education;
-    data['marriedOn'] = this.marriedOn;
+    data['fin'] = this.fin;
+    data['workPromoteNo'] = this.workPromoteNo;
+    data['citizenGrantedOnState'] = this.citizenGrantedOnState;
     data['passportNo'] = this.passportNo;
-    data['ethnicGroup'] = this.ethnicGroup;
-    data['nationality'] = this.nationality;
-    data['birthCountry'] = this.birthCountry;
-    data['maritalStatus'] = this.maritalStatus;
     data['passportExpiredOn'] = this.passportExpiredOn;
-    data['has8YearsEducation'] = this.has8YearsEducation;
+    data['gender'] = this.gender;
     data['immigrationPassType'] = this.immigrationPassType;
-    data['citizenGrantedAtStateProvince'] = this.citizenGrantedAtStateProvince;
+    data['has8YearsEducation'] = this.has8YearsEducation;
+    data['educationLevel'] = this.educationLevel;
+    data['marriedOn'] = this.marriedOn;
+    data['maritalStatus'] = this.maritalStatus;
+    data['birthCountry'] = this.birthCountry;
+    data['nationality'] = this.nationality;
+    data['ethnicGroup'] = this.ethnicGroup;
     return data;
   }
 }
 
 class Malaysia {
-  String icNo;
-  String icColour;
+  String no;
+  String colour;
 
-  Malaysia({this.icNo, this.icColour});
+  Malaysia({this.no, this.colour});
 
   Malaysia.fromJson(Map<String, dynamic> json) {
-    icNo = json['icNo'];
-    icColour = json['icColour'];
+    no = json['no'];
+    colour = json['colour'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['icNo'] = this.icNo;
-    data['icColour'] = this.icColour;
+    data['no'] = this.no;
+    data['colour'] = this.colour;
     return data;
   }
 }
 
 class Spouse {
   String name;
-  String nric;
+  String nricOnFin;
+  String marriedOn;
 
-  Spouse({this.name, this.nric});
+  Spouse({this.name, this.nricOnFin, this.marriedOn});
 
   Spouse.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    nric = json['nric'];
+    nricOnFin = json['nricOnFin'];
+    marriedOn = json['marriedOn'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['nric'] = this.nric;
+    data['nricOnFin'] = this.nricOnFin;
+    data['marriedOn'] = this.marriedOn;
     return data;
   }
 }
@@ -165,21 +225,21 @@ class Spouse {
 class Photo {
   String filename;
   String mimetype;
-  String originalname;
+  int order;
 
-  Photo({this.filename, this.mimetype, this.originalname});
+  Photo({this.filename, this.mimetype, this.order});
 
   Photo.fromJson(Map<String, dynamic> json) {
     filename = json['filename'];
     mimetype = json['mimetype'];
-    originalname = json['originalname'];
+    order = json['order'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['filename'] = this.filename;
     data['mimetype'] = this.mimetype;
-    data['originalname'] = this.originalname;
+    data['order'] = this.order;
     return data;
   }
 }

@@ -136,7 +136,6 @@ class _BuildContactInfoFormState extends State<BuildContactInfoForm> {
             decoration: InputDecoration(
               labelText: "Country Code",
               hintText: "Example +65",
-              errorText: provider.error,
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
@@ -150,7 +149,6 @@ class _BuildContactInfoFormState extends State<BuildContactInfoForm> {
             decoration: InputDecoration(
               labelText: "Phone Number",
               hintText: "+65 9443199",
-              errorText: provider.error,
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),

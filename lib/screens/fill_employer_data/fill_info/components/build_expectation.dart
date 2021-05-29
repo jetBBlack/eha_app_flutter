@@ -217,7 +217,6 @@ class _BuildDutiesState extends State<BuildDuties> {
   ];
   final _items = _duties.map((duty) => MultiSelectItem(duty, duty)).toList();
   List _selectedDuties = [];
-  final _multiSelectKey = GlobalKey<FormFieldState>();
   @override
   Widget build(BuildContext context) {
     return Container(

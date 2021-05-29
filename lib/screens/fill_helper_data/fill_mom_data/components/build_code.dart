@@ -1,12 +1,28 @@
 import 'package:eha_app/constant.dart';
+import 'package:eha_app/providers/helper_mom_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../size_config.dart';
 
-class BuildCodePage extends StatelessWidget {
+class BuildCodePage extends StatefulWidget {
+  @override
+  _BuildCodePageState createState() => _BuildCodePageState();
+}
+
+class _BuildCodePageState extends State<BuildCodePage> {
+  TextEditingController _codeCtl = TextEditingController();
+  @override
+  void initState() {
+    final codeProvider = Provider.of<HelperMomProvider>(context, listen: false);
+    super.initState();
+    _codeCtl = TextEditingController(text: codeProvider.code);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final codeProvider = Provider.of<HelperMomProvider>(context);
     return Padding(
       padding:
           EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(18)),
@@ -74,9 +90,25 @@ class BuildCodePage extends StatelessWidget {
                 )
               ],
             ),
+            Form(
+              child: TextFormField(
+                controller: _codeCtl,
+                onChanged: codeProvider.setcode,
+                decoration: InputDecoration(
+                  labelText: "Code",
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                ),
+              ),
+            )
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _codeCtl.dispose();
+    super.dispose();
   }
 }

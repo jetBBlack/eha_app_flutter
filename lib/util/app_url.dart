@@ -10,5 +10,14 @@ class AppUrl {
   static const String getHelperList = baseUrl + "api/helpers/get-helper-list";
   static const String uploadHelperImage =
       baseUrl + "api/helpers/helper-upload-photos";
-  static const String getImage = baseUrl + 'api/files/';
+  static const String createHelperMom =
+      baseUrl + "api/helperMom/create-helper-mom";
+  static const String updateHelperMom =
+      baseUrl + "api/helperMom/update-helper-mom";
+  static const String deleteHelperMom =
+      baseUrl + "api/helperMom/delete-helper-mom";
+  static const String getHelperMom = baseUrl + "api/helperMom/get-helper-mom";
+  static const String getHelperMomList =
+      baseUrl + "api/helperMom/get-helper-mom-list";
+  static const String getImage = baseUrl + "api/files/";
 }

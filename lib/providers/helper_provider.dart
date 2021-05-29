@@ -1,5 +1,5 @@
 import 'package:eha_app/models/helper.dart';
-import 'package:eha_app/services_api/helper_service.dart';
+import 'package:eha_app/services_api/helper_services.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/foundation.dart';
@@ -9,14 +9,11 @@ class HelperProvider extends ChangeNotifier {
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   HelperModel newHelper = new HelperModel();
   List<YesNoQuestions> yesNoQuestions = <YesNoQuestions>[];
-  String _error;
   PersonalInfo personalInfo = new PersonalInfo();
 
-  //ContactNo contactNo = new ContactNo();
   //List<ContactNo> contactList = [];
   //SingaporeAddress singaporeAddress = new SingaporeAddress();
   //OverseasAddress overseasAddress = new OverseasAddress();
-  String get error => _error;
 
   String get name => personalInfo.name;
   setname(String name) {

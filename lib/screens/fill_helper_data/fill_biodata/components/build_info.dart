@@ -154,8 +154,6 @@ class BuildGeneralInfo extends StatefulWidget {
 }
 
 class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
-  Key _formKey = GlobalKey<FormState>(); //key
-
   //Controller var
   TextEditingController _name = TextEditingController();
   TextEditingController _province = TextEditingController();
@@ -213,14 +211,20 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final HelperProvider myProvider = Provider.of<HelperProvider>(context);
+    final HelperProvider formProvider = Provider.of<HelperProvider>(context);
     return Form(
-      key: _formKey,
+      key: formProvider.globalFormKey,
       child: Column(
         children: [
           TextFormField(
             controller: _name,
-            onChanged: (value) => myProvider.setname(value),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Name must be not null";
+              }
+              return null;
+            },
+            onChanged: (value) => formProvider.setname(value),
             decoration: InputDecoration(
               labelText: "Name",
               hintText: "Enter your name",
@@ -236,7 +240,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             items: ['Male', 'Female'],
             label: 'Gender',
             searchBoxController: _gender,
-            onChanged: myProvider.setgender,
+            onChanged: formProvider.setgender,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -250,7 +254,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             items: maritalStatusList,
             label: 'Marital Status',
             searchBoxController: _maritalStatus,
-            onChanged: myProvider.setmaritalStatus,
+            onChanged: formProvider.setmaritalStatus,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -289,7 +293,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             items: countryList,
             label: 'Nationality',
             searchBoxController: _nationality,
-            onChanged: myProvider.setnationality,
+            onChanged: formProvider.setnationality,
             selectedItem: countryList[0],
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
@@ -304,7 +308,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             items: countryList,
             label: 'Birth Country',
             searchBoxController: _birthCountry,
-            onChanged: myProvider.setbirthCountry,
+            onChanged: formProvider.setbirthCountry,
             selectedItem: countryList[0],
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
@@ -315,7 +319,13 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           TextFormField(
             controller: _province,
-            onChanged: myProvider.setprovince,
+            onChanged: formProvider.setprovince,
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Provine must be not null';
+              }
+              return null;
+            },
             decoration: InputDecoration(
               labelText: "Provine",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -591,6 +601,7 @@ class _BuildSkillLevelState extends State<BuildSkillLevel> {
 
   @override
   void initState() {
+    // ignore: todo
     // TODO: implement initState
     super.initState();
     for (int i = 0; i < skills.length; i++) {
