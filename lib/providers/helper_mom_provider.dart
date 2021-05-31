@@ -7,6 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperMomProvider extends ChangeNotifier {
   final GlobalKey<FormState> globalHelperMomFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> globalHelperMomFormKey1 = GlobalKey<FormState>();
+  final GlobalKey<FormState> globalHelperMomFormKey2 = GlobalKey<FormState>();
+  final GlobalKey<FormState> globalHelperMomFormKey3 = GlobalKey<FormState>();
   HelperMomModel helperMom = new HelperMomModel();
   Mom mom = new Mom();
   Spouse spouse = new Spouse();
@@ -142,7 +145,6 @@ class HelperMomProvider extends ChangeNotifier {
 
   addPhotoData(Photo photo) {
     photoList.add(photo);
-    notifyListeners();
   }
 
   HelperMomService get service => GetIt.I<HelperMomService>();

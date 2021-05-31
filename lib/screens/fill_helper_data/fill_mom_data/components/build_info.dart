@@ -134,6 +134,7 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
   TextEditingController _educationCtl = TextEditingController();
   TextEditingController _educationLvlCtl = TextEditingController();
   TextEditingController _ethnicGroupCtl = TextEditingController();
+  TextEditingController _marriedDateCtl = TextEditingController();
   TextEditingController _maritalStatusCtl = TextEditingController();
   //Data var
 
@@ -191,6 +192,9 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
     _passTypeCtl = TextEditingController(text: formProvdider.passType);
     _expireDateCtl =
         TextEditingController(text: formProvdider.passportExpireDate);
+    _maritalStatusCtl =
+        TextEditingController(text: formProvdider.maritalStatus);
+    _marriedDateCtl = TextEditingController(text: formProvdider.marriedDate);
   }
 
   @override
@@ -340,7 +344,34 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
             onChanged: (value) {
               formProvider.seteducationlevel(value);
             },
-            selectedItem: passType[0],
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            controller: _marriedDateCtl,
+            onChanged: (value) {
+              formProvider.setmarriedDate(value);
+            },
+            onTap: () async {
+              DateTime date = DateTime(2021);
+              FocusScope.of(context).requestFocus(new FocusNode());
+
+              date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100),
+              );
+              _marriedDateCtl.text = date.toIso8601String();
+            },
+            decoration: InputDecoration(
+              labelText: "Married On",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -417,6 +448,7 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
     _educationCtl.dispose();
     _educationLvlCtl.dispose();
     _ethnicGroupCtl.dispose();
+    _marriedDateCtl.dispose();
     _maritalStatusCtl.dispose();
     _nationality.dispose();
     _birthCountry.dispose();
@@ -444,7 +476,7 @@ class _BuildSpouseFormState extends State<BuildSpouseForm> {
   Widget build(BuildContext context) {
     final spouseProvider = Provider.of<HelperMomProvider>(context);
     return Form(
-      key: spouseProvider.globalHelperMomFormKey,
+      key: spouseProvider.globalHelperMomFormKey1,
       child: Column(
         children: [
           TextFormField(
@@ -471,7 +503,9 @@ class _BuildSpouseFormState extends State<BuildSpouseForm> {
           ),
           TextFormField(
             controller: _marriedDateCtl,
-            onChanged: (value) => spouseProvider.setspouseMarriedOn,
+            onChanged: (value) {
+              spouseProvider.setspouseMarriedOn(value);
+            },
             onTap: () async {
               DateTime date = DateTime(2021);
               FocusScope.of(context).requestFocus(new FocusNode());
@@ -526,7 +560,7 @@ class _BuildMalaysiaFormState extends State<BuildMalaysiaForm> {
   Widget build(BuildContext context) {
     final malayProvider = Provider.of<HelperMomProvider>(context);
     return Form(
-      key: malayProvider.globalHelperMomFormKey,
+      key: malayProvider.globalHelperMomFormKey2,
       child: Column(
         children: [
           TextFormField(

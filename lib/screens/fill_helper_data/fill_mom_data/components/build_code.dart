@@ -90,6 +90,9 @@ class _BuildCodePageState extends State<BuildCodePage> {
                 )
               ],
             ),
+            SizedBox(
+              height: getProportionateScreenWidth(20),
+            ),
             Form(
               child: TextFormField(
                 controller: _codeCtl,

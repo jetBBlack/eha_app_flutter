@@ -24,6 +24,7 @@ class _BuildPicturesState extends State<BuildPictures>
   bool _useCamera = false;
 
   Future<void> getImageFromGallery() async {
+    _assets.clear();
     List<Asset> resultList = <Asset>[];
     String error = 'No Error Detected';
     try {
@@ -127,6 +128,7 @@ class _BuildPicturesState extends State<BuildPictures>
   void removeImage(String value) {
     setState(() {
       imgPath.remove(value);
+      _isUploading = false;
     });
   }
 
@@ -137,140 +139,142 @@ class _BuildPicturesState extends State<BuildPictures>
       child: Padding(
         padding:
             EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20)),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/image-gallery.svg',
-                  color: Colors.cyan,
-                ),
-                SizedBox(
-                  width: getProportionateScreenWidth(10),
-                ),
-                Text(
-                  "PICTURES",
-                  style: TextStyle(color: Colors.cyan, fontSize: 18),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: getProportionateScreenWidth(20),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.deepOrange,
-                  onSurface: Colors.grey,
-                  textStyle: TextStyle(
-                    fontSize: 25,
-                  )),
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Container(
-                        height: 150,
-                        color: Colors.grey[200],
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: getProportionateScreenWidth(20)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              GestureDetector(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  SvgPicture.asset(
+                    'assets/icons/image-gallery.svg',
+                    color: Colors.cyan,
+                  ),
+                  SizedBox(
+                    width: getProportionateScreenWidth(10),
+                  ),
+                  Text(
+                    "PICTURES",
+                    style: TextStyle(color: Colors.cyan, fontSize: 18),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: getProportionateScreenWidth(20),
+              ),
+              TextButton(
+                style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.deepOrange,
+                    onSurface: Colors.grey,
+                    textStyle: TextStyle(
+                      fontSize: 25,
+                    )),
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: 150,
+                          color: Colors.grey[200],
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: getProportionateScreenWidth(20)),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                GestureDetector(
+                                    onTap: () {
+                                      getImageFromCamera();
+                                      setState(() {
+                                        _useCamera = true;
+                                      });
+                                    },
+                                    child: Text(
+                                      "Upload from camera",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                                GestureDetector(
                                   onTap: () {
-                                    getImageFromCamera();
+                                    getImageFromGallery();
                                     setState(() {
-                                      _useCamera = true;
+                                      _useCamera = false;
                                     });
                                   },
                                   child: Text(
-                                    "Upload from camera",
+                                    "Upload from gallery",
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),
-                                  )),
-                              GestureDetector(
-                                onTap: () {
-                                  getImageFromGallery();
-                                  setState(() {
-                                    _useCamera = false;
-                                  });
-                                },
-                                child: Text(
-                                  "Upload from gallery",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "Cancel",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "Cancel",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    });
-              },
-              child: Text('Upload Image'),
-            ),
-            SizedBox(height: getProportionateScreenWidth(20)),
-            _isUploading == false
-                ? Text('Upload your image here')
-                : FutureBuilder(
-                    future: _useCamera == true
-                        ? uploadImage()
-                        : uploadMultipleImage(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.none:
-                        case ConnectionState.waiting:
-                          return new CircularProgressIndicator();
-                        default:
-                          if (snapshot.hasError) {
-                            return new Text('${snapshot.error}');
-                          } else {
-                            return buildGridView(context, snapshot);
-                          }
-                      }
-                    }),
-          ],
+                        );
+                      });
+                },
+                child: Text('Upload Image'),
+              ),
+              SizedBox(height: getProportionateScreenWidth(20)),
+              _isUploading == false
+                  ? buildGridView(context)
+                  : FutureBuilder(
+                      future: _useCamera == true
+                          ? uploadImage()
+                          : uploadMultipleImage(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                          case ConnectionState.waiting:
+                            return new CircularProgressIndicator();
+                          default:
+                            if (snapshot.hasError) {
+                              return new Text('${snapshot.error}');
+                            } else {
+                              return buildGridView(context);
+                            }
+                        }
+                      }),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  GridView buildGridView(BuildContext context, AsyncSnapshot snapshot) {
+  GridView buildGridView(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),
       padding: EdgeInsets.all(12),
       crossAxisCount: 2,
-      crossAxisSpacing: 10,
-      mainAxisSpacing: 10,
+      crossAxisSpacing: 15,
+      mainAxisSpacing: 15,
       children: List.generate(
         imgPath.length,
         (index) {
           String path = imgPath[index];
           return Stack(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image(
-                  fit: BoxFit.fill,
-                  image: NetworkImage(AppUrl.getImage + path),
-                ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    image: DecorationImage(
+                        image: NetworkImage(AppUrl.getImage + path),
+                        fit: BoxFit.cover)),
               ),
               Align(
                 alignment: Alignment.topLeft,
@@ -282,7 +286,9 @@ class _BuildPicturesState extends State<BuildPictures>
                       width: 22,
                     ),
                     color: Colors.red,
-                    onPressed: () {},
+                    onPressed: () {
+                      removeImage(path);
+                    },
                   ),
                 ),
               )

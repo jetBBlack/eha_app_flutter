@@ -44,6 +44,10 @@ dependencies:
   dropdown_search: ^0.6.1
   multi_select_flutter: ^4.0.0
   uuid: ^2.2.2
+  
+  #save signature
+  permission_handler: ^8.0.0+2
+  image_gallery_saver: ^1.6.9
  
 
   multi_image_picker2: ^5.0.0
