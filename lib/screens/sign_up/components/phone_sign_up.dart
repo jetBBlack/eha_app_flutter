@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-
 import '../../../constant.dart';
 
 class PhoneSignUp extends StatelessWidget {
@@ -71,7 +70,7 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
   void initState() {
     super.initState();
     registerRequestModel = new RegisterRequestModel();
-    registerRequestModel.emailAddress = _user == null ? null : _user.email;
+    registerRequestModel.emailAddress = null;
   }
 
   void addError({String error}) {
@@ -97,10 +96,9 @@ class _PhoneSignUpFormState extends State<PhoneSignUpForm> {
 
       if (form.validate()) {
         form.save();
-
         final Future<Map<String, dynamic>> successfullMessage =
             auth.register(registerRequestModel);
-
+            
         successfullMessage.then((response) async {
           if (response['status']) {
             Fluttertoast.showToast(

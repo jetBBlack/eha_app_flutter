@@ -101,12 +101,11 @@ class _BuildPicturesPageState extends State<BuildPicturesPage>
         final List<dynamic> responseData = response.data;
         for (var item in responseData) {
           Map<String, dynamic> responseItem = item;
-          imgProvider.addPhotoData(Photo(
+          await imgProvider.addPhotoData(Photo(
             filename: responseItem['fileName'],
             mimetype: responseItem['mimeType'],
             order: order,
           ));
-          print(responseItem['fileName']);
           imgPath.add(responseItem['fileName'].toString());
           order++;
         }
@@ -115,6 +114,8 @@ class _BuildPicturesPageState extends State<BuildPicturesPage>
   }
 
   Future uploadImage() async {
+    HelperMomProvider imgProvider =
+        Provider.of<HelperMomProvider>(context, listen: false);
     List<MultipartFile> multipartImageList = [];
     if (_singleImage != null) {
       MultipartFile multipartFile = await MultipartFile.fromFile(
@@ -132,7 +133,11 @@ class _BuildPicturesPageState extends State<BuildPicturesPage>
         final List<dynamic> responseData = response.data;
         for (var item in responseData) {
           Map<String, dynamic> responseItem = item;
-          print(responseItem['fileName']);
+          await imgProvider.addPhotoData(Photo(
+            filename: responseItem['fileName'],
+            mimetype: responseItem['mimeType'],
+            order: order,
+          ));
           imgPath.add(responseItem['fileName'].toString());
         }
       }
@@ -144,6 +149,9 @@ class _BuildPicturesPageState extends State<BuildPicturesPage>
       imgPath.remove(value);
       _isUploading = false;
     });
+    HelperMomProvider imgProvider =
+        Provider.of<HelperMomProvider>(context, listen: false);
+    imgProvider.removePhotoData(imgPath.indexOf(value));
   }
 
   @override

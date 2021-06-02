@@ -15,16 +15,14 @@ class HelperMomService {
       "signature": helperMom.signature,
       "code": helperMom.code,
     };
-
     var response = await http.post(
-      Uri.parse(AppUrl.createHelper),
+      Uri.parse(AppUrl.createHelperMom),
       body: json.encode(helperMomData),
       headers: {'Content-Type': 'application/json'},
     );
-
     final Map<String, dynamic> responseData = json.decode(response.body);
     if (response.statusCode == 201) {
-      print('MOM CREATED');
+      print(responseData['id']);
       result = {
         'status': true,
         'id:': responseData['id'],

@@ -62,7 +62,7 @@ class HelperMomProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String get educaton => mom.has8YearsEducation;
+  String get education => mom.has8YearsEducation;
   seteducation(String education) {
     mom.has8YearsEducation = education;
     notifyListeners();
@@ -147,23 +147,33 @@ class HelperMomProvider extends ChangeNotifier {
     photoList.add(photo);
   }
 
+  removePhotoData(int index) {
+    photoList.remove(index);
+    notifyListeners();
+  }
+
   HelperMomService get service => GetIt.I<HelperMomService>();
-  void createHelperWithData(BuildContext context) {
+
+  Future createHelperWithData(BuildContext context) async {
     helperMom.mom = mom;
+    helperMom.spouse = spouse;
     helperMom.malaysia = malaysia;
     helperMom.photo = photoList;
-    final Future<Map<String, dynamic>> successfulMessage =
-        service.createHelper(helperMom);
-    successfulMessage.then((response) async {
-      if (response['status']) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('C')));
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString(mom.name, response['id']);
-      } else {
-        throw Exception('Failed to create Helper');
-      }
-    });
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
+    final Map<String, dynamic> successfulMessage =
+        await service.createHelper(helperMom);
+    print(successfulMessage['id']);
+    if (successfulMessage['status']) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+        'Helper-MOM Created',
+        style: TextStyle(color: Colors.cyan, fontSize: 16),
+      )));
+    } else {
+      notifyListeners();
+      throw Exception('Failed to create Helper');
+    }
+    print(successfulMessage['status']);
     notifyListeners();
   }
 }

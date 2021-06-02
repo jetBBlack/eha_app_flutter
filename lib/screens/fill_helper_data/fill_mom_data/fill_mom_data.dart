@@ -1,12 +1,19 @@
-import 'package:eha_app/screens/home/home_screen.dart';
+import 'package:eha_app/providers/helper_mom_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'components/build_code.dart';
 import 'components/build_info.dart';
 import 'components/build_pic.dart';
 import 'components/build_signature.dart';
 
-class FillMoMDataScreen extends StatelessWidget {
+class FillMoMDataScreen extends StatefulWidget {
   static String routeName = "/fill_employer_data";
+
+  @override
+  _FillMoMDataScreenState createState() => _FillMoMDataScreenState();
+}
+
+class _FillMoMDataScreenState extends State<FillMoMDataScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -16,8 +23,11 @@ class FillMoMDataScreen extends StatelessWidget {
           title: Text('MOM'),
           actions: [
             TextButton(
-              onPressed: () {
-                Navigator.pushNamed(context, HomeScreen.routeName);
+              onPressed: () async {
+                final createProvider =
+                    Provider.of<HelperMomProvider>(context, listen: false);
+                await createProvider.createHelperWithData(context);
+                Navigator.pop(context);
               },
               child: Text(
                 'Create',

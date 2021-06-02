@@ -7,9 +7,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class BuildPersonalInfoPage extends StatelessWidget {
+class BuildPersonalInfoPage extends StatefulWidget {
+  @override
+  _BuildPersonalInfoPageState createState() => _BuildPersonalInfoPageState();
+}
+
+class _BuildPersonalInfoPageState extends State<BuildPersonalInfoPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
@@ -116,6 +123,9 @@ class BuildPersonalInfoPage extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class FillGeneralForm extends StatefulWidget {
@@ -152,8 +162,14 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
     "Single",
     "Widowed"
   ];
-  List<String> educationLevelList = [];
-  List<String> countryList = [
+  List<String> educationLevelList = [
+    'No Formal Education',
+    'Post-Secondary and Above',
+    'Primary',
+    "Secondary (With SPM or GEC '0' Level)",
+    "Secondary (Without SPM or GEC '0' Level)"
+  ];
+  List<String> nationList = [
     "Filipino",
     "Burman",
     "India",
@@ -166,6 +182,29 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
     "Chinese-Taiwan",
     "Thai",
     "Korean"
+  ];
+  List<String> countryList = [
+    "Philippines",
+    "India",
+    "Sri Lanka",
+    "Bangladesh",
+    "Malaysia",
+    "Indonesia",
+    "HongKong",
+    "Macau",
+    "Taiwan",
+    "Thailand",
+    "South Korea",
+    "Camboida",
+  ];
+  List<String> ethnicList = [
+    "Chinese",
+    "Filipino",
+    "Indian",
+    "Indonesian",
+    "Malay",
+    "No selected",
+    "Others"
   ];
   TextEditingController _nationality = TextEditingController();
   TextEditingController _birthCountry = TextEditingController();
@@ -183,7 +222,7 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
     _citizen = TextEditingController(text: formProvdider.citizen);
     _passportNoCtl = TextEditingController(text: formProvdider.passportNo);
     _genderCtl = TextEditingController(text: formProvdider.gender);
-    _educationCtl = TextEditingController(text: formProvdider.educaton);
+    _educationCtl = TextEditingController(text: formProvdider.education);
     _educationLvlCtl =
         TextEditingController(text: formProvdider.educationLevel);
     _ethnicGroupCtl = TextEditingController(text: formProvdider.ethnicGroup);
@@ -282,6 +321,7 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
                 lastDate: DateTime(2100),
               );
               _expireDateCtl.text = date.toIso8601String();
+              formProvider.setpassportExpireDate(date.toIso8601String());
             },
             decoration: InputDecoration(
               labelText: "Passport Expired On",
@@ -298,7 +338,6 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
             label: 'Immigration Pass Type',
             searchBoxController: _passTypeCtl,
             onChanged: (value) => formProvider.setpassType(value),
-            selectedItem: passType[0],
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -327,7 +366,6 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
             label: 'Has 8 years of education',
             searchBoxController: _educationCtl,
             onChanged: (value) => formProvider.seteducation(value),
-            selectedItem: 'Yes',
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -353,9 +391,7 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
           ),
           TextFormField(
             controller: _marriedDateCtl,
-            onChanged: (value) {
-              formProvider.setmarriedDate(value);
-            },
+            onChanged: formProvider.setmarriedDate,
             onTap: () async {
               DateTime date = DateTime(2021);
               FocusScope.of(context).requestFocus(new FocusNode());
@@ -367,6 +403,7 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
                 lastDate: DateTime(2100),
               );
               _marriedDateCtl.text = date.toIso8601String();
+              formProvider.setmarriedDate(date.toIso8601String());
             },
             decoration: InputDecoration(
               labelText: "Married On",
@@ -394,11 +431,10 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
           DropdownSearch<String>(
             mode: Mode.MENU,
             showSelectedItem: true,
-            items: countryList,
+            items: nationList,
             label: 'Nationality',
             searchBoxController: _nationality,
             onChanged: formProvider.setnationality,
-            selectedItem: countryList[0],
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -413,7 +449,6 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
             label: 'Birth Country',
             searchBoxController: _birthCountry,
             onChanged: formProvider.setbirthCountry,
-            selectedItem: countryList[0],
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -424,7 +459,7 @@ class _FillGeneralFormState extends State<FillGeneralForm> {
           DropdownSearch<String>(
             mode: Mode.MENU,
             showSelectedItem: true,
-            items: countryList,
+            items: ethnicList,
             label: 'Ethnic Group',
             searchBoxController: _ethnicGroupCtl,
             onChanged: (value) => formProvider.setethnicGroup(value),
@@ -517,6 +552,7 @@ class _BuildSpouseFormState extends State<BuildSpouseForm> {
                 lastDate: DateTime(2100),
               );
               _marriedDateCtl.text = date.toIso8601String();
+              spouseProvider.setspouseMarriedOn(date.toIso8601String());
             },
             decoration: InputDecoration(
               labelText: "Married On",
