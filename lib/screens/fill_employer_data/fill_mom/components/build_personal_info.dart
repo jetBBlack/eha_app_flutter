@@ -3,9 +3,16 @@ import 'package:eha_app/components/info_title.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 
-class BuildPersonalInfo extends StatelessWidget {
+class BuildPersonalInfo extends StatefulWidget {
+  @override
+  _BuildPersonalInfoState createState() => _BuildPersonalInfoState();
+}
+
+class _BuildPersonalInfoState extends State<BuildPersonalInfo>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
@@ -30,6 +37,10 @@ class BuildPersonalInfo extends StatelessWidget {
       ),
     );
   }
+
+  @override
+ 
+  bool get wantKeepAlive => true;
 }
 
 class BuildGeneralInfo extends StatefulWidget {
@@ -46,7 +57,6 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
   TextEditingController _finCtl = TextEditingController();
   TextEditingController _passportNo = TextEditingController();
   TextEditingController _passportExpireDate = TextEditingController();
-  TextEditingController _passportIssueDate = TextEditingController();
   TextEditingController _passportIssueIn = TextEditingController();
   TextEditingController _nationalityCtl = TextEditingController();
   TextEditingController _maritalStatusCtl = TextEditingController();
@@ -61,6 +71,27 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     "Others",
     "Singapore Citizen",
     "Singapore PR",
+  ];
+  List<String> maritalStatusList = [
+    "Divorced",
+    "Married",
+    "Separated",
+    "Single",
+    "Widowed"
+  ];
+  List<String> countryList = [
+    "Philippines",
+    "India",
+    "Sri Lanka",
+    "Bangladesh",
+    "Malaysia",
+    "Indonesia",
+    "HongKong",
+    "Macau",
+    "Taiwan",
+    "Thailand",
+    "South Korea",
+    "Camboida",
   ];
 
   @override
@@ -174,6 +205,83 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             decoration: InputDecoration(
               labelText: "Passport Number",
               floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            controller: _passportExpireDate,
+            //onChanged: formProvider.setmarriedDate,
+            onTap: () async {
+              DateTime date = DateTime(2021);
+              FocusScope.of(context).requestFocus(new FocusNode());
+
+              date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2100),
+              );
+              var dateparse = DateTime.parse(date.toIso8601String());
+              _passportExpireDate.text =
+                  "${dateparse.year}-${dateparse.month}-${dateparse.day}";
+              //formProvider.setmarriedDate(date.toIso8601String());
+            },
+            decoration: InputDecoration(
+              labelText: "Passport expired on",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            controller: _passportIssueIn,
+            decoration: InputDecoration(
+                labelText: "Passport issue in",
+                floatingLabelBehavior: FloatingLabelBehavior.always),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            items: countryList,
+            label: 'Nationality',
+            searchBoxController: _nationalityCtl,
+            //onChanged: (value) => formProvider.setgender(value),
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            items: maritalStatusList,
+            label: 'Marital Status',
+            searchBoxController: _maritalStatusCtl,
+            //onChanged: (value) => formProvider.setgender(value),
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+            ),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          DropdownSearch<String>(
+            mode: Mode.MENU,
+            showSelectedItem: true,
+            items: maritalStatusList,
+            label: 'Housing Type',
+            searchBoxController: _houseTypeCtl,
+            //onChanged: (value) => formProvider.setgender(value),
+            dropdownSearchDecoration: InputDecoration(
+              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
           ),
         ],

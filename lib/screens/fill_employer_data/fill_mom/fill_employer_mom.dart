@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'components/build_personal_info.dart';
 
 class FillEmployerMomScreen extends StatelessWidget {
-  final String routeName = "/fill-employer-mom";
+  static String routeName = "/fill-employer-mom";
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

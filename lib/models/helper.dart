@@ -1,5 +1,7 @@
 class HelperModel {
   PersonalInfo personalInfo;
+  String contactInfo;
+  String dob;
   List<YesNoQuestions> yesNoQuestions;
   List<Medicals> medicals;
   List<Skills> skills;
@@ -12,6 +14,8 @@ class HelperModel {
 
   HelperModel(
       {this.personalInfo,
+      this.contactInfo,
+      this.dob,
       this.yesNoQuestions,
       this.medicals,
       this.skills,
@@ -26,6 +30,8 @@ class HelperModel {
     personalInfo = json['personalInfo'] != null
         ? new PersonalInfo.fromJson(json['personalInfo'])
         : null;
+    contactInfo = json['contactInfo'];
+    dob = json['dob'];
     if (json['yesNoQuestions'] != null) {
       List<YesNoQuestions> yesNoQuestions = [];
       json['yesNoQuestions'].forEach((v) {
@@ -69,6 +75,8 @@ class HelperModel {
     if (this.personalInfo != null) {
       data['personalInfo'] = this.personalInfo.toJson();
     }
+    data['contactInfo'] = this.contactInfo;
+    data['dob'] = this.dob;
     if (this.yesNoQuestions != null) {
       data['yesNoQuestions'] =
           this.yesNoQuestions.map((v) => v.toJson()).toList();

@@ -478,7 +478,7 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
 
   @override
   Widget build(BuildContext context) {
-    final yesNoProvider = Provider.of<HelperProvider>(context);
+    final yesNoProvider = Provider.of<HelperProvider>(context, listen: false);
     return Column(
       children: [
         SwitchListTile(

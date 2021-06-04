@@ -10,8 +10,8 @@ class HelperProvider extends ChangeNotifier {
   HelperModel newHelper = new HelperModel();
   List<YesNoQuestions> yesNoQuestions = <YesNoQuestions>[];
   PersonalInfo personalInfo = new PersonalInfo();
+  List<EmploymentHistories> employmentHistories;
 
-  //List<ContactNo> contactList = [];
   //SingaporeAddress singaporeAddress = new SingaporeAddress();
   //OverseasAddress overseasAddress = new OverseasAddress();
 
@@ -51,6 +51,30 @@ class HelperProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //add contact info
+  String get contactInfo => newHelper.contactInfo;
+  setcontactNo(String contactInfo) {
+    newHelper.contactInfo = contactInfo;
+    notifyListeners();
+  }
+
+  String get dayOfBirth => newHelper.contactInfo;
+  setdayOfBirth(String dayOfBirth) {
+    newHelper.dob = dayOfBirth;
+    notifyListeners();
+  }
+
+  String get agencyId => newHelper.agencyId;
+  setagencyId(String id) {
+    newHelper.agencyId = id;
+    notifyListeners();
+  }
+
+  setEmploymentHistory(EmploymentHistories employment) {
+    employmentHistories.add(employment);
+    notifyListeners();
+  }
+
   //add data to YesNoQuestion List
   setYesNoData(YesNoQuestions yesNoQuestion) {
     yesNoQuestions.add(yesNoQuestion);
@@ -68,6 +92,8 @@ class HelperProvider extends ChangeNotifier {
     newHelper.medicals.add(medical);
     notifyListeners();
   }
+
+  //add data to Employment History List
 
   // String get countryCode => contactNo.countryCode;
   // setcountryCode(String countryCode) {

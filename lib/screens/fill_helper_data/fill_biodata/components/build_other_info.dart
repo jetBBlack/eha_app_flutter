@@ -16,18 +16,23 @@ class _BuildOtherInfoState extends State<BuildOtherInfo>
     with AutomaticKeepAliveClientMixin {
   var uuid = Uuid();
   Map<String, Widget> _widget = {};
+  //Controller
+  TextEditingController _startDateCtl = TextEditingController();
+  TextEditingController _endDateCtl = TextEditingController();
+  TextEditingController _leavingReasonCtl = TextEditingController();
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now().add(Duration(days: 7));
-
   Future displayDateRangePicker(BuildContext context) async {
     final List<DateTime> picked = await DateRangePicker.showDatePicker(
         context: context,
-        initialFirstDate: _startDate,
-        initialLastDate: _endDate,
+        initialFirstDate: DateTime.now(),
+        initialLastDate: DateTime.now().add(Duration(days: 10)),
         firstDate: new DateTime(DateTime.now().year - 30),
         lastDate: new DateTime(DateTime.now().year + 30));
     if (picked != null && picked.length == 2) {
       setState(() {
+        _startDateCtl.text = picked[0].toIso8601String();
+        _endDateCtl.text = picked[1].toIso8601String();
         _startDate = picked[0];
         _endDate = picked[1];
       });
@@ -139,104 +144,117 @@ class _BuildOtherInfoState extends State<BuildOtherInfo>
   bool get wantKeepAlive => true;
 
   Widget _buildHistoty(String key) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Color(0xFFF5F6F9),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                top: -2,
-                left: 10,
-                child: GestureDetector(
-                    child: Icon(Icons.close),
-                    onTap: () {
-                      print(key);
-                      setState(() {
-                        _widget.remove(key);
-                      });
-                    }),
-              ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
-                child: Column(
-                  children: [
-                    MultiSelectBottomSheetField(
-                      title: Text('Employment History'),
-                      initialChildSize: 0.5,
-                      listType: MultiSelectListType.CHIP,
-                      searchable: false,
-                      buttonText: Text(
-                        "Duties Selection",
-                        style: TextStyle(
-                          color: Colors.blue[800],
-                          fontSize: 16,
-                        ),
-                      ),
-                      items: _items,
-                      onConfirm: (values) {
-                        setState(() {
-                          _selectedDuties = values;
-                        });
-                      },
-                      chipDisplay: MultiSelectChipDisplay(
-                        onTap: (value) {
-                          setState(() {
-                            _selectedDuties.remove(value);
-                          });
-                        },
-                      ),
-                    ),
-                    _selectedDuties == null || _selectedDuties.isEmpty
-                        ? Container(
-                            padding: EdgeInsets.all(10),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "None selected ",
-                              style: TextStyle(color: Colors.black54),
-                            ))
-                        : Container(),
-                    ElevatedButton(
-                        onPressed: () async {
-                          await displayDateRangePicker(context);
-                        },
-                        child: Text('Select Date')),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text(
-                          '${DateFormat('MM/dd/yyyy').format(_startDate).toString()}',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text('-',
-                            style:
-                                TextStyle(fontSize: 15, color: Colors.black)),
-                        Text(
-                            '${DateFormat('MM/dd/yyyy').format(_endDate).toString()}',
-                            style: TextStyle(fontSize: 16)),
-                      ],
-                    ),
-                    SizedBox(
-                      height: getProportionateScreenWidth(5),
-                    ),
-                    TextFormField(
-                      autofocus: false,
-                      decoration: InputDecoration(
-                          labelText: 'Leaving Reason',
-                          floatingLabelBehavior: FloatingLabelBehavior.auto),
-                    ),
-                  ],
-                ),
-              ),
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      child: Column(
+        children: [
+          AppBar(
+            leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                    icon: Icon(FontAwesomeIcons.calendarCheck),
+                    onPressed: () {
+                      
+                    });
+              },
+            ),
+            title: Text('Work histoty'),
+            centerTitle: true,
+            actions: [
+              IconButton(
+                  icon: Icon(FontAwesomeIcons.trashAlt),
+                  onPressed: () {
+                    setState(() {
+                      _widget.remove(key);
+                    });
+                  }),
             ],
           ),
-        ),
-        Divider(),
-      ],
+          // Positioned(
+          //   top: -2,
+          //   left: 10,
+          //   child: GestureDetector(
+          //       child: Icon(Icons.close),
+          //       onTap: () {
+          //         print(key);
+          //         setState(() {
+          //           _widget.remove(key);
+          //         });
+          //       }),
+          // ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
+            child: Column(
+              children: [
+                MultiSelectBottomSheetField(
+                  title: Text('Employment History'),
+                  initialChildSize: 0.5,
+                  listType: MultiSelectListType.CHIP,
+                  searchable: false,
+                  buttonText: Text(
+                    "Duties Selection",
+                    style: TextStyle(
+                      color: Colors.blue[800],
+                      fontSize: 16,
+                    ),
+                  ),
+                  items: _items,
+                  onConfirm: (values) {
+                    setState(() {
+                      _selectedDuties = values;
+                    });
+                  },
+                  chipDisplay: MultiSelectChipDisplay(
+                    onTap: (value) {
+                      setState(() {
+                        _selectedDuties.remove(value);
+                      });
+                    },
+                  ),
+                ),
+                _selectedDuties == null || _selectedDuties.isEmpty
+                    ? Container(
+                        padding: EdgeInsets.all(10),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "None selected ",
+                          style: TextStyle(color: Colors.black54),
+                        ))
+                    : Container(),
+                ElevatedButton(
+                    onPressed: () async {
+                      await displayDateRangePicker(context);
+                    },
+                    child: Text('Select Date')),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Text(
+                      '${DateFormat('MM/dd/yyyy').format(_startDate).toString()}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text('-',
+                        style: TextStyle(fontSize: 15, color: Colors.black)),
+                    Text(
+                        '${DateFormat('MM/dd/yyyy').format(_endDate).toString()}',
+                        style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+                SizedBox(
+                  height: getProportionateScreenWidth(5),
+                ),
+                TextFormField(
+                  autofocus: false,
+                  decoration: InputDecoration(
+                      labelText: 'Leaving Reason',
+                      floatingLabelBehavior: FloatingLabelBehavior.auto),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -283,6 +301,164 @@ class _BuildExpectInfoState extends State<BuildExpectInfo> {
             decoration: InputDecoration(
               labelText: "Earliest date to join employer",
               floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BuildEmploymentHistory extends StatefulWidget {
+  const BuildEmploymentHistory({Key key}) : super(key: key);
+
+  @override
+  _BuildEmploymentHistoryState createState() => _BuildEmploymentHistoryState();
+}
+
+class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
+  var uuid = Uuid();
+  Map<String, Widget> _widget = {};
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now().add(Duration(days: 7));
+
+  Future displayDateRangePicker(BuildContext context) async {
+    final List<DateTime> picked = await DateRangePicker.showDatePicker(
+        context: context,
+        initialFirstDate: _startDate,
+        initialLastDate: _endDate,
+        firstDate: new DateTime(DateTime.now().year - 30),
+        lastDate: new DateTime(DateTime.now().year + 30));
+    if (picked != null && picked.length == 2) {
+      setState(() {
+        _startDate = picked[0];
+        _endDate = picked[1];
+      });
+    }
+  }
+
+  static List<String> _duties = [
+    'Caring of children',
+    'Caring of chronincally ill',
+    'Caring if disable',
+    'Caring of elderly',
+    'Caring of infants',
+    'Cleaning',
+    'Cooking',
+    'Gardering',
+    'Laundry/Ironing',
+    'Marketing',
+    'Other'
+  ];
+  final _items = _duties.map((duty) => MultiSelectItem(duty, duty)).toList();
+  List _selectedDuties = [];
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+      child: Column(
+        children: [
+          AppBar(
+            leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                    icon: Icon(FontAwesomeIcons.calendarCheck),
+                    onPressed: () {});
+              },
+            ),
+            title: Text('Work histoty'),
+            centerTitle: true,
+            actions: [
+              IconButton(
+                  icon: Icon(FontAwesomeIcons.trashAlt),
+                  onPressed: () {
+                    setState(() {
+                      //_widget.remove(key);
+                    });
+                  }),
+            ],
+          ),
+          // Positioned(
+          //   top: -2,
+          //   left: 10,
+          //   child: GestureDetector(
+          //       child: Icon(Icons.close),
+          //       onTap: () {
+          //         print(key);
+          //         setState(() {
+          //           _widget.remove(key);
+          //         });
+          //       }),
+          // ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
+            child: Column(
+              children: [
+                MultiSelectBottomSheetField(
+                  title: Text('Employment History'),
+                  initialChildSize: 0.5,
+                  listType: MultiSelectListType.CHIP,
+                  searchable: false,
+                  buttonText: Text(
+                    "Duties Selection",
+                    style: TextStyle(
+                      color: Colors.blue[800],
+                      fontSize: 16,
+                    ),
+                  ),
+                  items: _items,
+                  onConfirm: (values) {
+                    setState(() {
+                      _selectedDuties = values;
+                    });
+                  },
+                  chipDisplay: MultiSelectChipDisplay(
+                    onTap: (value) {
+                      setState(() {
+                        _selectedDuties.remove(value);
+                      });
+                    },
+                  ),
+                ),
+                _selectedDuties == null || _selectedDuties.isEmpty
+                    ? Container(
+                        padding: EdgeInsets.all(10),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "None selected ",
+                          style: TextStyle(color: Colors.black54),
+                        ))
+                    : Container(),
+                ElevatedButton(
+                    onPressed: () async {
+                      await displayDateRangePicker(context);
+                    },
+                    child: Text('Select Date')),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Text(
+                      '${DateFormat('MM/dd/yyyy').format(_startDate).toString()}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text('-',
+                        style: TextStyle(fontSize: 15, color: Colors.black)),
+                    Text(
+                        '${DateFormat('MM/dd/yyyy').format(_endDate).toString()}',
+                        style: TextStyle(fontSize: 16)),
+                  ],
+                ),
+                SizedBox(
+                  height: getProportionateScreenWidth(5),
+                ),
+                TextFormField(
+                  autofocus: false,
+                  decoration: InputDecoration(
+                      labelText: 'Leaving Reason',
+                      floatingLabelBehavior: FloatingLabelBehavior.auto),
+                ),
+              ],
             ),
           ),
         ],
