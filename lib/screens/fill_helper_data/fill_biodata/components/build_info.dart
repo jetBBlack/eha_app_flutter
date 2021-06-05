@@ -6,6 +6,7 @@ import 'package:eha_app/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:provider/provider.dart';
 
 class BuildPersonalInfoPage extends StatefulWidget {
@@ -72,10 +73,10 @@ class _BuildPersonalInfoPageState extends State<BuildPersonalInfoPage>
                 SizedBox(
                   height: getProportionateScreenWidth(20),
                 ),
-                BuildQAForm(),
-                SizedBox(
-                  height: getProportionateScreenWidth(30),
-                ),
+                // BuildQAForm(),
+                // SizedBox(
+                //   height: getProportionateScreenWidth(30),
+                // ),
                 Row(
                   children: [
                     SvgPicture.asset(
@@ -590,27 +591,36 @@ class _BuildSkillLevelState extends State<BuildSkillLevel> {
   List<String> skillLevel = ['Average', 'No Experience', 'Very Experience'];
   List<String> skills = [
     "Can cook Basic food ?",
-    "Can cook India food ?",
-    "Can cook Chinese food ?",
+    "Can cook Indian food ?",
     "Can cook Malay food ?",
     "Can cook Western food ?",
+    "Can cook Chinese food ?",
     "Can speak Chinese ?",
+    "Can speak English ?",
     "Can speak Indian ?",
+    "Can speak Malay",
+    "Do Marketting",
+    "Do gardening",
+    "Do general housework",
+    "Take care of autism children",
+    "Take care of children (2-12 years)",
+    "Take care of elderly",
+    "Take care of infants (4-24 months)",
+    "Take care of new-born baby",
   ];
   List<String> selectedLevel = [];
 
   @override
   void initState() {
-    // ignore: todo
-    // TODO: implement initState
-    super.initState();
     for (int i = 0; i < skills.length; i++) {
       selectedLevel.add(skillLevel.first);
     }
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final HelperProvider skillsProvider = Provider.of<HelperProvider>(context);
     return ListView.builder(
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),
@@ -619,56 +629,67 @@ class _BuildSkillLevelState extends State<BuildSkillLevel> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              skills[index],
-              style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
+            Container(
+              padding: const EdgeInsets.only(left: 8.0, top: 12.0, bottom: 0.0),
+              child: Text(
+                skills[index],
+                style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
-            Column(
-              children: [
-                RadioListTile(
-                    title: Text('Average'),
-                    value: skillLevel.first,
-                    groupValue: selectedLevel[index],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedLevel[index] = value;
-                      });
-                    }),
-                RadioListTile(
-                    title: Text('No Experience'),
-                    value: skillLevel[1],
-                    groupValue: selectedLevel[index],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedLevel[index] = value;
-                      });
-                    }),
-                RadioListTile(
-                    title: Text('Very Experience'),
-                    value: skillLevel[2],
-                    groupValue: selectedLevel[index],
-                    onChanged: (value) {
-                      setState(() {
-                        selectedLevel[index] = value;
-                      });
-                    })
-              ],
+            RadioButtonGroup(
+              labels: skillLevel,
+              labelStyle: TextStyle(
+                fontSize: 16,
+              ),
+              onChange: (String label, int index) =>
+                  print("label: $label index: $index"),
+              onSelected: (String label) {
+                skillsProvider
+                    .setSkillLevelData(Skills(id: skills[index], value: label));
+              },
             ),
-            // SingleChoice(
-            //   itemList: skillLevel,
-            //   selectedValue: selectedValue,
-            //   press: (newValue) {
-            //     setState(() {
-            //       selectedValue = newValue;
-            //     });
-            //   },
+            // Column(
+            //   children: [
+            //     RadioListTile(
+            //         selected: true,
+            //         title: Text('Average'),
+            //         value: skillLevel.first,
+            //         groupValue: selectedLevel[index],
+            //         onChanged: (value) {
+            //           skillsProvider.setSkillLevelData(
+            //               Skills(id: skills[index], value: value));
+            //           setState(() {
+            //             selectedLevel[index] = value;
+            //           });
+            //         }),
+            //     RadioListTile(
+            //         title: Text('No Experience'),
+            //         value: skillLevel[1],
+            //         groupValue: selectedLevel[index],
+            //         onChanged: (value) {
+            //           skillsProvider.setSkillLevelData(
+            //               Skills(id: skills[index], value: value));
+            //           setState(() {
+            //             selectedLevel[index] = value;
+            //           });
+            //         }),
+            //     RadioListTile(
+            //       title: Text('Very Experience'),
+            //       value: skillLevel[2],
+            //       groupValue: selectedLevel[index],
+            //       onChanged: (value) {
+            //         skillsProvider.setSkillLevelData(
+            //             Skills(id: skills[index], value: value));
+            //         setState(() {
+            //           selectedLevel[index] = value;
+            //         });
+            //       },
+            //     )
+            //   ],
             // ),
-            SizedBox(
-              height: getProportionateScreenWidth(20),
-            ),
           ],
         );
       },

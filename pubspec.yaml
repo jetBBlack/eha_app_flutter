@@ -43,6 +43,7 @@ dependencies:
   intl: ^0.17.0
   dropdown_search: ^0.6.1
   multi_select_flutter: ^4.0.0
+  grouped_buttons: ^1.0.4
   uuid: ^2.2.2
   
   #save signature

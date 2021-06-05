@@ -3,17 +3,43 @@ import 'package:eha_app/services_api/helper_services.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperProvider extends ChangeNotifier {
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   HelperModel newHelper = new HelperModel();
   List<YesNoQuestions> yesNoQuestions = <YesNoQuestions>[];
+  List<Skills> skillList = <Skills>[];
+  List<EmploymentHistories> employmentHistories = <EmploymentHistories>[];
+  List<Medicals> medicalInfo = <Medicals>[];
   PersonalInfo personalInfo = new PersonalInfo();
-  List<EmploymentHistories> employmentHistories;
+  OtherInfo otherInfo = new OtherInfo();
 
-  //SingaporeAddress singaporeAddress = new SingaporeAddress();
-  //OverseasAddress overseasAddress = new OverseasAddress();
+  String get noLeavesPerMonth => otherInfo.noLeavesPerMonth;
+  setnoLeavesPerMonth(String no) {
+    otherInfo.noLeavesPerMonth = no;
+    notifyListeners();
+  }
+
+  int get expectedSalary => otherInfo.expectedSalary;
+  setexpectedSalary(int salary) {
+    otherInfo.expectedSalary = salary;
+    notifyListeners();
+  }
+
+  String get hasReleasePaper => otherInfo.hasReleasePaper;
+  sethasReleasePaper(String value) {
+    otherInfo.noLeavesPerMonth = value;
+    notifyListeners();
+  }
+
+  String get earliestJoiningOn => otherInfo.earliestJoiningOn;
+  setearliestJoiningOn(String date) {
+    otherInfo.noLeavesPerMonth = date;
+    notifyListeners();
+  }
 
   String get name => personalInfo.name;
   setname(String name) {
@@ -70,6 +96,7 @@ class HelperProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //add data to Employment History List
   setEmploymentHistory(EmploymentHistories employment) {
     employmentHistories.add(employment);
     notifyListeners();
@@ -82,8 +109,8 @@ class HelperProvider extends ChangeNotifier {
   }
 
   //add data to SkillLevel List
-  setSkillLevelData(Skills skill) {
-    newHelper.skills.add(skill);
+  setSkillLevelData(Skills newSkill) {
+    skillList.add(newSkill);
     notifyListeners();
   }
 
@@ -93,103 +120,48 @@ class HelperProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  //add data to Employment History List
+  String get searchAble => newHelper.searchable;
+  setsearchAble(String value) {
+    newHelper.searchable = value;
+    notifyListeners();
+  }
 
-  // String get countryCode => contactNo.countryCode;
-  // setcountryCode(String countryCode) {
-  //   if (country.isNotEmpty) {
-  //     contactNo.countryCode = countryCode;
-  //     _error = null;
-  //   } else {
-  //     _error = "Must not be empty";
-  //   }
-  //   notifyListeners();
-  // }
+  String get selfDescription => newHelper.selfDescription;
+  setselfDescription(String string) {
+    newHelper.selfDescription = string;
+    notifyListeners();
+  }
 
-  // String get phoneNo => contactNo.phoneNo;
-  // setphoneNo(String phoneNo) {
-  //   if (phoneNo.isNotEmpty) {
-  //     contactNo.phoneNo = phoneNo;
-  //     _error = null;
-  //   } else {
-  //     _error = "Must not be empty";
-  //   }
-  //   notifyListeners();
-  // }
-
-  // String get blkNo => singaporeAddress.blkNo;
-  // setbklNo(String blkNo) {
-  //   singaporeAddress.blkNo = blkNo;
-  //   notifyListeners();
-  // }
-
-  // String get unitNo => singaporeAddress.unitNo;
-  // setunitNo(String unitNo) {
-  //   singaporeAddress.unitNo = unitNo;
-  //   notifyListeners();
-  // }
-
-  // String get floorNo => singaporeAddress.floorNo;
-  // setfloorNo(String floorNo) {
-  //   singaporeAddress.floorNo = floorNo;
-  //   notifyListeners();
-  // }
-
-  // String get streetName => singaporeAddress.streetName;
-  // setstreetName(String streetName) {
-  //   singaporeAddress.streetName = streetName;
-  //   notifyListeners();
-  // }
-
-  // String get country => singaporeAddress.country;
-  // setcountry(String country) {
-  //   singaporeAddress.country = country;
-  //   notifyListeners();
-  // }
-
-  // String get postalCode => singaporeAddress.postalCode;
-  // setpostalCode(String postalCode) {
-  //   singaporeAddress.postalCode = postalCode;
-  //   notifyListeners();
-  // }
-
-  // String get no => overseasAddress.no;
-  // setno(String no) {
-  //   overseasAddress.no = no;
-  //   notifyListeners();
-  // }
-
-  // String get seaCountry => overseasAddress.country;
-  // setoverseaCountry(String seaCountry) {
-  //   overseasAddress.country = seaCountry;
-  //   notifyListeners();
-  // }
-
-  // String get seaStreetName => overseasAddress.streetName;
-  // setseaStreetName(String streetName) {
-  //   overseasAddress.streetName = streetName;
-  //   notifyListeners();
-  // }
-
-  // String get seaPostalCode => overseasAddress.postalCode;
-  // setseaPostalCode(String postalCode) {
-  //   overseasAddress.postalCode = postalCode;
-  //   notifyListeners();
-  // }
-
-  HelperService _service = new HelperService();
-  void createHelperWithData() {
+  HelperService get _service => GetIt.I<HelperService>();
+  Future<void> createHelperWithData(BuildContext context) async {
     newHelper.personalInfo = personalInfo;
-    final Future<Map<String, dynamic>> successfulMessage =
-        _service.createHelper(newHelper);
-    successfulMessage.then((response) async {
-      if (response['status']) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('userID', response['id']);
-      } else {
-        throw Exception('Failed to create Helper');
+    newHelper.yesNoQuestions = yesNoQuestions;
+    newHelper.medicals = medicalInfo;
+    newHelper.employmentHistories = employmentHistories;
+    for (int i = 0; i < skillList.length - 1; i++) {
+      for (int j = i + 1; j < skillList.length; j++) {
+        if (skillList[i].id == skillList[j].id) {
+          skillList.remove(skillList[i]);
+          break;
+        }
       }
-    });
+    }
+    newHelper.skills = skillList;
+    for (int i = 0; i < skillList.length; i++) {
+      print(skillList[i].id + ":" + skillList[i].value);
+    }
+    final Map<String, dynamic> successfulMessage =
+        await _service.createHelper(newHelper);
+    if (successfulMessage['status']) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+        'Helper Created',
+        style: TextStyle(color: Colors.cyan, fontSize: 16),
+      )));
+    } else {
+      throw Exception('Failed to create Helper');
+    }
+    print('true');
     notifyListeners();
   }
 }

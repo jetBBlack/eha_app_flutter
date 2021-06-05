@@ -2,7 +2,7 @@ import 'package:eha_app/components/info_title.dart';
 import 'package:eha_app/providers/helper_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:provider/provider.dart';
 
 class BuildContactInfo extends StatefulWidget {
@@ -39,54 +39,54 @@ class _BuildContactInfoState extends State<BuildContactInfo>
                 SizedBox(
                   height: getProportionateScreenWidth(30),
                 ),
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/address.svg',
-                      height: 20,
-                      width: 20,
-                      color: Colors.cyan,
-                    ),
-                    SizedBox(
-                      width: getProportionateScreenWidth(10),
-                    ),
-                    Text(
-                      "Singapore Address",
-                      style: TextStyle(color: Colors.cyan, fontSize: 18),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: getProportionateScreenWidth(20),
-                ),
-                SingaporeAddress(),
-                SizedBox(
-                  height: getProportionateScreenWidth(30),
-                ),
-                Row(
-                  children: [
-                    SvgPicture.asset(
-                      'assets/icons/address.svg',
-                      height: 20,
-                      width: 20,
-                      color: Colors.cyan,
-                    ),
-                    SizedBox(
-                      width: getProportionateScreenWidth(10),
-                    ),
-                    Text(
-                      "Oversea Address",
-                      style: TextStyle(color: Colors.cyan, fontSize: 18),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: getProportionateScreenWidth(20),
-                ),
-                OverseaAddress(),
-                SizedBox(
-                  height: getProportionateScreenWidth(15),
-                ),
+                // Row(
+                //   children: [
+                //     SvgPicture.asset(
+                //       'assets/icons/address.svg',
+                //       height: 20,
+                //       width: 20,
+                //       color: Colors.cyan,
+                //     ),
+                //     SizedBox(
+                //       width: getProportionateScreenWidth(10),
+                //     ),
+                //     Text(
+                //       "Singapore Address",
+                //       style: TextStyle(color: Colors.cyan, fontSize: 18),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: getProportionateScreenWidth(20),
+                // ),
+                // SingaporeAddress(),
+                // SizedBox(
+                //   height: getProportionateScreenWidth(30),
+                // ),
+                // Row(
+                //   children: [
+                //     SvgPicture.asset(
+                //       'assets/icons/address.svg',
+                //       height: 20,
+                //       width: 20,
+                //       color: Colors.cyan,
+                //     ),
+                //     SizedBox(
+                //       width: getProportionateScreenWidth(10),
+                //     ),
+                //     Text(
+                //       "Oversea Address",
+                //       style: TextStyle(color: Colors.cyan, fontSize: 18),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(
+                //   height: getProportionateScreenWidth(20),
+                // ),
+                // OverseaAddress(),
+                // SizedBox(
+                //   height: getProportionateScreenWidth(15),
+                // ),
               ],
             ),
           ),
@@ -105,37 +105,39 @@ class BuildContactInfoForm extends StatefulWidget {
 }
 
 class _BuildContactInfoFormState extends State<BuildContactInfoForm> {
-  TextEditingController _countryCode = TextEditingController();
-  TextEditingController _phoneNumber = TextEditingController();
+  TextEditingController _contactNoCtl = TextEditingController();
+  TextEditingController _agencyIdCtl = TextEditingController();
   Key _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
-    final provider = Provider.of<HelperProvider>(context, listen: false);
+    final contactProvider = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
+    _contactNoCtl = TextEditingController(text: contactProvider.contactInfo);
+    _agencyIdCtl = TextEditingController(text: contactProvider.agencyId);
   }
 
   @override
   void dispose() {
-    _countryCode.dispose();
-    _phoneNumber.dispose();
+    _contactNoCtl.dispose();
+    _agencyIdCtl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final HelperProvider provider = Provider.of<HelperProvider>(context);
+    final HelperProvider contactProvider = Provider.of<HelperProvider>(context);
     return Form(
       key: _formKey,
       child: Column(
         children: [
           TextFormField(
-            controller: _countryCode,
-            //onChanged: (value) => provider.setcountryCode(value),
+            controller: _contactNoCtl,
+            onChanged: contactProvider.setcontactNo,
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
-              labelText: "Country Code",
-              hintText: "Example +65",
+              labelText: "Contact Number",
+              hintText: "Example +65 4444 9999",
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
@@ -143,12 +145,10 @@ class _BuildContactInfoFormState extends State<BuildContactInfoForm> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            controller: _phoneNumber,
-            //onChanged: (value) => provider.setphoneNo(value),
-            keyboardType: TextInputType.phone,
+            controller: _agencyIdCtl,
+            onChanged: contactProvider.setagencyId,
             decoration: InputDecoration(
-              labelText: "Phone Number",
-              hintText: "+65 9443199",
+              labelText: "Agency ID",
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
@@ -174,7 +174,6 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
 
   @override
   void initState() {
-    final addressProvider = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
     // _blkNo = TextEditingController(text: addressProvider.blkNo);
     // _unitNo = TextEditingController(text: addressProvider.unitNo);
@@ -197,7 +196,6 @@ class _SingaporeAddressState extends State<SingaporeAddress> {
 
   @override
   Widget build(BuildContext context) {
-    final HelperProvider addressProvider = Provider.of<HelperProvider>(context);
     return Form(
       key: _formKey1,
       child: Column(
@@ -299,7 +297,7 @@ class _OverseaAddressState extends State<OverseaAddress> {
 
   @override
   void initState() {
-    final overseaProvider = Provider.of<HelperProvider>(context, listen: false);
+    //final overseaProvider = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
     // _no = TextEditingController(text: overseaProvider.no);
     // _streetname = TextEditingController(text: overseaProvider.seaStreetName);
@@ -318,7 +316,7 @@ class _OverseaAddressState extends State<OverseaAddress> {
 
   @override
   Widget build(BuildContext context) {
-    final HelperProvider overseaProvider = Provider.of<HelperProvider>(context);
+    //final HelperProvider overseaProvider = Provider.of<HelperProvider>(context);
     return Form(
       child: Column(
         children: [

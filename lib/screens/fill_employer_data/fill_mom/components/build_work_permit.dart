@@ -6,9 +6,16 @@ import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class BuildWorkPermit extends StatelessWidget {
+class BuildWorkPermit extends StatefulWidget {
+  @override
+  _BuildWorkPermitState createState() => _BuildWorkPermitState();
+}
+
+class _BuildWorkPermitState extends State<BuildWorkPermit>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SafeArea(
       child: SizedBox(
         width: double.infinity,
@@ -24,13 +31,22 @@ class BuildWorkPermit extends StatelessWidget {
                 ),
                 InfoTitle(
                     icon: 'assets/icons/address.svg', title: 'ADDRESS INFO'),
-                BuildWorkPermitAddress(),
                 SizedBox(
                   height: getProportionateScreenWidth(20),
                 ),
+                BuildWorkPermitAddress(),
+                SizedBox(
+                  height: getProportionateScreenWidth(30),
+                ),
                 InfoTitle(
                     icon: 'assets/icons/address.svg', title: 'RECEIVER INFO'),
+                SizedBox(
+                  height: getProportionateScreenWidth(20),
+                ),
                 BuildReceiverInfo(),
+                SizedBox(
+                  height: getProportionateScreenWidth(30),
+                ),
               ],
             ),
           ),
@@ -38,6 +54,9 @@ class BuildWorkPermit extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class BuildWorkPermitAddress extends StatefulWidget {
@@ -70,12 +89,12 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
   List<String> _countryList = [];
   @override
   void initState() {
-    super.initState();
-    if (_countryList == null) {
+    if (_countryList.length == 0 || _countryList.isEmpty) {
       getCountryName().then((List<String> c) => setState(() {
             _countryList = c;
           }));
     }
+    super.initState();
   }
 
   @override
@@ -125,8 +144,16 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
           ),
           DropdownSearch<String>(
             mode: Mode.MENU,
+            showSearchBox: true,
+            dialogMaxWidth: 7,
             showSelectedItem: true,
-            items: [],
+            searchBoxDecoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.black,
+              ),
+            ),
+            items: _countryList,
             label: 'Country',
             searchBoxController: _countryCtl,
             //onChanged: (value) => formProvider.setgender(value),
@@ -161,6 +188,29 @@ class BuildReceiverInfo extends StatefulWidget {
 }
 
 class _BuildReceiverInfoState extends State<BuildReceiverInfo> {
+  Future<List<String>> getCountryCode() async {
+    List<String> countryCodeList = [];
+    final String response =
+        await rootBundle.loadString('assets/country-by-calling-code.json');
+    final List<dynamic> countries = json.decode(response.toString());
+    for (var country in countries) {
+      Map<String, dynamic> responseItem = country;
+      countryCodeList.add("+" + responseItem['calling_code'].toString());
+    }
+    return countryCodeList;
+  }
+
+  List<String> _countryCode = [];
+  @override
+  void initState() {
+    if (_countryCode.length == 0 || _countryCode.isEmpty) {
+      getCountryCode().then((List<String> c) => setState(() {
+            _countryCode = c;
+          }));
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -185,15 +235,23 @@ class _BuildReceiverInfoState extends State<BuildReceiverInfo> {
             height: getProportionateScreenWidth(20),
           ),
           DropdownSearch<String>(
-            mode: Mode.MENU,
+            mode: Mode.BOTTOM_SHEET,
+            dialogMaxWidth: 8,
+            showSearchBox: true,
+            searchBoxDecoration: InputDecoration(
+              prefixIcon: Icon(Icons.search),
+            ),
             showSelectedItem: true,
-            items: [],
+            items: _countryCode,
             label: 'Country code',
             //searchBoxController: _countryCtl,
             //onChanged: (value) => formProvider.setgender(value),
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
           ),
           TextFormField(
             keyboardType: TextInputType.phone,
@@ -202,9 +260,6 @@ class _BuildReceiverInfoState extends State<BuildReceiverInfo> {
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          )
         ],
       ),
     );

@@ -29,6 +29,7 @@ class _BuildPersonalInfoState extends State<BuildPersonalInfo>
                 InfoTitle(
                     icon: 'assets/icons/User.svg',
                     title: "GENERAL INFORMATION"),
+                SizedBox(height: getProportionateScreenWidth(20)),
                 BuildGeneralInfo(),
               ],
             ),
@@ -39,7 +40,6 @@ class _BuildPersonalInfoState extends State<BuildPersonalInfo>
   }
 
   @override
- 
   bool get wantKeepAlive => true;
 }
 

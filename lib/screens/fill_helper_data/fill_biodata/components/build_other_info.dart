@@ -150,13 +150,12 @@ class _BuildOtherInfoState extends State<BuildOtherInfo>
       child: Column(
         children: [
           AppBar(
+            backgroundColor: Colors.green,
             leading: Builder(
               builder: (BuildContext context) {
                 return IconButton(
                     icon: Icon(FontAwesomeIcons.calendarCheck),
-                    onPressed: () {
-                      
-                    });
+                    onPressed: () {});
               },
             ),
             title: Text('Work histoty'),
@@ -245,6 +244,7 @@ class _BuildOtherInfoState extends State<BuildOtherInfo>
                   height: getProportionateScreenWidth(5),
                 ),
                 TextFormField(
+                  controller: _leavingReasonCtl,
                   autofocus: false,
                   decoration: InputDecoration(
                       labelText: 'Leaving Reason',
@@ -318,7 +318,7 @@ class BuildEmploymentHistory extends StatefulWidget {
 
 class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
   var uuid = Uuid();
-  Map<String, Widget> _widget = {};
+
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now().add(Duration(days: 7));
 
@@ -379,18 +379,6 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
                   }),
             ],
           ),
-          // Positioned(
-          //   top: -2,
-          //   left: 10,
-          //   child: GestureDetector(
-          //       child: Icon(Icons.close),
-          //       onTap: () {
-          //         print(key);
-          //         setState(() {
-          //           _widget.remove(key);
-          //         });
-          //       }),
-          // ),
           Padding(
             padding: EdgeInsets.fromLTRB(5, 15, 5, 0),
             child: Column(
