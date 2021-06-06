@@ -1,21 +1,42 @@
 import 'package:eha_app/models/helper.dart';
 import 'package:eha_app/services_api/helper_services.dart';
-import 'package:flutter/cupertino.dart';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperProvider extends ChangeNotifier {
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   HelperModel newHelper = new HelperModel();
+  //EmploymentHistories history = new EmploymentHistories();
   List<YesNoQuestions> yesNoQuestions = <YesNoQuestions>[];
   List<Skills> skillList = <Skills>[];
   List<EmploymentHistories> employmentHistories = <EmploymentHistories>[];
   List<Medicals> medicalInfo = <Medicals>[];
+  List<Photo> photoList = <Photo>[];
   PersonalInfo personalInfo = new PersonalInfo();
   OtherInfo otherInfo = new OtherInfo();
+
+  // void setDuties(List<String> duties) {
+  //   history.duties = duties;
+  //   notifyListeners();
+  // }
+
+  // void setReason(String reason) {
+  //   history.leavingReason = reason;
+  //   notifyListeners();
+  // }
+
+  // String get startDate => history.startOn;
+  // setStartDate(String date) {
+  //   history.startOn = date;
+  //   notifyListeners();
+  // }
+
+  // String get endDate => history.endOn;
+  // setEndDate(String date) {
+  //   history.endOn = date;
+  //   notifyListeners();
+  // }
 
   String get noLeavesPerMonth => otherInfo.noLeavesPerMonth;
   setnoLeavesPerMonth(String no) {
@@ -97,15 +118,23 @@ class HelperProvider extends ChangeNotifier {
   }
 
   //add data to Employment History List
-  setEmploymentHistory(EmploymentHistories employment) {
+  void setEmploymentHistory(EmploymentHistories employment) {
     employmentHistories.add(employment);
     notifyListeners();
+  }
+
+  void removeEmploymentHistory(int index) {
+    employmentHistories.removeAt(index);
   }
 
   //add data to YesNoQuestion List
   setYesNoData(YesNoQuestions yesNoQuestion) {
     yesNoQuestions.add(yesNoQuestion);
     notifyListeners();
+  }
+
+  removeYesNoData(YesNoQuestions yesNoQuestion) {
+    yesNoQuestions.removeWhere((item) => item.id == yesNoQuestion.id);
   }
 
   //add data to SkillLevel List
@@ -116,7 +145,14 @@ class HelperProvider extends ChangeNotifier {
 
   //add data to Medical Info List
   setMedicalInfoData(Medicals medical) {
-    newHelper.medicals.add(medical);
+    if (medicalInfo.contains(medical) == false) {
+      medicalInfo.add(medical);
+      notifyListeners();
+    }
+  }
+
+  setFalseMedicalInfoData(Medicals medicals) {
+    medicalInfo.removeWhere((item) => item.id == medicals.id);
     notifyListeners();
   }
 
@@ -129,6 +165,17 @@ class HelperProvider extends ChangeNotifier {
   String get selfDescription => newHelper.selfDescription;
   setselfDescription(String string) {
     newHelper.selfDescription = string;
+    notifyListeners();
+  }
+
+  //add photos
+  addPhotoData(Photo photo) {
+    photoList.add(photo);
+    notifyListeners();
+  }
+
+  removePhotoData(int index) {
+    photoList.removeAt(index);
     notifyListeners();
   }
 
@@ -147,17 +194,22 @@ class HelperProvider extends ChangeNotifier {
       }
     }
     newHelper.skills = skillList;
-    for (int i = 0; i < skillList.length; i++) {
-      print(skillList[i].id + ":" + skillList[i].value);
+    for (int i = 0; i < employmentHistories.length; i++) {
+      print(employmentHistories[i].leavingReason +
+          ":" +
+          employmentHistories[i].startOn);
     }
     final Map<String, dynamic> successfulMessage =
         await _service.createHelper(newHelper);
     if (successfulMessage['status']) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
           content: Text(
-        'Helper Created',
-        style: TextStyle(color: Colors.cyan, fontSize: 16),
-      )));
+            'Helper Created',
+            style: TextStyle(color: Colors.cyan, fontSize: 16),
+          ),
+        ),
+      );
     } else {
       throw Exception('Failed to create Helper');
     }

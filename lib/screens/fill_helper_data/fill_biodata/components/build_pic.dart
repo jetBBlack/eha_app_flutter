@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:eha_app/models/helper.dart';
+import 'package:eha_app/providers/helper_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:eha_app/util/app_url.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker2/multi_image_picker2.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:provider/provider.dart';
 
 class BuildPictures extends StatefulWidget {
   @override
@@ -51,7 +54,9 @@ class _BuildPicturesState extends State<BuildPictures>
     setState(() {
       _assets = resultList;
       error = error;
-      _isUploading = true;
+      if (resultList.length > 0) {
+        _isUploading = true;
+      }
     });
   }
 
@@ -67,8 +72,11 @@ class _BuildPicturesState extends State<BuildPictures>
     });
   }
 
+  int order = 1;
   List<String> imgPath = <String>[];
   Future uploadMultipleImage() async {
+    HelperProvider imgProvider =
+        Provider.of<HelperProvider>(context, listen: false);
     List<MultipartFile> multipartImageList = [];
     if (_assets != null) {
       for (Asset asset in _assets) {
@@ -93,14 +101,21 @@ class _BuildPicturesState extends State<BuildPictures>
         final List<dynamic> responseData = response.data;
         for (var item in responseData) {
           Map<String, dynamic> responseItem = item;
-          print(responseItem['fileName']);
+          await imgProvider.addPhotoData(Photo(
+            fileName: responseItem['fileName'],
+            mimeType: responseItem['mimeType'],
+            order: order,
+          ));
           imgPath.add(responseItem['fileName'].toString());
+          order++;
         }
       }
     }
   }
 
   Future uploadImage() async {
+    HelperProvider imgProvider =
+        Provider.of<HelperProvider>(context, listen: false);
     List<MultipartFile> multipartImageList = [];
     if (_singleImage != null) {
       MultipartFile multipartFile = await MultipartFile.fromFile(
@@ -118,7 +133,11 @@ class _BuildPicturesState extends State<BuildPictures>
         final List<dynamic> responseData = response.data;
         for (var item in responseData) {
           Map<String, dynamic> responseItem = item;
-          print(responseItem['fileName']);
+          await imgProvider.addPhotoData(Photo(
+            fileName: responseItem['fileName'],
+            mimeType: responseItem['mimeType'],
+            order: order,
+          ));
           imgPath.add(responseItem['fileName'].toString());
         }
       }
@@ -130,6 +149,9 @@ class _BuildPicturesState extends State<BuildPictures>
       imgPath.remove(value);
       _isUploading = false;
     });
+    HelperProvider imgProvider =
+        Provider.of<HelperProvider>(context, listen: false);
+    imgProvider.removePhotoData(imgPath.indexOf(value));
   }
 
   @override

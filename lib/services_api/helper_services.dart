@@ -24,9 +24,8 @@ class HelperService {
     var result;
     final Map<String, dynamic> helperData = {
       'personalInfo': helper.personalInfo,
-      //'contactNo': helper.contactNo,
-      //'singaporeAddress': helper.singaporeAddress,
-      //'overseasAddress': helper.overseasAddress,
+      'contactInfo': helper.contactInfo,
+      'dob': helper.dob,
       'yesNoQuestions': helper.yesNoQuestions,
       'medicals': helper.medicals,
       'skills': helper.skills,

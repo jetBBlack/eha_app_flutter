@@ -1,11 +1,11 @@
 import 'package:eha_app/providers/helper_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'components/build_contact.dart';
 import 'components/build_info.dart';
 import 'components/build_other_info.dart';
 import 'components/build_pic.dart';
 import 'components/build_settings.dart';
+import 'components/work_history.dart';
 
 class FillBioDataScreen extends StatefulWidget {
   const FillBioDataScreen({Key key}) : super(key: key);
@@ -29,8 +29,8 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
           title: Text('BIODATA'),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                provider.createHelperWithData(context);
+              onPressed: () async {
+                await provider.createHelperWithData(context);
               },
               child: Text(
                 'Create',
@@ -50,7 +50,7 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
                 text: "PERSONAL INFO",
               ),
               Tab(
-                text: "CONTACT INFO",
+                text: "WORK HISTORY",
               ),
               Tab(
                 text: "OTHER INFO",
@@ -67,7 +67,7 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
         body: TabBarView(
           children: [
             BuildPersonalInfoPage(),
-            BuildContactInfo(),
+            BuildEmploymentHistory(),
             BuildOtherInfo(),
             BuildPictures(),
             BuildSettings(),

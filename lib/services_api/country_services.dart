@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
-class Country {
+class CountryService {
   Future<List<String>> getCountryName() async {
     List<String> countryNameList = [];
     final String response =

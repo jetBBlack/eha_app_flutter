@@ -5,6 +5,7 @@ import 'package:eha_app/providers/helper_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:provider/provider.dart';
@@ -73,10 +74,6 @@ class _BuildPersonalInfoPageState extends State<BuildPersonalInfoPage>
                 SizedBox(
                   height: getProportionateScreenWidth(20),
                 ),
-                // BuildQAForm(),
-                // SizedBox(
-                //   height: getProportionateScreenWidth(30),
-                // ),
                 Row(
                   children: [
                     SvgPicture.asset(
@@ -158,11 +155,12 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
   //Controller var
   TextEditingController _name = TextEditingController();
   TextEditingController _province = TextEditingController();
-  TextEditingController dateCtl = TextEditingController();
+  TextEditingController _dateCtl = TextEditingController();
   TextEditingController _nationality = TextEditingController();
   TextEditingController _birthCountry = TextEditingController();
   TextEditingController _gender = TextEditingController();
   TextEditingController _maritalStatus = TextEditingController();
+  TextEditingController _contactCtl = TextEditingController();
   //Data var
   List<String> genderList = ["Male", "Female"];
   List<String> maritalStatusList = [
@@ -193,16 +191,19 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     super.initState();
     _name = TextEditingController(text: myProvider.name);
     _gender = TextEditingController(text: myProvider.gender);
+    _dateCtl = TextEditingController(text: myProvider.dayOfBirth);
     _maritalStatus = TextEditingController(text: myProvider.maritalStatus);
     _nationality = TextEditingController(text: myProvider.nationality);
     _birthCountry = TextEditingController(text: myProvider.birthCountry);
     _province = TextEditingController(text: myProvider.province);
+    _contactCtl = TextEditingController(text: myProvider.contactInfo);
   }
 
   @override
   void dispose() {
     _name.dispose();
     _gender.dispose();
+    _dateCtl.dispose();
     _maritalStatus.dispose();
     _birthCountry.dispose();
     _nationality.dispose();
@@ -264,8 +265,12 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            controller: dateCtl,
-            inputFormatters: [],
+            controller: _dateCtl,
+            inputFormatters: [
+              FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')),
+              FilteringTextInputFormatter.allow(RegExp(r'[/\\]')),
+              FilteringTextInputFormatter.digitsOnly,
+            ],
             onTap: () async {
               DateTime date = DateTime(1900);
               FocusScope.of(context).requestFocus(new FocusNode());
@@ -277,8 +282,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
                 lastDate: DateTime(2050),
               );
               var dateparse = DateTime.parse(date.toIso8601String());
-              dateCtl.text =
+              _dateCtl.text =
                   "${dateparse.year}-${dateparse.month}-${dateparse.day}";
+              formProvider.setdayOfBirth(date.toIso8601String());
             },
             decoration: InputDecoration(
               labelText: "D.O.B",
@@ -335,34 +341,14 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           SizedBox(
             height: getProportionateScreenHeight(20),
           ),
-          // DropDownContainer(
-          //   labelText: "Status",
-          //   valueList: genderList,
-          //   press: (String newValue) {
-          //     genderSelect = newValue;
-          //   },
-          // ),
-          // SizedBox(
-          //   height: getProportionateScreenWidth(5),
-          // ),
-          // Text(
-          //   "Transer => You are  currently working in Singapore and you are looking for another employer. You must get release paper form your currnt employer in order to do the transfer.\n New => You have never worked as domestic helper in Singapore before. You want to come to Singapore to work as domestic helper",
-          //   style: TextStyle(
-          //     color: kTextColor,
-          //     fontSize: 13,
-          //     fontStyle: FontStyle.italic,
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: getProportionateScreenWidth(20),
-          // ),
-          // DropDownContainer(
-          //   labelText: "Ethnic Group",
-          //   valueList: genderList,
-          //   press: (String newValue) {
-          //     genderSelect = newValue;
-          //   },
-          // ),
+          TextFormField(
+            controller: _contactCtl,
+            onChanged: formProvider.setcontactNo,
+            decoration: InputDecoration(
+              labelText: "Contact No",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          )
         ],
       ),
     );
@@ -472,6 +458,7 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
   bool _canEatBeef = false;
   bool _canEatPork = false;
   bool _canHandlePork = false;
+  bool _canWashClothesbyHand = false;
   bool _canCall = false;
   bool _canNotCall = false;
   bool _afraidDog = false;
@@ -489,18 +476,25 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
             if (value == true) {
               yesNoProvider.setYesNoData(
                   YesNoQuestions(id: 'Can eat beef', value: 'yes'));
+            } else {
+              yesNoProvider.removeYesNoData(
+                  YesNoQuestions(id: 'Can eat beef', value: 'yes'));
             }
             setState(() {
               _canEatBeef = value;
             });
           },
         ),
+        Divider(),
         SwitchListTile(
           title: Text("Can eat pork"),
           value: _canEatPork,
           onChanged: (value) {
             if (value == true) {
               yesNoProvider.setYesNoData(
+                  YesNoQuestions(id: 'Can eat pork', value: 'yes'));
+            } else {
+              yesNoProvider.removeYesNoData(
                   YesNoQuestions(id: 'Can eat pork', value: 'yes'));
             }
             setState(() {
@@ -515,12 +509,33 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
             if (value == true) {
               yesNoProvider.setYesNoData(
                   YesNoQuestions(id: 'Can handle pork', value: 'yes'));
+            } else {
+              yesNoProvider.removeYesNoData(
+                  YesNoQuestions(id: 'Can handle pork', value: 'yes'));
             }
             setState(() {
               _canHandlePork = value;
             });
           },
         ),
+        Divider(),
+        SwitchListTile(
+          title: Text("Can wash clothes by hand"),
+          value: _canWashClothesbyHand,
+          onChanged: (value) {
+            if (value == true) {
+              yesNoProvider.setYesNoData(
+                  YesNoQuestions(id: 'Can wash clothes by hand', value: 'yes'));
+            } else {
+              yesNoProvider.removeYesNoData(
+                  YesNoQuestions(id: 'Can wash clothes by hand', value: 'yes'));
+            }
+            setState(() {
+              _canWashClothesbyHand = value;
+            });
+          },
+        ),
+        Divider(),
         SwitchListTile(
           title: Text(
               "Can you ensure that you will only emergency call or your employer call during your working hour"),
@@ -528,6 +543,10 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
           onChanged: (value) {
             if (value == true) {
               yesNoProvider.setYesNoData(YesNoQuestions(
+                  id: 'Can you ensure that you will only emergency call or your employer call during your working hour',
+                  value: 'yes'));
+            } else {
+              yesNoProvider.removeYesNoData(YesNoQuestions(
                   id: 'Can you ensure that you will only emergency call or your employer call during your working hour',
                   value: 'yes'));
             }
@@ -545,6 +564,10 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
               yesNoProvider.setYesNoData(YesNoQuestions(
                   id: 'Can you let your employer to keep your phone during your working hour',
                   value: 'yes'));
+            } else {
+              yesNoProvider.removeYesNoData(YesNoQuestions(
+                  id: 'Can you let your employer to keep your phone during your working hour',
+                  value: 'yes'));
             }
             setState(() {
               _canNotCall = value;
@@ -557,6 +580,9 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
           onChanged: (value) {
             if (value == true) {
               yesNoProvider.setYesNoData(
+                  YesNoQuestions(id: 'Not afraid of dogs', value: 'yes'));
+            } else {
+              yesNoProvider.removeYesNoData(
                   YesNoQuestions(id: 'Not afraid of dogs', value: 'yes'));
             }
             setState(() {
@@ -573,6 +599,9 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
             });
             if (value == true) {
               yesNoProvider.setYesNoData(YesNoQuestions(
+                  id: 'Prepare to wake up as early as 5am', value: 'yes'));
+            } else {
+              yesNoProvider.removeYesNoData(YesNoQuestions(
                   id: 'Prepare to wake up as early as 5am', value: 'yes'));
             }
           },
@@ -651,45 +680,6 @@ class _BuildSkillLevelState extends State<BuildSkillLevel> {
                     .setSkillLevelData(Skills(id: skills[index], value: label));
               },
             ),
-            // Column(
-            //   children: [
-            //     RadioListTile(
-            //         selected: true,
-            //         title: Text('Average'),
-            //         value: skillLevel.first,
-            //         groupValue: selectedLevel[index],
-            //         onChanged: (value) {
-            //           skillsProvider.setSkillLevelData(
-            //               Skills(id: skills[index], value: value));
-            //           setState(() {
-            //             selectedLevel[index] = value;
-            //           });
-            //         }),
-            //     RadioListTile(
-            //         title: Text('No Experience'),
-            //         value: skillLevel[1],
-            //         groupValue: selectedLevel[index],
-            //         onChanged: (value) {
-            //           skillsProvider.setSkillLevelData(
-            //               Skills(id: skills[index], value: value));
-            //           setState(() {
-            //             selectedLevel[index] = value;
-            //           });
-            //         }),
-            //     RadioListTile(
-            //       title: Text('Very Experience'),
-            //       value: skillLevel[2],
-            //       groupValue: selectedLevel[index],
-            //       onChanged: (value) {
-            //         skillsProvider.setSkillLevelData(
-            //             Skills(id: skills[index], value: value));
-            //         setState(() {
-            //           selectedLevel[index] = value;
-            //         });
-            //       },
-            //     )
-            //   ],
-            // ),
           ],
         );
       },
@@ -722,6 +712,9 @@ class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
             if (value == true) {
               medicalProvider
                   .setMedicalInfoData(Medicals(id: 'Asthmas', value: 'yes'));
+            } else if (value == false) {
+              medicalProvider.setFalseMedicalInfoData(
+                  Medicals(id: 'Asthmas', value: 'yes'));
             }
             setState(() {
               _asthma = value;
@@ -732,6 +725,13 @@ class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
           title: Text("Diabetes"),
           value: _diabetes,
           onChanged: (value) {
+            if (value == true) {
+              medicalProvider
+                  .setMedicalInfoData(Medicals(id: 'Diabetes', value: 'yes'));
+            } else {
+              medicalProvider.setFalseMedicalInfoData(
+                  Medicals(id: 'Diabetes', value: 'yes'));
+            }
             setState(() {
               _diabetes = value;
             });
@@ -741,6 +741,13 @@ class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
           title: Text("Epilepsy"),
           value: _epilepsy,
           onChanged: (value) {
+            if (value == true) {
+              medicalProvider
+                  .setMedicalInfoData(Medicals(id: 'Epilepsy', value: 'yes'));
+            } else {
+              medicalProvider.setFalseMedicalInfoData(
+                  Medicals(id: 'Epilepsy', value: 'yes'));
+            }
             setState(() {
               _epilepsy = value;
             });
@@ -750,6 +757,13 @@ class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
           title: Text("Malaria"),
           value: _malaria,
           onChanged: (value) {
+            if (value == true) {
+              medicalProvider
+                  .setMedicalInfoData(Medicals(id: 'Malaria', value: 'yes'));
+            } else {
+              medicalProvider.setFalseMedicalInfoData(
+                  Medicals(id: 'Malaria', value: 'yes'));
+            }
             setState(() {
               _malaria = value;
             });
@@ -759,6 +773,13 @@ class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
           title: Text("Mental Illness"),
           value: _mentalIllness,
           onChanged: (value) {
+            if (value == true) {
+              medicalProvider.setMedicalInfoData(
+                  Medicals(id: 'Mental Illness', value: 'yes'));
+            } else {
+              medicalProvider.setFalseMedicalInfoData(
+                  Medicals(id: 'Mental Illness', value: 'yes'));
+            }
             setState(() {
               _mentalIllness = value;
             });
@@ -768,6 +789,13 @@ class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
           title: Text("Operation"),
           value: _operation,
           onChanged: (value) {
+            if (value == true) {
+              medicalProvider
+                  .setMedicalInfoData(Medicals(id: 'Operation', value: 'yes'));
+            } else {
+              medicalProvider.setFalseMedicalInfoData(
+                  Medicals(id: 'Operation', value: 'yes'));
+            }
             setState(() {
               _operation = value;
             });
@@ -777,6 +805,13 @@ class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
           title: Text("Tuberculosis"),
           value: _tuberculosis,
           onChanged: (value) {
+            if (value == true) {
+              medicalProvider.setMedicalInfoData(
+                  Medicals(id: 'Tuberculosis', value: 'yes'));
+            } else {
+              medicalProvider.setFalseMedicalInfoData(
+                  Medicals(id: 'Tuberculosis', value: 'yes'));
+            }
             setState(() {
               _tuberculosis = value;
             });
