@@ -21,8 +21,9 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
   TextEditingController _reasonCtl;
   TextEditingController _startDateCtl;
   TextEditingController _endDateCtl;
-  EmploymentHistories employmentHistory;
+
   int counter = 0;
+  var workHistoryProvider;
 
   static List<String> _duties = [
     'Caring of children',
@@ -48,22 +49,20 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
     _reasonCtl = TextEditingController();
     _startDateCtl = TextEditingController();
     _endDateCtl = TextEditingController();
-    employmentHistory = new EmploymentHistories();
+    workHistoryProvider = Provider.of<HelperProvider>(context, listen: false);
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _reasonCtl.dispose();
     _startDateCtl.dispose();
     _endDateCtl.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final HelperProvider workHistoryProvider =
-        Provider.of<HelperProvider>(context, listen: false);
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(
@@ -72,6 +71,9 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              SizedBox(
+                height: getProportionateScreenWidth(10),
+              ),
               Card(
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
@@ -79,6 +81,7 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
                 child: Column(
                   children: [
                     AppBar(
+                      automaticallyImplyLeading: false,
                       backgroundColor: kPrimaryColor,
                       title: Text(
                         'Work histoty',
@@ -111,8 +114,6 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
                                   child: TextFormField(
                                     style: TextStyle(fontSize: 13),
                                     controller: _startDateCtl,
-                                    onSaved: (value) =>
-                                        employmentHistory.startOn = value,
                                     validator: (value) {
                                       if (value.isEmpty || value.length == 0) {
                                         return "Select start date";
@@ -154,8 +155,6 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
                                   child: TextFormField(
                                     style: TextStyle(fontSize: 13),
                                     controller: _endDateCtl,
-                                    onSaved: (value) =>
-                                        employmentHistory.endOn = value,
                                     validator: (value) {
                                       if (value.isEmpty || value.length == 0) {
                                         return "Select end date";
@@ -198,8 +197,6 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
                                   return null;
                                 }
                               },
-                              onSaved: (value) =>
-                                  employmentHistory.leavingReason = value,
                               autofocus: false,
                               decoration: InputDecoration(
                                   labelText: 'Leaving Reason',
@@ -216,8 +213,12 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    workHistoryProvider.setEmploymentHistory(employmentHistory);
+                    workHistoryProvider.setEmploymentHistory(
+                        EmploymentHistories(
+                            duties: _selectedDuties.cast<String>(),
+                            startOn: _startDateCtl.text,
+                            endOn: _endDateCtl.text,
+                            leavingReason: _reasonCtl.text));
                   }
                 },
                 child: Text('Add'),
@@ -243,12 +244,12 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
                 ],
               ),
               Consumer<HelperProvider>(
-                builder: (context, provider, child) {
-                  return Expanded(
-                    child: ListView.builder(
-                      itemCount: workHistoryProvider.employmentHistories.length,
-                      itemBuilder: buildList,
-                    ),
+                builder: (context, provider, listTile) {
+                  return ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: workHistoryProvider.employmentHistories.length,
+                    itemBuilder: buildList,
                   );
                 },
               ),
@@ -261,7 +262,6 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
 
   MultiSelectBottomSheetField buildMultiSelectBottomSheetField() {
     return MultiSelectBottomSheetField(
-      onSaved: (value) => employmentHistory.duties = value.cast<String>(),
       title: Text('Employment History'),
       initialChildSize: 0.5,
       listType: MultiSelectListType.CHIP,
@@ -306,8 +306,12 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
       ),
     );
     counter++;
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+    return Dismissible(
+      key: Key(counter.toString()),
+      direction: DismissDirection.startToEnd,
+      onDismissed: (direction) {
+        workHistoryProvider.removeEmploymentHistory(index);
+      },
       child: Column(
         children: [
           SizedBox(
@@ -319,8 +323,8 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  border: Border.all(color: Colors.grey[400]),
-                  borderRadius: BorderRadius.circular(5)),
+                  border: Border.all(color: Colors.grey[300]),
+                  borderRadius: BorderRadius.circular(16)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -363,6 +367,11 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
                       ),
                     ),
                   ),
+                  Divider(),
+                  Text(
+                    "Leaving Reason: " + listHistory[index].leavingReason,
+                    style: TextStyle(fontSize: 15, color: Colors.black),
+                  ),
                 ],
               ),
             ),
@@ -370,7 +379,6 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
           SizedBox(
             height: 10,
           ),
-          Text(listHistory[index].leavingReason),
         ],
       ),
     );

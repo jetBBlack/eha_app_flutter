@@ -145,13 +145,13 @@ class _BuildPicturesState extends State<BuildPictures>
   }
 
   void removeImage(String value) {
+    HelperProvider imgProvider =
+        Provider.of<HelperProvider>(context, listen: false);
+    imgProvider.removePhotoData(imgPath.indexOf(value));
     setState(() {
       imgPath.remove(value);
       _isUploading = false;
     });
-    HelperProvider imgProvider =
-        Provider.of<HelperProvider>(context, listen: false);
-    imgProvider.removePhotoData(imgPath.indexOf(value));
   }
 
   @override

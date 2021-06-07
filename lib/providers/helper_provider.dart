@@ -3,11 +3,11 @@ import 'package:eha_app/services_api/helper_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperProvider extends ChangeNotifier {
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   HelperModel newHelper = new HelperModel();
-  //EmploymentHistories history = new EmploymentHistories();
   List<YesNoQuestions> yesNoQuestions = <YesNoQuestions>[];
   List<Skills> skillList = <Skills>[];
   List<EmploymentHistories> employmentHistories = <EmploymentHistories>[];
@@ -15,28 +15,6 @@ class HelperProvider extends ChangeNotifier {
   List<Photo> photoList = <Photo>[];
   PersonalInfo personalInfo = new PersonalInfo();
   OtherInfo otherInfo = new OtherInfo();
-
-  // void setDuties(List<String> duties) {
-  //   history.duties = duties;
-  //   notifyListeners();
-  // }
-
-  // void setReason(String reason) {
-  //   history.leavingReason = reason;
-  //   notifyListeners();
-  // }
-
-  // String get startDate => history.startOn;
-  // setStartDate(String date) {
-  //   history.startOn = date;
-  //   notifyListeners();
-  // }
-
-  // String get endDate => history.endOn;
-  // setEndDate(String date) {
-  //   history.endOn = date;
-  //   notifyListeners();
-  // }
 
   String get noLeavesPerMonth => otherInfo.noLeavesPerMonth;
   setnoLeavesPerMonth(String no) {
@@ -52,13 +30,13 @@ class HelperProvider extends ChangeNotifier {
 
   String get hasReleasePaper => otherInfo.hasReleasePaper;
   sethasReleasePaper(String value) {
-    otherInfo.noLeavesPerMonth = value;
+    otherInfo.hasReleasePaper = value;
     notifyListeners();
   }
 
   String get earliestJoiningOn => otherInfo.earliestJoiningOn;
   setearliestJoiningOn(String date) {
-    otherInfo.noLeavesPerMonth = date;
+    otherInfo.earliestJoiningOn = date;
     notifyListeners();
   }
 
@@ -105,7 +83,7 @@ class HelperProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String get dayOfBirth => newHelper.contactInfo;
+  String get dayOfBirth => newHelper.dob;
   setdayOfBirth(String dayOfBirth) {
     newHelper.dob = dayOfBirth;
     notifyListeners();
@@ -118,13 +96,14 @@ class HelperProvider extends ChangeNotifier {
   }
 
   //add data to Employment History List
-  void setEmploymentHistory(EmploymentHistories employment) {
+  setEmploymentHistory(EmploymentHistories employment) {
     employmentHistories.add(employment);
     notifyListeners();
   }
 
-  void removeEmploymentHistory(int index) {
+  removeEmploymentHistory(int index) {
     employmentHistories.removeAt(index);
+    notifyListeners();
   }
 
   //add data to YesNoQuestion List
@@ -179,8 +158,21 @@ class HelperProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void removeDuplicateItem(List items) {
+    for (int i = 0; i < items.length - 1; i++) {
+      for (int j = i + 1; j < items.length; j++) {
+        if (items[i].id == items[j].id && items[i].value == items[j].value) {
+          skillList.remove(skillList[i]);
+          break;
+        }
+      }
+    }
+  }
+
   HelperService get _service => GetIt.I<HelperService>();
   Future<void> createHelperWithData(BuildContext context) async {
+    removeDuplicateItem(medicalInfo);
+    removeDuplicateItem(yesNoQuestions);
     newHelper.personalInfo = personalInfo;
     newHelper.yesNoQuestions = yesNoQuestions;
     newHelper.medicals = medicalInfo;
@@ -194,16 +186,16 @@ class HelperProvider extends ChangeNotifier {
       }
     }
     newHelper.skills = skillList;
-    for (int i = 0; i < employmentHistories.length; i++) {
-      print(employmentHistories[i].leavingReason +
-          ":" +
-          employmentHistories[i].startOn);
-    }
+    newHelper.otherInfo = otherInfo;
+    newHelper.photo = photoList;
     final Map<String, dynamic> successfulMessage =
         await _service.createHelper(newHelper);
     if (successfulMessage['status']) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('helper-id', successfulMessage['id'].toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
+          duration: Duration(seconds: 10),
           content: Text(
             'Helper Created',
             style: TextStyle(color: Colors.cyan, fontSize: 16),
@@ -213,7 +205,6 @@ class HelperProvider extends ChangeNotifier {
     } else {
       throw Exception('Failed to create Helper');
     }
-    print('true');
     notifyListeners();
   }
 }

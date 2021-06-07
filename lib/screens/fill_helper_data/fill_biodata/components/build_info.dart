@@ -57,26 +57,6 @@ class _BuildPersonalInfoPageState extends State<BuildPersonalInfoPage>
                 Row(
                   children: [
                     SvgPicture.asset(
-                      'assets/icons/request.svg',
-                      height: 20,
-                      width: 20,
-                      color: Colors.cyan,
-                    ),
-                    SizedBox(
-                      width: getProportionateScreenWidth(10),
-                    ),
-                    Text(
-                      "Q & A",
-                      style: TextStyle(color: Colors.cyan, fontSize: 18),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: getProportionateScreenWidth(20),
-                ),
-                Row(
-                  children: [
-                    SvgPicture.asset(
                       'assets/icons/question.svg',
                       height: 20,
                       width: 20,
@@ -238,10 +218,10 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           DropdownSearch<String>(
             mode: Mode.MENU,
+            selectedItem: _gender.text,
             showSelectedItem: true,
             items: ['Male', 'Female'],
             label: 'Gender',
-            searchBoxController: _gender,
             onChanged: formProvider.setgender,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
@@ -255,7 +235,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: maritalStatusList,
             label: 'Marital Status',
-            searchBoxController: _maritalStatus,
+            selectedItem: _maritalStatus.text,
             onChanged: formProvider.setmaritalStatus,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
@@ -299,9 +279,8 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: countryList,
             label: 'Nationality',
-            searchBoxController: _nationality,
+            selectedItem: _nationality.text,
             onChanged: formProvider.setnationality,
-            selectedItem: countryList[0],
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -314,9 +293,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: countryList,
             label: 'Birth Country',
-            searchBoxController: _birthCountry,
+           selectedItem: _birthCountry.text,
             onChanged: formProvider.setbirthCountry,
-            selectedItem: countryList[0],
+          
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -502,6 +481,7 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
             });
           },
         ),
+        Divider(),
         SwitchListTile(
           title: Text("Can handle pork"),
           value: _canHandlePork,
@@ -555,6 +535,7 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
             });
           },
         ),
+        Divider(),
         SwitchListTile(
           title: Text(
               "Can you let your employer to keep your phone during your working hour"),
@@ -574,6 +555,7 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
             });
           },
         ),
+        Divider(),
         SwitchListTile(
           title: Text("Not afraid of dogs"),
           value: _afraidDog,
@@ -590,6 +572,7 @@ class _BuildYesNoFormState extends State<BuildYesNoForm> {
             });
           },
         ),
+        Divider(),
         SwitchListTile(
           title: Text("Prepare to wake up as early as 5am"),
           value: _canWakeUpEarly,
@@ -673,8 +656,7 @@ class _BuildSkillLevelState extends State<BuildSkillLevel> {
               labelStyle: TextStyle(
                 fontSize: 16,
               ),
-              onChange: (String label, int index) =>
-                  print("label: $label index: $index"),
+              onChange: (String label, int index) {},
               onSelected: (String label) {
                 skillsProvider
                     .setSkillLevelData(Skills(id: skills[index], value: label));

@@ -11,7 +11,7 @@ class BuildSettings extends StatefulWidget {
 
 class _BuildSettingsState extends State<BuildSettings>
     with AutomaticKeepAliveClientMixin {
-  bool _searchAble = true;
+  bool _searchAble = false;
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +63,7 @@ class _BuildSettingsState extends State<BuildSettings>
                       },
                     ),
                     Text('If you enable, your profile be able to search'),
+                    SizedBox(height: getProportionateScreenWidth(10)),
                   ],
                 ),
               ),

@@ -11,6 +11,7 @@ class HelperModel {
   List<Photo> photo;
   String searchable;
   String agencyId;
+  String id;
 
   HelperModel(
       {this.personalInfo,
@@ -24,7 +25,8 @@ class HelperModel {
       this.selfDescription,
       this.photo,
       this.searchable,
-      this.agencyId});
+      this.agencyId,
+      this.id});
 
   HelperModel.fromJson(Map<String, dynamic> json) {
     personalInfo = json['personalInfo'] != null
@@ -68,6 +70,7 @@ class HelperModel {
     }
     searchable = json['searchable'];
     agencyId = json['agencyId'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -100,6 +103,7 @@ class HelperModel {
     }
     data['searchable'] = this.searchable;
     data['agencyId'] = this.agencyId;
+    data['id'] = this.id;
     return data;
   }
 }

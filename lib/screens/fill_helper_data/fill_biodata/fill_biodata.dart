@@ -31,6 +31,7 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
             TextButton(
               onPressed: () async {
                 await provider.createHelperWithData(context);
+                Navigator.pop(context);
               },
               child: Text(
                 'Create',
@@ -56,7 +57,7 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
                 text: "OTHER INFO",
               ),
               Tab(
-                text: "SIGNATURE",
+                text: "PICTURES",
               ),
               Tab(
                 text: "SETTINGS",
