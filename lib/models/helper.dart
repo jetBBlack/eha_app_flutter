@@ -28,6 +28,10 @@ class HelperModel {
       this.agencyId,
       this.id});
 
+  // HelperModel.fromJson(Map<String, dynamic> json){
+
+  // }
+
   HelperModel.fromJson(Map<String, dynamic> json) {
     personalInfo = json['personalInfo'] != null
         ? new PersonalInfo.fromJson(json['personalInfo'])
@@ -35,25 +39,25 @@ class HelperModel {
     contactInfo = json['contactInfo'];
     dob = json['dob'];
     if (json['yesNoQuestions'] != null) {
-      List<YesNoQuestions> yesNoQuestions = [];
+      yesNoQuestions = <YesNoQuestions>[];
       json['yesNoQuestions'].forEach((v) {
         yesNoQuestions.add(new YesNoQuestions.fromJson(v));
       });
     }
     if (json['medicals'] != null) {
-      List<Medicals> medicals = [];
+      medicals = <Medicals>[];
       json['medicals'].forEach((v) {
         medicals.add(new Medicals.fromJson(v));
       });
     }
     if (json['skills'] != null) {
-      List<Skills> skills = [];
+      skills = <Skills>[];
       json['skills'].forEach((v) {
         skills.add(new Skills.fromJson(v));
       });
     }
     if (json['employmentHistories'] != null) {
-      List<EmploymentHistories> employmentHistories = [];
+      employmentHistories = <EmploymentHistories>[];
       json['employmentHistories'].forEach((v) {
         employmentHistories.add(new EmploymentHistories.fromJson(v));
       });
@@ -63,7 +67,7 @@ class HelperModel {
         : null;
     selfDescription = json['selfDescription'];
     if (json['photo'] != null) {
-      List<Photo> photo = [];
+      photo = <Photo>[];
       json['photo'].forEach((v) {
         photo.add(new Photo.fromJson(v));
       });

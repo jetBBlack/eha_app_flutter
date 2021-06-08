@@ -1,4 +1,6 @@
 import 'package:eha_app/constant.dart';
+import 'package:eha_app/models/helper.dart';
+import 'package:eha_app/screens/user_details/user_detail_screen.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -21,6 +23,7 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    final HelperModel helper = UserDetailInherited.of(context).helperModel;
     return SizedBox(
       width: double.infinity,
       child: SingleChildScrollView(
@@ -57,7 +60,7 @@ class _BodyState extends State<Body> {
                             Row(
                               children: [
                                 Text(
-                                  "Sample Helper Biodata",
+                                  helper.personalInfo.name,
                                   style: TextStyle(
                                     fontSize: 22,
                                     color: Colors.grey[800],
@@ -141,7 +144,7 @@ class _BodyState extends State<Body> {
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      "This is a sample helper biodata only. It provides idea how to provide information so that other potential employers can make a quick decision whether to engage you for an interview or direct employment. Please do not engage with this helper. \nI have been taking care of babies and children for the past 6 years. These children treat me as alder sister and I am very close with them. ",
+                      helper.selfDescription,
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 14,
@@ -165,7 +168,7 @@ class _BodyState extends State<Body> {
                   SizedBox(
                     height: 15,
                   ),
-                  BuildSkillLevel(),
+                  BuildSkillLevel(skills: helper.skills),
                   SizedBox(
                     height: 15,
                   ),
@@ -370,8 +373,10 @@ class BuildWorkHistoy extends StatelessWidget {
 }
 
 class BuildSkillLevel extends StatelessWidget {
+  final List skills;
   const BuildSkillLevel({
     Key key,
+    @required this.skills,
   }) : super(key: key);
 
   @override
@@ -402,10 +407,9 @@ class BuildSkillLevel extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(left: 14),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
+            child: ListView.separated(
+              itemBuilder: (BuildContext context, index) {
+                return Container(
                   height: 60,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -418,14 +422,14 @@ class BuildSkillLevel extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        ' Can cook Basic food',
+                        skills[index].id,
                         style: TextStyle(
                             fontSize: 17,
                             color: Colors.black,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        ' Very Experience',
+                        skills[index].value,
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontSize: 14,
@@ -434,40 +438,78 @@ class BuildSkillLevel extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
+                );
+              },
+              itemCount: skills.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(
                   height: 10,
-                ),
-                Container(
-                  height: 60,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    border: Border.all(color: Colors.grey[500]),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        ' Can cook Indian food',
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        ' No Experience',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: kTextColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                );
+              },
+              // children: [
+              //   Container(
+              //     height: 60,
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       color: Colors.grey[100],
+              //       border: Border.all(color: Colors.grey[500]),
+              //       borderRadius: BorderRadius.circular(5),
+              //     ),
+              //     alignment: Alignment.centerLeft,
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           ' Can cook Basic food',
+              //           style: TextStyle(
+              //               fontSize: 17,
+              //               color: Colors.black,
+              //               fontWeight: FontWeight.bold),
+              //         ),
+              //         Text(
+              //           ' Very Experience',
+              //           textAlign: TextAlign.start,
+              //           style: TextStyle(
+              //             fontSize: 14,
+              //             color: kTextColor,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              //   SizedBox(
+              //     height: 10,
+              //   ),
+              //   Container(
+              //     height: 60,
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       color: Colors.grey[100],
+              //       border: Border.all(color: Colors.grey[500]),
+              //       borderRadius: BorderRadius.circular(5),
+              //     ),
+              //     alignment: Alignment.centerLeft,
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.stretch,
+              //       children: [
+              //         Text(
+              //           ' Can cook Indian food',
+              //           style: TextStyle(
+              //               fontSize: 17,
+              //               color: Colors.black,
+              //               fontWeight: FontWeight.bold),
+              //         ),
+              //         Text(
+              //           ' No Experience',
+              //           style: TextStyle(
+              //             fontSize: 14,
+              //             color: kTextColor,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ],
             ),
           ),
         ],
@@ -477,8 +519,10 @@ class BuildSkillLevel extends StatelessWidget {
 }
 
 class BuildYesNo extends StatelessWidget {
+  final List<YesNoQuestions> yesNoQuestions;
   const BuildYesNo({
     Key key,
+    this.yesNoQuestions,
   }) : super(key: key);
 
   @override
@@ -509,10 +553,9 @@ class BuildYesNo extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(left: 14),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
+            child: ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
                   height: 60,
                   width: double.infinity,
                   decoration: BoxDecoration(
@@ -540,72 +583,107 @@ class BuildYesNo extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: 60,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.grey[500]),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ' Can cook beef',
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        ' Yes',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: kTextColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: 60,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.grey[500]),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        ' Can take care children',
-                        style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        ' Yes',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: kTextColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                );
+              },
+              itemCount: yesNoQuestions.length,
+              separatorBuilder: (BuildContext context, int index) => SizedBox(
+                height: 10,
+              ),
+              // children: [
+              //   Container(
+              //     height: 60,
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       color: Colors.grey[200],
+              //       border: Border.all(color: Colors.grey[500]),
+              //       borderRadius: BorderRadius.circular(5),
+              //     ),
+              //     alignment: Alignment.centerLeft,
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           ' Can drive',
+              //           style: TextStyle(
+              //               fontSize: 17,
+              //               color: Colors.black,
+              //               fontWeight: FontWeight.bold),
+              //         ),
+              //         Text(
+              //           ' No',
+              //           style: TextStyle(
+              //             fontSize: 14,
+              //             color: kTextColor,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              //   SizedBox(
+              //     height: 10,
+              //   ),
+              //   Container(
+              //     height: 60,
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       color: Colors.grey[200],
+              //       border: Border.all(color: Colors.grey[500]),
+              //       borderRadius: BorderRadius.circular(5),
+              //     ),
+              //     alignment: Alignment.centerLeft,
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           ' Can cook beef',
+              //           style: TextStyle(
+              //               fontSize: 17,
+              //               color: Colors.black,
+              //               fontWeight: FontWeight.bold),
+              //         ),
+              //         Text(
+              //           ' Yes',
+              //           style: TextStyle(
+              //             fontSize: 14,
+              //             color: kTextColor,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              //   SizedBox(
+              //     height: 10,
+              //   ),
+              //   Container(
+              //     height: 60,
+              //     width: double.infinity,
+              //     decoration: BoxDecoration(
+              //       color: Colors.grey[200],
+              //       border: Border.all(color: Colors.grey[500]),
+              //       borderRadius: BorderRadius.circular(5),
+              //     ),
+              //     alignment: Alignment.centerLeft,
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.start,
+              //       children: [
+              //         Text(
+              //           ' Can take care children',
+              //           style: TextStyle(
+              //               fontSize: 17,
+              //               color: Colors.black,
+              //               fontWeight: FontWeight.bold),
+              //         ),
+              //         Text(
+              //           ' Yes',
+              //           style: TextStyle(
+              //             fontSize: 14,
+              //             color: kTextColor,
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ],
             ),
           ),
         ],

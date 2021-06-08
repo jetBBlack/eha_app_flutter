@@ -20,7 +20,7 @@ class HelperService {
     }
   }
 
-  Future<List<HelperModel>> getHelperList(
+  Future<List> getHelperList(
       int pageNumber, int pageSize, String orderBy) async {
     final Map<String, dynamic> requestData = {
       "orderBy": orderBy,
@@ -35,11 +35,13 @@ class HelperService {
       headers: {'Content-Type': 'application/json'},
     );
     final Map<String, dynamic> responseData = json.decode(response.body);
+
     if (response.statusCode == 200) {
       List<dynamic> body = responseData['items'];
-      List<HelperModel> helpers =
-          body.map((dynamic item) => HelperModel.fromJson(item)).toList();
-      return helpers;
+      // List<HelperModel> helpers =
+      //     body.map((dynamic item) => HelperModel.fromJson(item)).toList();
+      // print(helpers[1].yesNoQuestions[1].id);
+      return body;
     } else {
       throw "Failed to load helpers list";
     }

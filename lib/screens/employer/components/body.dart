@@ -10,6 +10,8 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   List<Employer> employers = getEmployer();
+ 
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
