@@ -1,7 +1,12 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eha_app/components/info_title.dart';
+import 'package:eha_app/models/employer.dart';
+import 'package:eha_app/providers/employer_provider.dart';
+import 'package:eha_app/services_api/country_services.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../constant.dart';
 
@@ -70,6 +75,32 @@ class BuildGeneralInfo extends StatefulWidget {
 }
 
 class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
+  CountryService get _service => GetIt.I<CountryService>();
+  TextEditingController _nameCtl = TextEditingController();
+  TextEditingController _genderCtl = TextEditingController();
+  TextEditingController _maritalStatusCtl = TextEditingController();
+  TextEditingController _nationalityCtl = TextEditingController();
+  TextEditingController _religionCtl = TextEditingController();
+  TextEditingController _idCtl = TextEditingController();
+  TextEditingController _valueCtl = TextEditingController();
+
+  String formValidator(String value) {
+    if (value.isEmpty || value.length == 0) {
+      return "Required field";
+    } else {
+      return null;
+    }
+  }
+
+  List<String> _religionList = [
+    "Buddhist",
+    "Christian",
+    "Free Thinker",
+    "Hindu",
+    "Mulism",
+    "Sikh",
+    "Other"
+  ];
   List<String> maritalStatusList = [
     "Divorced",
     "Married",
@@ -77,20 +108,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     "Single",
     "Widowed"
   ];
-  List<String> countryList = [
-    "Filipino",
-    "Burman",
-    "India",
-    "Sri Lanka",
-    "Bangladesh",
-    "Malaysian",
-    "Indonesian",
-    "Chinese-HongKong",
-    "Chinese-Macau",
-    "Chinese-Taiwan",
-    "Thai",
-    "Korean"
-  ];
+  List<String> _countryList = [];
   List<String> ethnicGroupList = [
     'Chinese',
     'Filipino',
@@ -101,11 +119,35 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     'Other',
   ];
   @override
+  void initState() {
+    if (_countryList.length == 0 || _countryList.isEmpty) {
+      _service.getCountryName().then((List<String> c) => setState(() {
+            _countryList = c;
+          }));
+    }
+    final infoProvider = Provider.of<EmployerProvider>(context, listen: false);
+    super.initState();
+    _nameCtl = TextEditingController(text: infoProvider.name);
+    _genderCtl = TextEditingController(text: infoProvider.gender);
+    _maritalStatusCtl = TextEditingController(text: infoProvider.maritalStatus);
+    _nationalityCtl = TextEditingController(text: infoProvider.nationality);
+    _religionCtl = TextEditingController(text: infoProvider.religion);
+    _idCtl = TextEditingController(text: infoProvider.groupId);
+    _valueCtl = TextEditingController(text: infoProvider.groudValue);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final EmployerProvider infoProvider =
+        Provider.of<EmployerProvider>(context);
     return Form(
+      key: infoProvider.personalFormKey,
       child: Column(
         children: [
           TextFormField(
+            controller: _nameCtl,
+            validator: (value) => formValidator(value),
+            onChanged: infoProvider.setName,
             decoration: InputDecoration(
               labelText: "Name",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -115,8 +157,11 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             height: getProportionateScreenWidth(20),
           ),
           DropdownSearch<String>(
+            validator: (value) => formValidator(value),
+            onChanged: infoProvider.setGender,
             mode: Mode.MENU,
             showSelectedItem: true,
+            selectedItem: _genderCtl.text,
             items: ['Male', 'Female'],
             label: 'Gender',
             dropdownSearchDecoration: InputDecoration(
@@ -128,7 +173,10 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           DropdownSearch<String>(
             mode: Mode.MENU,
+            validator: (value) => formValidator(value),
+            onChanged: infoProvider.setMaritalStatus,
             showSelectedItem: true,
+            selectedItem: _maritalStatusCtl.text,
             items: maritalStatusList,
             label: 'Marital Status',
             dropdownSearchDecoration: InputDecoration(
@@ -140,8 +188,11 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           DropdownSearch<String>(
             mode: Mode.MENU,
+            validator: (value) => formValidator(value),
+            onChanged: infoProvider.setNationality,
+            selectedItem: _nationalityCtl.text,
             showSelectedItem: true,
-            items: countryList,
+            items: _countryList,
             label: 'Nationality',
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
@@ -152,8 +203,11 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           DropdownSearch<String>(
             mode: Mode.MENU,
+            validator: (value) => formValidator(value),
+            onChanged: infoProvider.setReligion,
+            selectedItem: _religionCtl.text,
             showSelectedItem: true,
-            items: countryList,
+            items: _religionList,
             label: 'Religion',
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
@@ -162,8 +216,20 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
+          TextFormField(
+            controller: _idCtl,
+            validator: (value) => formValidator(value),
+            onChanged: infoProvider.setGroupId,
+            decoration: InputDecoration(
+              labelText: "Ethnic Group ID",
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+            ),
+          ),
           DropdownSearch<String>(
             mode: Mode.MENU,
+            validator: (value) => formValidator(value),
+            onChanged: infoProvider.setGroupValue,
+            selectedItem: _valueCtl.text,
             showSelectedItem: true,
             items: ethnicGroupList,
             label: 'Ethnic Group',
@@ -178,6 +244,18 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _nameCtl.dispose();
+    _genderCtl.dispose();
+    _maritalStatusCtl.dispose();
+    _nationalityCtl.dispose();
+    _religionCtl.dispose();
+    _idCtl.dispose();
+    _valueCtl.dispose();
+    super.dispose();
+  }
 }
 
 class BuildFamilyInfo extends StatefulWidget {
@@ -186,17 +264,151 @@ class BuildFamilyInfo extends StatefulWidget {
 }
 
 class _BuildFamilyInfoState extends State<BuildFamilyInfo> {
-  bool _stayWithParent = false;
-  bool _stayWithParentInLaw = false;
+  TextEditingController _memberNameCtl;
+  TextEditingController _relationCtl;
+  TextEditingController _nricFinCtl;
+  TextEditingController _dateOfBirthCtl;
+  GlobalKey<FormState> _formKey;
+  bool _stayWithParent = true;
+  bool _stayWithParentInLaw = true;
+  var familyMembersProvider;
+  int counter = 0;
+
+  String memberFormValidate(String value) {
+    if (value.isEmpty || value.length == 0) {
+      return "Family info is required";
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _formKey = GlobalKey();
+    _memberNameCtl = TextEditingController();
+    _relationCtl = TextEditingController();
+    _nricFinCtl = TextEditingController();
+    _dateOfBirthCtl = TextEditingController();
+    familyMembersProvider =
+        Provider.of<EmployerProvider>(context, listen: false);
+  }
+
+  @override
+  void dispose() {
+    _memberNameCtl.dispose();
+    _relationCtl.dispose();
+    _nricFinCtl.dispose();
+    _dateOfBirthCtl.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Column(
         children: [
           TextFormField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: "No. of children"),
+            controller: _memberNameCtl,
+            validator: (value) => memberFormValidate(value),
+            decoration: InputDecoration(
+                labelText: "Member's name",
+                floatingLabelBehavior: FloatingLabelBehavior.always),
           ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            controller: _relationCtl,
+            validator: (value) => memberFormValidate(value),
+            decoration: InputDecoration(
+                labelText: "Relation to employer",
+                floatingLabelBehavior: FloatingLabelBehavior.always),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            controller: _nricFinCtl,
+            validator: (value) => memberFormValidate(value),
+            decoration: InputDecoration(
+                labelText: "NRIC or FIN",
+                floatingLabelBehavior: FloatingLabelBehavior.always),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          TextFormField(
+            controller: _dateOfBirthCtl,
+            validator: (value) => memberFormValidate(value),
+            onTap: () async {
+              DateTime date = DateTime(1900);
+              FocusScope.of(context).requestFocus(new FocusNode());
+
+              date = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(1900),
+                lastDate: DateTime(2050),
+              );
+              //var dateparse = DateTime.parse(date.toIso8601String());
+              _dateOfBirthCtl.text = date.toIso8601String();
+            },
+            decoration: InputDecoration(
+                labelText: "Date of birth",
+                floatingLabelBehavior: FloatingLabelBehavior.always),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(10),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (_formKey.currentState.validate()) {
+                familyMembersProvider.setFamilyMembersData(FamilyMembers(
+                  name: _memberNameCtl.text,
+                  relationToEmployeer: _relationCtl.text,
+                  dob: _dateOfBirthCtl.text,
+                  nricFin: _nricFinCtl.text,
+                ));
+              }
+            },
+            child: Text('Add member'),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
+          ),
+          Consumer<EmployerProvider>(builder: (context, provider, child) {
+            return ListView.builder(
+              itemCount: provider.familyMembers.length,
+              itemBuilder: (BuildContext context, int index) {
+                counter++;
+                return Dismissible(
+                  key: Key(counter.toString()),
+                  direction: DismissDirection.startToEnd,
+                  onDismissed: (direction) {
+                    familyMembersProvider.removeFamilyMember(index);
+                  },
+                  child: Container(
+                    margin: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.blue,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: ListTile(
+                      title: Text(
+                          provider.familyMembers[index].relationToEmployeer +
+                              ": " +
+                              provider.familyMembers[index].name),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                    ),
+                  ),
+                );
+              },
+            );
+          }),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
@@ -248,12 +460,6 @@ class _BuildFamilyInfoState extends State<BuildFamilyInfo> {
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
-          TextFormField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-                labelText: "No of people in the same house",
-                floatingLabelBehavior: FloatingLabelBehavior.always),
-          )
         ],
       ),
     );
@@ -266,14 +472,57 @@ class BuildHouseInfo extends StatefulWidget {
 }
 
 class _BuildHouseInfoState extends State<BuildHouseInfo> {
+  TextEditingController _houseTypeCtl = TextEditingController();
+  TextEditingController _noOfRoomsClt = TextEditingController();
+  TextEditingController _noOfBathRoomsClt = TextEditingController();
+  TextEditingController _noOfToiletsCtl = TextEditingController();
+  TextEditingController _noOfFloorsCtl = TextEditingController();
+  List<String> typeOfHouse = [
+    "HDB (1-room)",
+    "HDB (2-room)",
+    "HDB (3-room)",
+    "HDB (4-room)",
+    "HDB (5-room)",
+    "HUDC",
+    "Landed property",
+    "Non-HDB public flat / apartment",
+    "Private flat / apartment",
+    "Shop house",
+    "Others",
+  ];
+  String houseValidator(String value) {
+    if (value.isEmpty || value.length == 0) {
+      return "House info is required field";
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  void initState() {
+    final houseProvider = Provider.of<EmployerProvider>(context, listen: false);
+    super.initState();
+    _houseTypeCtl = TextEditingController(text: houseProvider.houseType);
+    _noOfRoomsClt = TextEditingController(text: houseProvider.noOfRooms);
+    _noOfBathRoomsClt =
+        TextEditingController(text: houseProvider.noOfBathrooms);
+    _noOfToiletsCtl = TextEditingController(text: houseProvider.noOfToilets);
+    _noOfFloorsCtl = TextEditingController(text: houseProvider.noOfFloors);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final houseProvider = Provider.of<EmployerProvider>(context);
     return Form(
+      key: houseProvider.houseFormKey,
       child: Column(
         children: [
           DropdownSearch<String>(
             mode: Mode.MENU,
-            items: [],
+            onChanged: houseProvider.setHouseType,
+            validator: (value) => houseValidator(value),
+            selectedItem: _houseTypeCtl.text,
+            items: typeOfHouse,
             label: "Housing Type",
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
@@ -283,32 +532,64 @@ class _BuildHouseInfoState extends State<BuildHouseInfo> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
+            controller: _noOfRoomsClt,
+            validator: (value) => houseValidator(value),
+            onChanged: (value) => houseProvider.setNoOfRooms(int.parse(value)),
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: "No of rooms"),
+            decoration: InputDecoration(
+                labelText: "No of rooms",
+                floatingLabelBehavior: FloatingLabelBehavior.always),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
+            controller: _noOfBathRoomsClt,
+            validator: (value) => houseValidator(value),
+            onChanged: (value) =>
+                houseProvider.setNoOfBathRooms(int.parse(value)),
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: "No of bathrooms"),
+            decoration: InputDecoration(
+                labelText: "No of bathrooms",
+                floatingLabelBehavior: FloatingLabelBehavior.always),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
+            controller: _noOfToiletsCtl,
+            validator: (value) => houseValidator(value),
+            onChanged: (value) =>
+                houseProvider.setNoOfToilets(int.parse(value)),
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: "No of toilets"),
+            decoration: InputDecoration(
+                labelText: "No of toilets",
+                floatingLabelBehavior: FloatingLabelBehavior.always),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
+            controller: _noOfFloorsCtl,
+            validator: (value) => houseValidator(value),
+            onChanged: (value) => houseProvider.setNoOfFloors(int.parse(value)),
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: "No of floors"),
+            decoration: InputDecoration(
+                labelText: "No of floors",
+                floatingLabelBehavior: FloatingLabelBehavior.always),
           )
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _houseTypeCtl.dispose();
+    _noOfRoomsClt.dispose();
+    _noOfBathRoomsClt.dispose();
+    _noOfToiletsCtl.dispose();
+    _noOfFloorsCtl.dispose();
+    super.dispose();
   }
 }

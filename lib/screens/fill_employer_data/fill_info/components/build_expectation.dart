@@ -1,11 +1,13 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eha_app/components/info_title.dart';
 import 'package:eha_app/constant.dart';
+import 'package:eha_app/providers/employer_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import 'package:multi_select_flutter/util/multi_select_item.dart';
+import 'package:provider/provider.dart';
 
 class BuildExpectation extends StatefulWidget {
   @override
@@ -62,7 +64,62 @@ class BuildExpectationForm extends StatefulWidget {
 }
 
 class _BuildExpectationFormState extends State<BuildExpectationForm> {
-  TextEditingController dateCtl = TextEditingController();
+  TextEditingController _offSalaryCtl = TextEditingController();
+  TextEditingController _firstPriorityCtl = TextEditingController();
+  TextEditingController _secondPriority = TextEditingController();
+  TextEditingController _thirdPriority = TextEditingController();
+  TextEditingController _helperJoinOn = TextEditingController();
+  TextEditingController _expectation = TextEditingController();
+  TextEditingController _nonExpectation = TextEditingController();
+  List<String> priorities = [
+    "Can cook Basic food ?",
+    "Can cook Indian food ?",
+    "Can cook Malay food ?",
+    "Can cook Western food ?",
+    "Can cook Chinese food ?",
+    "Can speak Chinese ?",
+    "Can speak English ?",
+    "Can speak Indian ?",
+    "Can speak Malay",
+    "Do Marketting",
+    "Do gardening",
+    "Do general housework",
+    "Take care of autism children",
+    "Take care of children (2-12 years)",
+    "Take care of elderly",
+    "Take care of infants (4-24 months)",
+    "Take care of new-born baby",
+  ];
+
+  @override
+  void initState() {
+    final expectProvider =
+        Provider.of<EmployerProvider>(context, listen: false);
+    super.initState();
+    _offSalaryCtl = TextEditingController(text: expectProvider.offerSalary);
+    _firstPriorityCtl =
+        TextEditingController(text: expectProvider.firstPriority);
+    _secondPriority =
+        TextEditingController(text: expectProvider.secondPriority);
+    _thirdPriority = TextEditingController(text: expectProvider.thirdPriority);
+    _helperJoinOn = TextEditingController(text: expectProvider.helperJoinOn);
+    _expectation = TextEditingController(text: expectProvider.expectationInfo);
+    _nonExpectation =
+        TextEditingController(text: expectProvider.nonExpectation);
+  }
+
+  @override
+  void dispose() {
+    _offSalaryCtl.dispose();
+    _firstPriorityCtl.dispose();
+    _secondPriority.dispose();
+    _thirdPriority.dispose();
+    _helperJoinOn.dispose();
+    _expectation.dispose();
+    _nonExpectation.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -80,11 +137,7 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
           ),
           DropdownSearch<String>(
             mode: Mode.BOTTOM_SHEET,
-            items: [
-              'Can cook Basic food',
-              'Can cook India food',
-              'Can cook Western food'
-            ],
+            items: priorities,
             label: '1st Priority',
             showClearButton: true,
             dropdownSearchDecoration: InputDecoration(
@@ -152,7 +205,7 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
-            controller: dateCtl,
+            controller: _helperJoinOn,
             onTap: () async {
               DateTime date = DateTime(1900);
               FocusScope.of(context).requestFocus(new FocusNode());
@@ -164,7 +217,7 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
                 lastDate: DateTime(2050),
               );
               var dateparse = DateTime.parse(date.toIso8601String());
-              dateCtl.text =
+              _helperJoinOn.text =
                   "${dateparse.year}-${dateparse.month}-${dateparse.day}";
             },
             decoration: InputDecoration(

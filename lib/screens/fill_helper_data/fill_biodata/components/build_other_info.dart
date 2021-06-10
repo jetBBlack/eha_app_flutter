@@ -84,10 +84,7 @@ class _BuildExpectInfoState extends State<BuildExpectInfo> {
     super.initState();
     _noLeaveCtl =
         TextEditingController(text: otherInfoProvider.noLeavesPerMonth);
-    _salaryCtl = TextEditingController(
-        text: otherInfoProvider.expectedSalary == null
-            ? 0
-            : otherInfoProvider.expectedSalary.toString());
+    _salaryCtl = TextEditingController(text: otherInfoProvider.expectedSalary);
     _earliestDateCtl =
         TextEditingController(text: otherInfoProvider.earliestJoiningOn);
     _releasePaperClt =

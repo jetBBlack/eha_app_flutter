@@ -40,9 +40,9 @@ class AppUrl {
 
   //employerMom Api url
   static const String updateEmployerMom =
-      baseUrl + "api/employerMom/update-employee-mom";
+      baseUrl + "api/employerMom/update-employer-mom";
   static const String createEmployerMom =
-      baseUrl + "api/employerMom/create-employer-mom";
+      baseUrl + "api/employerMom/create-employee-mom";
   static const String deleteEmployerMom =
       baseUrl + "api/employerMom/delete-employer-mom";
   static const String getEmployerMom =

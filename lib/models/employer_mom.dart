@@ -6,6 +6,7 @@ class EmployerMom {
   List<Photos> photos;
   String singnature;
   String securityCode;
+  String id;
 
   EmployerMom(
       {this.mom,
@@ -14,7 +15,8 @@ class EmployerMom {
       this.workPermitReceiverAddress,
       this.photos,
       this.singnature,
-      this.securityCode});
+      this.securityCode,
+      this.id});
 
   EmployerMom.fromJson(Map<String, dynamic> json) {
     mom = json['mom'] != null ? new Mom.fromJson(json['mom']) : null;
@@ -39,6 +41,7 @@ class EmployerMom {
     }
     singnature = json['singnature'];
     securityCode = json['securityCode'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -62,6 +65,7 @@ class EmployerMom {
     }
     data['singnature'] = this.singnature;
     data['securityCode'] = this.securityCode;
+    data['id'] = this.id;
     return data;
   }
 }

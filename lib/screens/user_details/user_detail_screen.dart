@@ -1,4 +1,5 @@
 import 'package:eha_app/models/helper.dart';
+import 'package:eha_app/screens/user_details/components/photo_view.dart';
 import 'package:flutter/material.dart';
 import 'components/body.dart';
 
@@ -49,7 +50,14 @@ class UserDetailScreen extends StatelessWidget {
       persistentFooterButtons: <Widget>[
         ElevatedButton(
             style: raisedButtonStyle,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PhotoView(
+                            photos: helper.photo,
+                          )));
+            },
             child: Text(
               'Contact me',
               style: TextStyle(fontSize: 18),

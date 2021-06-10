@@ -5,6 +5,7 @@ class Employer {
   List<Photo> photo;
   Expectation expectation;
   String searchable;
+  String id;
 
   Employer(
       {this.personalInfo,
@@ -12,7 +13,8 @@ class Employer {
       this.houseInfo,
       this.photo,
       this.expectation,
-      this.searchable});
+      this.searchable,
+      this.id});
 
   Employer.fromJson(Map<String, dynamic> json) {
     personalInfo = json['personalInfo'] != null
@@ -34,6 +36,7 @@ class Employer {
         ? new Expectation.fromJson(json['expectation'])
         : null;
     searchable = json['searchable'];
+    id = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -54,6 +57,7 @@ class Employer {
       data['expectation'] = this.expectation.toJson();
     }
     data['searchable'] = this.searchable;
+    data['id'] = this.id;
     return data;
   }
 }

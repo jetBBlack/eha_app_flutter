@@ -22,7 +22,7 @@ class HelperProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  int get expectedSalary => otherInfo.expectedSalary;
+  String get expectedSalary => otherInfo.expectedSalary.toString();
   setexpectedSalary(int salary) {
     otherInfo.expectedSalary = salary;
     notifyListeners();
@@ -137,8 +137,13 @@ class HelperProvider extends ChangeNotifier {
 
   String get searchAble => newHelper.searchable;
   setsearchAble(String value) {
-    newHelper.searchable = value;
-    notifyListeners();
+    if (value.isEmpty) {
+      newHelper.searchable = 'false';
+      notifyListeners();
+    } else {
+      newHelper.searchable = value;
+      notifyListeners();
+    }
   }
 
   String get selfDescription => newHelper.selfDescription;
