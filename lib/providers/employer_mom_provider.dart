@@ -1,6 +1,7 @@
 import 'package:eha_app/models/employer_mom.dart';
 import 'package:eha_app/services_api/employer_mom_services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 class EmployerMomProvider extends ChangeNotifier {
@@ -13,7 +14,10 @@ class EmployerMomProvider extends ChangeNotifier {
       new WorkPermitReceiverAddress();
   List<Photos> photosList = <Photos>[];
   WorkPermitReceivers workPermitReceivers = WorkPermitReceivers();
+  ContactNo contactNo = new ContactNo();
 
+  //Form Key
+  GlobalKey<FormState> momKey = GlobalKey<FormState>();
   //mom
   String get name => mom.name;
   String get gender => mom.gender;
@@ -24,9 +28,9 @@ class EmployerMomProvider extends ChangeNotifier {
   String get houseType => mom.houseType;
   String get newOrReplaceHelper => mom.newOrReplaceHelper;
   String get residentStatus => mom.residentStatus;
-  String get passportNo => mom.passport.no;
-  String get passportExpireDate => mom.passport.expiredOn;
-  String get passportIssueAt => mom.passport.issuedAt;
+  String get passportNo => passport.no;
+  String get passportExpireDate => passport.expiredOn;
+  String get passportIssueAt => passport.issuedAt;
 
   setname(String value) {
     mom.name = value;
@@ -129,5 +133,106 @@ class EmployerMomProvider extends ChangeNotifier {
   //WorkPermitReceiversInfo
   String get wpName => workPermitReceivers.name;
   String get nricFin => workPermitReceivers.nricFin;
-  ContactNo get contactNo => workPermitReceivers.contactNo;
+  String get countryId => contactNo.countryId;
+  String get contactNumber => contactNo.no;
+
+  setwpName(String value) {
+    workPermitReceivers.name = value;
+    notifyListeners();
+  }
+
+  setnricFin(String value) {
+    workPermitReceivers.nricFin = value;
+    notifyListeners();
+  }
+
+  setCountryId(String id) {
+    contactNo.countryId = id;
+    notifyListeners();
+  }
+
+  setContactNumber(String no) {
+    contactNo.no = no;
+    notifyListeners();
+  }
+
+  //IncomeProof
+
+  String get monthlyIncome {
+    if (incomeProof.monthlyIncome == null) {
+      return "";
+    } else {
+      return incomeProof.monthlyIncome.toString();
+    }
+  }
+
+  String get spouseIncome {
+    if (incomeProof.spouseIncome == null) {
+      return "";
+    } else {
+      return incomeProof.spouseIncome.toString();
+    }
+  }
+
+  String get incomeProofInfo => incomeProof.incomeProof;
+
+  setMonthlyIncome(int income) {
+    incomeProof.monthlyIncome = income;
+    notifyListeners();
+  }
+
+  setSpouseIncome(int income) {
+    incomeProof.spouseIncome = income;
+    notifyListeners();
+  }
+
+  setIncomeProofInfo(String value) {
+    incomeProof.incomeProof = value;
+    notifyListeners();
+  }
+
+  //Photos
+  setPhotosData(Photos photos) {
+    photosList.add(photos);
+    notifyListeners();
+  }
+
+  removePhotos(int index) {
+    photosList.removeAt(index);
+    notifyListeners();
+  }
+
+  setSignature(String signature) {
+    newEmployerMom.singnature = signature;
+    notifyListeners();
+  }
+
+  String get sercurityCode => newEmployerMom.securityCode;
+  setSecurityCode(String code) {
+    newEmployerMom.securityCode = code;
+    notifyListeners();
+  }
+
+  Future<void> createEmployerMomWithData(BuildContext context) async {
+    if (momKey.currentState.validate()) {
+      final Map<String, dynamic> successfulMessage =
+          await _service.createEmployerMom(newEmployerMom);
+      if (successfulMessage['status']) {
+        // SharedPreferences prefs = await SharedPreferences.getInstance();
+        // prefs.setString('helper-id', successfulMessage['id'].toString());
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 10),
+            content: Text(
+              'Employer Created',
+              style: TextStyle(color: Colors.cyan, fontSize: 16),
+            ),
+          ),
+        );
+      } else {
+        throw Exception('Failed to create Helper');
+      }
+      notifyListeners();
+    }
+  }
 }

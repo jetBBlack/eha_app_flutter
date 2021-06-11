@@ -172,8 +172,8 @@ class IncomeProof {
 }
 
 class WorkPermitReceivers {
-  String    name;
-  String    nricFin;
+  String name;
+  String nricFin;
   ContactNo contactNo;
 
   WorkPermitReceivers({this.name, this.nricFin, this.contactNo});

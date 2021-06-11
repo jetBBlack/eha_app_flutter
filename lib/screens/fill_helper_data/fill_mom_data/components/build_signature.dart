@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
-import 'package:eha_app/providers/helper_mom_provider.dart';
+import 'package:eha_app/providers/employer_mom_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:eha_app/util/app_url.dart';
 import 'package:http_parser/http_parser.dart';
@@ -28,8 +28,8 @@ class _BuildSignaturePageState extends State<BuildSignaturePage> {
   }
 
   Future uploadImage() async {
-    final HelperMomProvider signProvider =
-        Provider.of<HelperMomProvider>(context, listen: false);
+    final EmployerMomProvider signProvider =
+        Provider.of<EmployerMomProvider>(context, listen: false);
     List<MultipartFile> multipartImageList = [];
     final String data = await storeSignature(context);
     if (data != null) {
@@ -52,7 +52,7 @@ class _BuildSignaturePageState extends State<BuildSignaturePage> {
         final List<dynamic> responseData = response.data;
         for (var item in responseData) {
           Map<String, dynamic> responseItem = item;
-          signProvider.setsignature(responseItem['fileName'].toString());
+          signProvider.setSignature(responseItem['fileName'].toString());
           print(responseItem['fileName'].toString());
         }
       } else {

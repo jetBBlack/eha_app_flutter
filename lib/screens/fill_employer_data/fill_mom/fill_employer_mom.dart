@@ -59,8 +59,8 @@ class FillEmployerMomScreen extends StatelessWidget {
           BuildInComeInfo(),
           BuildWorkPermit(),
           BuildPictures(),
-          BuildSignature(),
-          BuildCode(),
+          BuildSignaturePage(),
+          BuildCodePage(),
         ]),
       ),
     );

@@ -63,6 +63,13 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
   TextEditingController _nationalityCtl = TextEditingController();
   TextEditingController _maritalStatusCtl = TextEditingController();
   TextEditingController _houseTypeCtl = TextEditingController();
+  String momValidator(String value) {
+    if (value.isEmpty || value.length == 0) {
+      return "required field";
+    } else {
+      return null;
+    }
+  }
 
   //Data list
   List<String> residentailStatusList = [
@@ -138,12 +145,14 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final momProivder = Provider.of<EmployerMomProvider>(context);
+    final momProvider = Provider.of<EmployerMomProvider>(context);
     return Form(
       child: Column(
         children: [
           TextFormField(
             controller: _nameCtl,
+            validator: (value) => momValidator(value),
+            onChanged: momProvider.setname,
             decoration: InputDecoration(
               labelText: "Name",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -154,11 +163,12 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           DropdownSearch<String>(
             mode: Mode.MENU,
+            validator: (value) => momValidator(value),
             showSelectedItem: true,
             items: ['New Helper', 'Replacement Helper'],
             label: 'Immigration Pass Type',
-            searchBoxController: _newOrReplaceCtl,
-            //onChanged: (value) => formProvider.setpassType(value),
+            selectedItem: _newOrReplaceCtl.text,
+            onChanged: (value) => momProvider.setnewOrReplaceHelper(value),
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -169,10 +179,11 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           DropdownSearch<String>(
             mode: Mode.MENU,
             showSelectedItem: true,
+            validator: (value) => momValidator(value),
+            onChanged: momProvider.setgender,
             items: ['Male', 'Female'],
             label: 'Gender',
-            searchBoxController: _genderCtl,
-            //onChanged: (value) => formProvider.setgender(value),
+            selectedItem: _genderCtl.text,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -182,7 +193,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           TextFormField(
             controller: _dateOfBirth,
-            //onChanged: formProvider.setmarriedDate,
+            validator: (value) => momValidator(value),
             onTap: () async {
               DateTime date = DateTime(2021);
               FocusScope.of(context).requestFocus(new FocusNode());
@@ -194,7 +205,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
                 lastDate: DateTime(2100),
               );
               _dateOfBirth.text = date.toIso8601String();
-              //formProvider.setmarriedDate(date.toIso8601String());
+              momProvider.setdob(date.toIso8601String());
             },
             decoration: InputDecoration(
               labelText: "Date of birth",
@@ -240,7 +251,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           TextFormField(
             controller: _passportNo,
-            onChanged: momProivder.setpassportNo,
+            onChanged: momProvider.setpassportNo,
             decoration: InputDecoration(
               labelText: "Passport Number",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -314,11 +325,12 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           DropdownSearch<String>(
             mode: Mode.MENU,
+            validator: (value) => momValidator(value),
             showSelectedItem: true,
             items: maritalStatusList,
             label: 'Housing Type',
-            searchBoxController: _houseTypeCtl,
-            //onChanged: (value) => formProvider.setgender(value),
+            selectedItem: _houseTypeCtl.text,
+            onChanged: (value) => momProvider.sethouseType(value),
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
