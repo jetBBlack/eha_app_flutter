@@ -1,7 +1,9 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eha_app/components/info_title.dart';
+import 'package:eha_app/providers/employer_mom_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BuildPersonalInfo extends StatefulWidget {
   @override
@@ -96,11 +98,47 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
 
   @override
   void initState() {
+    final momProivder =
+        Provider.of<EmployerMomProvider>(context, listen: false);
     super.initState();
+    _nameCtl = TextEditingController(text: momProivder.name);
+    _newOrReplaceCtl =
+        TextEditingController(text: momProivder.newOrReplaceHelper);
+    _genderCtl = TextEditingController(text: momProivder.gender);
+    _dateOfBirth = TextEditingController(text: momProivder.dob);
+    _residentailStatus =
+        TextEditingController(text: momProivder.residentStatus);
+    _finCtl = TextEditingController(text: momProivder.nricOrFin);
+    _passportNo = TextEditingController(text: momProivder.passport.no);
+    _passportExpireDate =
+        TextEditingController(text: momProivder.passport.expiredOn);
+    _passportIssueIn =
+        TextEditingController(text: momProivder.passport.issuedAt);
+    _nationalityCtl = TextEditingController(text: momProivder.nationality);
+    _maritalStatusCtl = TextEditingController(text: momProivder.martialStatus);
+    _houseTypeCtl = TextEditingController(text: momProivder.houseType);
+  }
+
+  @override
+  void dispose() {
+    _nameCtl.dispose();
+    _newOrReplaceCtl.dispose();
+    _genderCtl.dispose();
+    _dateOfBirth.dispose();
+    _residentailStatus.dispose();
+    _finCtl.dispose();
+    _passportNo.dispose();
+    _passportExpireDate.dispose();
+    _passportIssueIn.dispose();
+    _nationalityCtl.dispose();
+    _maritalStatusCtl.dispose();
+    _houseTypeCtl.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final momProivder = Provider.of<EmployerMomProvider>(context);
     return Form(
       child: Column(
         children: [
@@ -202,6 +240,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           TextFormField(
             controller: _passportNo,
+            onChanged: momProivder.setpassportNo,
             decoration: InputDecoration(
               labelText: "Passport Number",
               floatingLabelBehavior: FloatingLabelBehavior.always,

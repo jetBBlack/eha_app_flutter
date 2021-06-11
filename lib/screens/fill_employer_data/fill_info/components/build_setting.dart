@@ -1,6 +1,8 @@
+import 'package:eha_app/providers/employer_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class BuildSetting extends StatefulWidget {
   @override
@@ -13,6 +15,7 @@ class _BuildSettingState extends State<BuildSetting>
 
   @override
   Widget build(BuildContext context) {
+    final searchAbleProvider = Provider.of<EmployerProvider>(context);
     super.build(context);
     return SafeArea(
       child: Padding(
@@ -53,6 +56,7 @@ class _BuildSettingState extends State<BuildSetting>
                       title: Text("Searchable"),
                       value: _searchAble,
                       onChanged: (value) {
+                        searchAbleProvider.setSearchAble(value.toString());
                         setState(() {
                           _searchAble = value;
                         });

@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperProvider extends ChangeNotifier {
   final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
-  HelperModel newHelper = new HelperModel();
+  HelperModel newHelper = new HelperModel(searchable: "true");
   List<YesNoQuestions> yesNoQuestions = <YesNoQuestions>[];
   List<Skills> skillList = <Skills>[];
   List<EmploymentHistories> employmentHistories = <EmploymentHistories>[];
@@ -22,7 +22,14 @@ class HelperProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String get expectedSalary => otherInfo.expectedSalary.toString();
+  String get expectedSalary {
+    if (otherInfo.expectedSalary == null) {
+      return "";
+    } else {
+      return otherInfo.expectedSalary.toString();
+    }
+  }
+
   setexpectedSalary(int salary) {
     otherInfo.expectedSalary = salary;
     notifyListeners();
@@ -137,13 +144,8 @@ class HelperProvider extends ChangeNotifier {
 
   String get searchAble => newHelper.searchable;
   setsearchAble(String value) {
-    if (value.isEmpty) {
-      newHelper.searchable = 'false';
-      notifyListeners();
-    } else {
-      newHelper.searchable = value;
-      notifyListeners();
-    }
+    newHelper.searchable = value;
+    notifyListeners();
   }
 
   String get selfDescription => newHelper.selfDescription;

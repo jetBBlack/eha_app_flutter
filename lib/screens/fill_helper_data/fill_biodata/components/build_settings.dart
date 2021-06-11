@@ -11,7 +11,7 @@ class BuildSettings extends StatefulWidget {
 
 class _BuildSettingsState extends State<BuildSettings>
     with AutomaticKeepAliveClientMixin {
-  bool _searchAble = false;
+  bool _searchAble = true;
 
   @override
   Widget build(BuildContext context) {

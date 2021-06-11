@@ -69,17 +69,17 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
   TextEditingController _secondPriority = TextEditingController();
   TextEditingController _thirdPriority = TextEditingController();
   TextEditingController _helperJoinOn = TextEditingController();
-  TextEditingController _expectation = TextEditingController();
-  TextEditingController _nonExpectation = TextEditingController();
+  TextEditingController _expectationCtl = TextEditingController();
+  TextEditingController _nonExpectationCtl = TextEditingController();
   List<String> priorities = [
-    "Can cook Basic food ?",
-    "Can cook Indian food ?",
-    "Can cook Malay food ?",
-    "Can cook Western food ?",
-    "Can cook Chinese food ?",
-    "Can speak Chinese ?",
-    "Can speak English ?",
-    "Can speak Indian ?",
+    "Can cook Basic food",
+    "Can cook Indian food",
+    "Can cook Malay food",
+    "Can cook Western food",
+    "Can cook Chinese food",
+    "Can speak Chinese",
+    "Can speak English",
+    "Can speak Indian",
     "Can speak Malay",
     "Do Marketting",
     "Do gardening",
@@ -90,6 +90,14 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
     "Take care of infants (4-24 months)",
     "Take care of new-born baby",
   ];
+
+  String expectationValidate(String value) {
+    if (value.isEmpty || value.length == 0) {
+      return "Required field";
+    } else {
+      return null;
+    }
+  }
 
   @override
   void initState() {
@@ -103,8 +111,9 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
         TextEditingController(text: expectProvider.secondPriority);
     _thirdPriority = TextEditingController(text: expectProvider.thirdPriority);
     _helperJoinOn = TextEditingController(text: expectProvider.helperJoinOn);
-    _expectation = TextEditingController(text: expectProvider.expectationInfo);
-    _nonExpectation =
+    _expectationCtl =
+        TextEditingController(text: expectProvider.expectationInfo);
+    _nonExpectationCtl =
         TextEditingController(text: expectProvider.nonExpectation);
   }
 
@@ -115,17 +124,24 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
     _secondPriority.dispose();
     _thirdPriority.dispose();
     _helperJoinOn.dispose();
-    _expectation.dispose();
-    _nonExpectation.dispose();
+    _expectationCtl.dispose();
+    _nonExpectationCtl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final EmployerProvider expectProvider =
+        Provider.of<EmployerProvider>(context);
     return Form(
+      key: expectProvider.expectationKey,
       child: Column(
         children: [
           TextFormField(
+            controller: _offSalaryCtl,
+            validator: (value) => expectationValidate(value),
+            onChanged: (value) =>
+                expectProvider.setOfferSalary(int.parse(value)),
             decoration: InputDecoration(
               labelStyle: TextStyle(fontSize: 16),
               labelText: "Offer Salary",
@@ -136,20 +152,25 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
             height: getProportionateScreenWidth(20),
           ),
           DropdownSearch<String>(
-            mode: Mode.BOTTOM_SHEET,
+            mode: Mode.DIALOG,
+            onChanged: expectProvider.setFirstPriority,
+            validator: (value) => expectationValidate(value),
+            popupBackgroundColor: Colors.grey[200],
+            popupShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
             items: priorities,
             label: '1st Priority',
-            showClearButton: true,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
             showSearchBox: true,
             searchBoxDecoration: InputDecoration(
               suffixIcon: Icon(Icons.search),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-              contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 8),
-              labelText: "Search",
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: kTextColor)),
+              contentPadding: EdgeInsets.fromLTRB(25, 12, 8, 0),
             ),
           ),
           SizedBox(
@@ -157,12 +178,9 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
           ),
           DropdownSearch<String>(
             mode: Mode.DIALOG,
-            items: [
-              'Can cook Basic food',
-              'Can cook India food',
-              'Can cook Malay food',
-              'Can cook Western food'
-            ],
+            onChanged: expectProvider.setSecondPriority,
+            validator: (value) => expectationValidate(value),
+            items: priorities,
             label: '2st Priority',
             showClearButton: true,
             dropdownSearchDecoration: InputDecoration(
@@ -171,34 +189,31 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
             showSearchBox: true,
             searchBoxDecoration: InputDecoration(
               suffixIcon: Icon(Icons.search),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: kTextColor)),
               contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 8),
-              labelText: "Search",
             ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
           DropdownSearch<String>(
-            mode: Mode.BOTTOM_SHEET,
-            items: [
-              'Can cook Basic food',
-              'Can cook India food',
-              'Can cook Western food'
-            ],
+            mode: Mode.DIALOG,
+            validator: (value) => expectationValidate(value),
+            onChanged: expectProvider.setThirdPriority,
+            items: priorities,
             label: '3st Priority',
-            showClearButton: true,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
             showSearchBox: true,
             searchBoxDecoration: InputDecoration(
               suffixIcon: Icon(Icons.search),
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: kTextColor)),
               contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 8),
-              labelText: "Search",
             ),
           ),
           SizedBox(
@@ -206,6 +221,7 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
           ),
           TextFormField(
             controller: _helperJoinOn,
+            validator: (value) => expectationValidate(value),
             onTap: () async {
               DateTime date = DateTime(1900);
               FocusScope.of(context).requestFocus(new FocusNode());
@@ -219,6 +235,7 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
               var dateparse = DateTime.parse(date.toIso8601String());
               _helperJoinOn.text =
                   "${dateparse.year}-${dateparse.month}-${dateparse.day}";
+              expectProvider.setHelperJoinOn(date.toIso8601String());
             },
             decoration: InputDecoration(
               labelText: "I expect to get domestic helper on",
@@ -229,6 +246,9 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
+            controller: _expectationCtl,
+            validator: (value) => expectationValidate(value),
+            onChanged: expectProvider.setExpectationInfo,
             decoration: InputDecoration(
               labelText: "My expectation for domestic helper",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -238,6 +258,9 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
+            controller: _nonExpectationCtl,
+            validator: (value) => expectationValidate(value),
+            onChanged: expectProvider.setNonExpectation,
             decoration: InputDecoration(
               labelText: "Not my expectation for domestic helper",
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -272,6 +295,7 @@ class _BuildDutiesState extends State<BuildDuties> {
   List _selectedDuties = [];
   @override
   Widget build(BuildContext context) {
+    final dutiesProvider = Provider.of<EmployerProvider>(context);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -295,6 +319,7 @@ class _BuildDutiesState extends State<BuildDuties> {
             ),
             items: _items,
             onConfirm: (values) {
+              dutiesProvider.setDuties(values.cast<String>().toList());
               setState(() {
                 _selectedDuties = values;
               });

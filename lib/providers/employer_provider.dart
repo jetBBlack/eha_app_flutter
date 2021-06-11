@@ -6,10 +6,11 @@ import 'package:get_it/get_it.dart';
 
 class EmployerProvider extends ChangeNotifier {
   EmployerService get _service => GetIt.I<EmployerService>();
-  Employer newEmployer = new Employer();
+  Employer newEmployer = new Employer(searchable: "yes");
   PersonalInfo personalInfo = new PersonalInfo();
   EthnicGroup ethnicGroup = new EthnicGroup();
-  FamilyMember familyMember = new FamilyMember();
+  FamilyMember familyMember =
+      new FamilyMember(stayWithParent: true, stayWithParentInLaw: true);
   List<FamilyMembers> familyMembers = [];
   HouseInfo houseInfo = new HouseInfo();
   List<Photo> photosList = <Photo>[];
@@ -17,6 +18,7 @@ class EmployerProvider extends ChangeNotifier {
 
   final GlobalKey<FormState> personalFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> houseFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> expectationKey = GlobalKey<FormState>();
 
   //Personal Infomation
   String get name => personalInfo.name;
@@ -92,32 +94,67 @@ class EmployerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String get noOfRooms => houseInfo.noOfRooms.toString();
+  String get noOfRooms {
+    if (houseInfo.noOfRooms == null) {
+      return "";
+    } else {
+      return houseInfo.noOfRooms.toString();
+    }
+  }
+
   setNoOfRooms(int no) {
     houseInfo.noOfRooms = no;
     notifyListeners();
   }
 
-  String get noOfBathrooms => houseInfo.noOfBathrooms.toString();
+  String get noOfBathrooms {
+    if (houseInfo.noOfBathrooms == null) {
+      return "";
+    } else {
+      return houseInfo.noOfBathrooms.toString();
+    }
+  }
+
   setNoOfBathRooms(int value) {
     houseInfo.noOfBathrooms = value;
     notifyListeners();
   }
 
-  String get noOfToilets => houseInfo.noOfToilets.toString();
+  String get noOfToilets {
+    if (houseInfo.noOfToilets == null) {
+      return "";
+    } else {
+      return houseInfo.noOfToilets.toString();
+    }
+  }
+
   setNoOfToilets(int value) {
     houseInfo.noOfToilets = value;
     notifyListeners();
   }
 
-  String get noOfFloors => houseInfo.noOfFloors.toString();
+  String get noOfFloors {
+    if (houseInfo.noOfFloors == null) {
+      return "";
+    } else {
+      return houseInfo.noOfFloors.toString();
+    }
+  }
+
   setNoOfFloors(int value) {
     houseInfo.noOfFloors = value;
     notifyListeners();
   }
 
   //Expextation Infomation
-  String get offerSalary => expectation.offerSalary.toString();
+  String get offerSalary {
+    if (expectation.offerSalary == null) {
+      return "";
+    } else {
+      return expectation.offerSalary.toString();
+    }
+  }
+
   setOfferSalary(int salary) {
     expectation.offerSalary = salary;
     notifyListeners();
@@ -165,13 +202,27 @@ class EmployerProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  //Photos
+  addPhotoData(Photo photo) {
+    photosList.add(photo);
+    notifyListeners();
+  }
+
+  removePhotoData(int index) {
+    photosList.removeAt(index);
+    notifyListeners();
+  }
+
   String get searchAble => newEmployer.searchable;
   setSearchAble(String value) {
     newEmployer.searchable = value;
     notifyListeners();
   }
 
-  Future<void> createHelperWithData(BuildContext context) async {
+  Future<void> createEmployerWithData(BuildContext context) async {
+    for (var item in expectation.duties) {
+      print(item);
+    }
     personalInfo.ethnicGroup = ethnicGroup;
     familyMember.familyMembers = familyMembers;
     newEmployer.personalInfo = personalInfo;
@@ -179,24 +230,27 @@ class EmployerProvider extends ChangeNotifier {
     newEmployer.houseInfo = houseInfo;
     newEmployer.expectation = expectation;
     newEmployer.photo = photosList;
-    final Map<String, dynamic> successfulMessage =
-        await _service.createEmployer(newEmployer);
-    if (successfulMessage['status']) {
-      // SharedPreferences prefs = await SharedPreferences.getInstance();
-      // prefs.setString('helper-id', successfulMessage['id'].toString());
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 10),
-          content: Text(
-            'Employer Created',
-            style: TextStyle(color: Colors.cyan, fontSize: 16),
+    if (personalFormKey.currentState.validate() &&
+        expectationKey.currentState.validate() &&
+        houseFormKey.currentState.validate()) {
+      final Map<String, dynamic> successfulMessage =
+          await _service.createEmployer(newEmployer);
+      if (successfulMessage['status']) {
+        // SharedPreferences prefs = await SharedPreferences.getInstance();
+        // prefs.setString('helper-id', successfulMessage['id'].toString());
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 10),
+            content: Text(
+              'Employer Created',
+              style: TextStyle(color: Colors.cyan, fontSize: 16),
+            ),
           ),
-        ),
-      );
-    } else {
-      throw Exception('Failed to create Helper');
+        );
+      } else {
+        throw Exception('Failed to create Helper');
+      }
+      notifyListeners();
     }
-    notifyListeners();
   }
 }

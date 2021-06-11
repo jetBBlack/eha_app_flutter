@@ -1,5 +1,7 @@
+import 'package:eha_app/providers/employer_provider.dart';
 import 'package:eha_app/screens/fill_employer_data/fill_info/components/build_info.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'components/build_expectation.dart';
 import 'components/build_photos.dart';
@@ -14,6 +16,7 @@ class FillEmployerInfoScreen extends StatefulWidget {
 class _FillEmployerInfoScreenState extends State<FillEmployerInfoScreen> {
   @override
   Widget build(BuildContext context) {
+    final myProvider = Provider.of<EmployerProvider>(context, listen: false);
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -21,7 +24,9 @@ class _FillEmployerInfoScreenState extends State<FillEmployerInfoScreen> {
           title: Text('INFO'),
           actions: [
             TextButton(
-              onPressed: () {},
+              onPressed: () async {
+                await myProvider.createEmployerWithData(context);
+              },
               child: Text(
                 'Save',
                 style: TextStyle(fontSize: 17),

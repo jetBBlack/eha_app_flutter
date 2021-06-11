@@ -1,5 +1,6 @@
 import 'package:eha_app/models/register_model.dart';
 import 'package:eha_app/providers/auth.dart';
+import 'package:eha_app/providers/employer_mom_provider.dart';
 import 'package:eha_app/providers/employer_provider.dart';
 import 'package:eha_app/providers/get_helper_provider.dart';
 import 'package:eha_app/providers/helper_mom_provider.dart';
@@ -47,6 +48,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => HelperMomProvider()),
         ChangeNotifierProvider(create: (_) => GetHelperProvider()),
         ChangeNotifierProvider(create: (_) => EmployerProvider()),
+        ChangeNotifierProvider(create: (_) => EmployerMomProvider()),
       ],
       child: GestureDetector(
         onTap: () {

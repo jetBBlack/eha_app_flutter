@@ -187,10 +187,23 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             height: getProportionateScreenWidth(20),
           ),
           DropdownSearch<String>(
-            mode: Mode.MENU,
+            mode: Mode.DIALOG,
+            popupBackgroundColor: Colors.grey[200],
+            popupShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
             validator: (value) => formValidator(value),
             onChanged: infoProvider.setNationality,
             selectedItem: _nationalityCtl.text,
+            searchBoxDecoration: InputDecoration(
+              hintText: "Search nationlity",
+              border: outlineInputBorder(),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.black,
+              ),
+            ),
+            showSearchBox: true,
             showSelectedItem: true,
             items: _countryList,
             label: 'Nationality',
@@ -224,6 +237,9 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
               labelText: "Ethnic Group ID",
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
+          ),
+          SizedBox(
+            height: getProportionateScreenWidth(20),
           ),
           DropdownSearch<String>(
             mode: Mode.MENU,
@@ -276,7 +292,7 @@ class _BuildFamilyInfoState extends State<BuildFamilyInfo> {
 
   String memberFormValidate(String value) {
     if (value.isEmpty || value.length == 0) {
-      return "Family info is required";
+      return "Member info is required";
     } else {
       return null;
     }
@@ -305,163 +321,175 @@ class _BuildFamilyInfoState extends State<BuildFamilyInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          TextFormField(
-            controller: _memberNameCtl,
-            validator: (value) => memberFormValidate(value),
-            decoration: InputDecoration(
-                labelText: "Member's name",
-                floatingLabelBehavior: FloatingLabelBehavior.always),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          TextFormField(
-            controller: _relationCtl,
-            validator: (value) => memberFormValidate(value),
-            decoration: InputDecoration(
-                labelText: "Relation to employer",
-                floatingLabelBehavior: FloatingLabelBehavior.always),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          TextFormField(
-            controller: _nricFinCtl,
-            validator: (value) => memberFormValidate(value),
-            decoration: InputDecoration(
-                labelText: "NRIC or FIN",
-                floatingLabelBehavior: FloatingLabelBehavior.always),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          TextFormField(
-            controller: _dateOfBirthCtl,
-            validator: (value) => memberFormValidate(value),
-            onTap: () async {
-              DateTime date = DateTime(1900);
-              FocusScope.of(context).requestFocus(new FocusNode());
+    final familyProvider = Provider.of<EmployerProvider>(context);
+    return Column(
+      children: [
+        Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _memberNameCtl,
+                validator: (value) => memberFormValidate(value),
+                decoration: InputDecoration(
+                    labelText: "Member's name",
+                    floatingLabelBehavior: FloatingLabelBehavior.always),
+              ),
+              SizedBox(
+                height: getProportionateScreenWidth(20),
+              ),
+              TextFormField(
+                controller: _relationCtl,
+                validator: (value) => memberFormValidate(value),
+                decoration: InputDecoration(
+                    labelText: "Relation to employer",
+                    floatingLabelBehavior: FloatingLabelBehavior.always),
+              ),
+              SizedBox(
+                height: getProportionateScreenWidth(20),
+              ),
+              TextFormField(
+                controller: _nricFinCtl,
+                validator: (value) => memberFormValidate(value),
+                decoration: InputDecoration(
+                    labelText: "NRIC or FIN",
+                    floatingLabelBehavior: FloatingLabelBehavior.always),
+              ),
+              SizedBox(
+                height: getProportionateScreenWidth(20),
+              ),
+              TextFormField(
+                controller: _dateOfBirthCtl,
+                validator: (value) => memberFormValidate(value),
+                onTap: () async {
+                  DateTime date = DateTime(1900);
+                  FocusScope.of(context).requestFocus(new FocusNode());
 
-              date = await showDatePicker(
-                context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(1900),
-                lastDate: DateTime(2050),
-              );
-              //var dateparse = DateTime.parse(date.toIso8601String());
-              _dateOfBirthCtl.text = date.toIso8601String();
-            },
-            decoration: InputDecoration(
-                labelText: "Date of birth",
-                floatingLabelBehavior: FloatingLabelBehavior.always),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(10),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (_formKey.currentState.validate()) {
-                familyMembersProvider.setFamilyMembersData(FamilyMembers(
-                  name: _memberNameCtl.text,
-                  relationToEmployeer: _relationCtl.text,
-                  dob: _dateOfBirthCtl.text,
-                  nricFin: _nricFinCtl.text,
-                ));
-              }
-            },
-            child: Text('Add member'),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          Consumer<EmployerProvider>(builder: (context, provider, child) {
-            return ListView.builder(
-              itemCount: provider.familyMembers.length,
-              itemBuilder: (BuildContext context, int index) {
-                counter++;
-                return Dismissible(
-                  key: Key(counter.toString()),
-                  direction: DismissDirection.startToEnd,
-                  onDismissed: (direction) {
-                    familyMembersProvider.removeFamilyMember(index);
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.blue,
-                          width: 2,
-                        ),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: ListTile(
-                      title: Text(
-                          provider.familyMembers[index].relationToEmployeer +
+                  date = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2050),
+                  );
+                  //var dateparse = DateTime.parse(date.toIso8601String());
+                  _dateOfBirthCtl.text = date.toIso8601String();
+                },
+                decoration: InputDecoration(
+                    labelText: "Date of birth",
+                    floatingLabelBehavior: FloatingLabelBehavior.always),
+              ),
+              SizedBox(
+                height: getProportionateScreenWidth(10),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState.validate()) {
+                    familyMembersProvider.setFamilyMembersData(FamilyMembers(
+                      name: _memberNameCtl.text,
+                      relationToEmployeer: _relationCtl.text,
+                      dob: _dateOfBirthCtl.text,
+                      nricFin: _nricFinCtl.text,
+                    ));
+                  }
+                },
+                child: Text('Add member'),
+              ),
+              SizedBox(
+                height: getProportionateScreenWidth(20),
+              ),
+              Consumer<EmployerProvider>(builder: (context, provider, child) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  itemCount: provider.familyMembers.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    counter++;
+                    return Dismissible(
+                      key: Key(counter.toString()),
+                      direction: DismissDirection.startToEnd,
+                      onDismissed: (direction) {
+                        familyMembersProvider.removeFamilyMember(index);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.blue,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(14)),
+                        child: ListTile(
+                          title: Text(provider
+                                  .familyMembers[index].relationToEmployeer +
                               ": " +
                               provider.familyMembers[index].name),
-                      trailing: Icon(Icons.keyboard_arrow_right),
-                    ),
-                  ),
+                          trailing: Icon(
+                            Icons.keyboard_arrow_right,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 );
-              },
-            );
-          }),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          Container(
-            padding: EdgeInsets.all(6.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                getProportionateScreenWidth(25),
+              }),
+              SizedBox(
+                height: getProportionateScreenWidth(20),
               ),
-              border: Border.all(color: kTextColor),
-            ),
-            child: SwitchListTile(
-              title: Text(
-                'Staying with parents',
-                style: TextStyle(color: kTextColor),
-              ),
-              value: _stayWithParent,
-              onChanged: (bool newValue) {
-                setState(() {
-                  _stayWithParent = newValue;
-                });
-              },
-            ),
+            ],
           ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          Container(
-            padding: EdgeInsets.all(5.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(
-                getProportionateScreenWidth(25),
-              ),
-              border: Border.all(color: kTextColor),
+        ),
+        Container(
+          padding: EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(
+              getProportionateScreenWidth(25),
             ),
-            child: SwitchListTile(
-              title: Text(
-                'Staying with parents in law',
-                style: TextStyle(color: kTextColor),
-              ),
-              value: _stayWithParentInLaw,
-              onChanged: (bool newValue) {
-                setState(() {
-                  _stayWithParentInLaw = newValue;
-                });
-              },
+            border: Border.all(color: kTextColor),
+          ),
+          child: SwitchListTile(
+            title: Text(
+              'Staying with parents',
+              style: TextStyle(color: kTextColor),
             ),
+            value: _stayWithParent,
+            onChanged: (bool newValue) {
+              familyProvider.setStayWithParent(newValue);
+              setState(() {
+                _stayWithParent = newValue;
+              });
+            },
           ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
+        ),
+        SizedBox(
+          height: getProportionateScreenWidth(20),
+        ),
+        Container(
+          padding: EdgeInsets.all(5.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(
+              getProportionateScreenWidth(25),
+            ),
+            border: Border.all(color: kTextColor),
           ),
-        ],
-      ),
+          child: SwitchListTile(
+            title: Text(
+              'Staying with parents in law',
+              style: TextStyle(color: kTextColor),
+            ),
+            value: _stayWithParentInLaw,
+            onChanged: (bool newValue) {
+              familyProvider.setStayWithParentInLaw(newValue);
+              setState(() {
+                _stayWithParentInLaw = newValue;
+              });
+            },
+          ),
+        ),
+        SizedBox(
+          height: getProportionateScreenWidth(20),
+        ),
+      ],
     );
   }
 }
