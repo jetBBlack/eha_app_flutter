@@ -1,10 +1,13 @@
 import 'dart:convert';
 
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eha_app/components/info_title.dart';
+import 'package:eha_app/providers/employer_mom_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
 class BuildWorkPermit extends StatefulWidget {
   @override
@@ -74,6 +77,14 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
   TextEditingController _countryCtl = TextEditingController();
   TextEditingController _postalCode = TextEditingController();
 
+  String wpValidator(String value) {
+    if (value.isEmpty || value.length == 0) {
+      return "Required field";
+    } else {
+      return null;
+    }
+  }
+
   Future<List<String>> getCountryName() async {
     List<String> countryNameList = [];
     final String response =
@@ -94,16 +105,39 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
             _countryList = c;
           }));
     }
+    final EmployerMomProvider wpProvider =
+        Provider.of<EmployerMomProvider>(context, listen: false);
     super.initState();
+    _blkNoCtl = TextEditingController(text: wpProvider.blkNo);
+    _unitNoCtl = TextEditingController(text: wpProvider.unitNo);
+    _floorNoCtl = TextEditingController(text: wpProvider.floorNo);
+    _streetNameCtl = TextEditingController(text: wpProvider.streetName);
+    _countryCtl = TextEditingController(text: wpProvider.country);
+    _postalCode = TextEditingController(text: wpProvider.postalCode);
+  }
+
+  @override
+  void dispose() {
+    _blkNoCtl.dispose();
+    _unitNoCtl.dispose();
+    _floorNoCtl.dispose();
+    _streetNameCtl.dispose();
+    _countryCtl.dispose();
+    _postalCode.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final EmployerMomProvider wpProvider =
+        Provider.of<EmployerMomProvider>(context);
     return Form(
       child: Column(
         children: [
           TextFormField(
             controller: _blkNoCtl,
+            validator: (value) => wpValidator(value),
+            onChanged: wpProvider.setblkNo,
             decoration: InputDecoration(
               labelText: 'Block number',
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -114,6 +148,8 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
           ),
           TextFormField(
             controller: _unitNoCtl,
+            validator: (value) => wpValidator(value),
+            onChanged: wpProvider.setunitNo,
             decoration: InputDecoration(
               labelText: 'Unit number',
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -124,6 +160,8 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
           ),
           TextFormField(
             controller: _floorNoCtl,
+            validator: (value) => wpValidator(value),
+            onChanged: wpProvider.setfloorNo,
             decoration: InputDecoration(
               labelText: 'Floor number',
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -134,6 +172,8 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
           ),
           TextFormField(
             controller: _streetNameCtl,
+            validator: (value) => wpValidator(value),
+            onChanged: wpProvider.setstreetName,
             decoration: InputDecoration(
               labelText: 'Street name',
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -144,6 +184,7 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
           ),
           DropdownSearch<String>(
             mode: Mode.MENU,
+            validator: (value) => wpValidator(value),
             showSearchBox: true,
             dialogMaxWidth: 7,
             showSelectedItem: true,
@@ -156,7 +197,7 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
             items: _countryList,
             label: 'Country',
             searchBoxController: _countryCtl,
-            //onChanged: (value) => formProvider.setgender(value),
+            onChanged: wpProvider.setcountry,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -166,6 +207,8 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
           ),
           TextFormField(
             controller: _postalCode,
+            validator: (value) => wpValidator(value),
+            onChanged: wpProvider.setpostalCode,
             decoration: InputDecoration(
               labelText: 'Postal code',
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -188,35 +231,40 @@ class BuildReceiverInfo extends StatefulWidget {
 }
 
 class _BuildReceiverInfoState extends State<BuildReceiverInfo> {
-  Future<List<String>> getCountryCode() async {
-    List<String> countryCodeList = [];
-    final String response =
-        await rootBundle.loadString('assets/country-by-calling-code.json');
-    final List<dynamic> countries = json.decode(response.toString());
-    for (var country in countries) {
-      Map<String, dynamic> responseItem = country;
-      countryCodeList.add("+" + responseItem['calling_code'].toString());
-    }
-    return countryCodeList;
-  }
+  TextEditingController _nameClt = TextEditingController();
+  TextEditingController _nricFinClt = TextEditingController();
+  TextEditingController _countryIdCtl = TextEditingController();
+  TextEditingController _contactNoCtl = TextEditingController();
 
-  List<String> _countryCode = [];
   @override
   void initState() {
-    if (_countryCode.length == 0 || _countryCode.isEmpty) {
-      getCountryCode().then((List<String> c) => setState(() {
-            _countryCode = c;
-          }));
-    }
+    final contactProvider =
+        Provider.of<EmployerMomProvider>(context, listen: false);
     super.initState();
+    _nameClt = TextEditingController(text: contactProvider.wpName);
+    _nricFinClt = TextEditingController(text: contactProvider.nricFin);
+    _countryIdCtl = TextEditingController(text: contactProvider.country);
+    _contactNoCtl = TextEditingController(text: contactProvider.contactNumber);
+  }
+
+  @override
+  void dispose() {
+    _nameClt.dispose();
+    _nricFinClt.dispose();
+    _countryIdCtl.dispose();
+    _contactNoCtl.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final contactProvider = Provider.of<EmployerMomProvider>(context);
     return Form(
       child: Column(
         children: [
           TextFormField(
+            controller: _nameClt,
+            onChanged: contactProvider.setwpName,
             decoration: InputDecoration(
               labelText: 'Name',
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -226,39 +274,55 @@ class _BuildReceiverInfoState extends State<BuildReceiverInfo> {
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
+            controller: _nricFinClt,
+            onChanged: contactProvider.setnricFin,
             decoration: InputDecoration(
               labelText: 'NRIC or FIN',
               floatingLabelBehavior: FloatingLabelBehavior.always,
             ),
           ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          DropdownSearch<String>(
-            mode: Mode.BOTTOM_SHEET,
-            dialogMaxWidth: 8,
-            showSearchBox: true,
-            searchBoxDecoration: InputDecoration(
-              prefixIcon: Icon(Icons.search),
-            ),
-            showSelectedItem: true,
-            items: _countryCode,
-            label: 'Country code',
-            //searchBoxController: _countryCtl,
-            //onChanged: (value) => formProvider.setgender(value),
-            dropdownSearchDecoration: InputDecoration(
-              contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
-            ),
-          ),
+          // SizedBox(
+          //   height: getProportionateScreenWidth(20),
+          // ),
+          // DropdownSearch<String>(
+          //   mode: Mode.BOTTOM_SHEET,
+          //   dialogMaxWidth: 8,
+          //   showSearchBox: true,
+          //   searchBoxDecoration: InputDecoration(
+          //     prefixIcon: Icon(Icons.search),
+          //   ),
+          //   showSelectedItem: true,
+          //   items: _countryCode,
+          //   label: 'Country code',
+          //   //searchBoxController: _countryCtl,
+          //   //onChanged: (value) => formProvider.setgender(value),
+          //   dropdownSearchDecoration: InputDecoration(
+          //     contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
+          //   ),
+          // ),
           SizedBox(
             height: getProportionateScreenWidth(20),
           ),
           TextFormField(
+            controller: _contactNoCtl,
+            onChanged: contactProvider.setContactNumber,
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
-              labelText: 'Contact number',
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
+                prefix: CountryCodePicker(
+                  padding: EdgeInsets.only(
+                    left: 2,
+                  ),
+                  onChanged: (value) =>
+                      contactProvider.setCountryId(value.toString()),
+                  favorite: ['+65', '+63'],
+                  initialSelection: '+65',
+                  flagDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+                labelText: 'Contact number',
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                contentPadding: EdgeInsets.fromLTRB(30, 10, 10, 12)),
           ),
         ],
       ),

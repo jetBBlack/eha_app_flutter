@@ -17,7 +17,8 @@ class EmployerMomProvider extends ChangeNotifier {
   ContactNo contactNo = new ContactNo();
 
   //Form Key
-  GlobalKey<FormState> momKey = GlobalKey<FormState>();
+  GlobalKey<FormState> wpFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> momFormKey = GlobalKey<FormState>();
   //mom
   String get name => mom.name;
   String get gender => mom.gender;
@@ -214,7 +215,16 @@ class EmployerMomProvider extends ChangeNotifier {
   }
 
   Future<void> createEmployerMomWithData(BuildContext context) async {
-    if (momKey.currentState.validate()) {
+    mom.passport = passport;
+    workPermitReceivers.contactNo = contactNo;
+    newEmployerMom.mom = mom;
+    newEmployerMom.incomeProof = incomeProof;
+    newEmployerMom.workPermitReceiverAddress = workPermitReceiverAddress;
+    newEmployerMom.photos = photosList;
+    newEmployerMom.workPermitReceivers.add(workPermitReceivers);
+
+    if (momFormKey.currentState.validate() &&
+        wpFormKey.currentState.validate()) {
       final Map<String, dynamic> successfulMessage =
           await _service.createEmployerMom(newEmployerMom);
       if (successfulMessage['status']) {

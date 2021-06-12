@@ -142,15 +142,6 @@ class _BuildPhotosState extends State<BuildPhotos>
       }
     }
   }
-  // void removeImage(String value) {
-  //   EmployerProvider imgProvider =
-  //       Provider.of<EmployerProvider>(context, listen: false);
-  //   imgProvider.removePhotoData(imgPath.indexOf(value));
-  //   setState(() {
-  //     imgPath.remove(value);
-  //     _isUploading = false;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {

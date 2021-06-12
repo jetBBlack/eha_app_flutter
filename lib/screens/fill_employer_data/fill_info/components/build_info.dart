@@ -190,14 +190,13 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             mode: Mode.DIALOG,
             popupBackgroundColor: Colors.grey[200],
             popupShape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(12),
             ),
             validator: (value) => formValidator(value),
             onChanged: infoProvider.setNationality,
             selectedItem: _nationalityCtl.text,
             searchBoxDecoration: InputDecoration(
-              hintText: "Search nationlity",
-              border: outlineInputBorder(),
+              hintText: "Search country",
               prefixIcon: Icon(
                 Icons.search,
                 color: Colors.black,
@@ -392,7 +391,10 @@ class _BuildFamilyInfoState extends State<BuildFamilyInfo> {
                     ));
                   }
                 },
-                child: Text('Add member'),
+                child: Text(
+                  'Add member',
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
               SizedBox(
                 height: getProportionateScreenWidth(20),
@@ -546,7 +548,19 @@ class _BuildHouseInfoState extends State<BuildHouseInfo> {
       child: Column(
         children: [
           DropdownSearch<String>(
-            mode: Mode.MENU,
+            mode: Mode.DIALOG,
+            popupBackgroundColor: Colors.grey[200],
+            popupShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            searchBoxDecoration: InputDecoration(
+              hintText: "Search type",
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.black,
+              ),
+            ),
+            showSearchBox: true,
             onChanged: houseProvider.setHouseType,
             validator: (value) => houseValidator(value),
             selectedItem: _houseTypeCtl.text,

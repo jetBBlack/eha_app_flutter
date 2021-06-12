@@ -1,8 +1,10 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:eha_app/components/info_title.dart';
 import 'package:eha_app/providers/employer_mom_provider.dart';
+import 'package:eha_app/services_api/country_services.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 class BuildPersonalInfo extends StatefulWidget {
@@ -33,6 +35,7 @@ class _BuildPersonalInfoState extends State<BuildPersonalInfo>
                     title: "GENERAL INFORMATION"),
                 SizedBox(height: getProportionateScreenWidth(20)),
                 BuildGeneralInfo(),
+                SizedBox(height: getProportionateScreenWidth(20)),
               ],
             ),
           ),
@@ -51,6 +54,7 @@ class BuildGeneralInfo extends StatefulWidget {
 }
 
 class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
+  CountryService get _service => GetIt.I<CountryService>();
   TextEditingController _nameCtl = TextEditingController();
   TextEditingController _newOrReplaceCtl = TextEditingController();
   TextEditingController _genderCtl = TextEditingController();
@@ -65,7 +69,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
   TextEditingController _houseTypeCtl = TextEditingController();
   String momValidator(String value) {
     if (value.isEmpty || value.length == 0) {
-      return "required field";
+      return "Required field";
     } else {
       return null;
     }
@@ -88,23 +92,28 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     "Single",
     "Widowed"
   ];
-  List<String> countryList = [
-    "Philippines",
-    "India",
-    "Sri Lanka",
-    "Bangladesh",
-    "Malaysia",
-    "Indonesia",
-    "HongKong",
-    "Macau",
-    "Taiwan",
-    "Thailand",
-    "South Korea",
-    "Camboida",
+  List<String> typeOfHouse = [
+    "HDB (1-room)",
+    "HDB (2-room)",
+    "HDB (3-room)",
+    "HDB (4-room)",
+    "HDB (5-room)",
+    "HUDC",
+    "Landed property",
+    "Non-HDB public flat / apartment",
+    "Private flat / apartment",
+    "Shop house",
+    "Others",
   ];
+  List<String> _countryList = [];
 
   @override
   void initState() {
+    if (_countryList.length == 0 || _countryList.isEmpty) {
+      _service.getCountryName().then((List<String> c) => setState(() {
+            _countryList = c;
+          }));
+    }
     final momProivder =
         Provider.of<EmployerMomProvider>(context, listen: false);
     super.initState();
@@ -147,6 +156,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
   Widget build(BuildContext context) {
     final momProvider = Provider.of<EmployerMomProvider>(context);
     return Form(
+      key: momProvider.momFormKey,
       child: Column(
         children: [
           TextFormField(
@@ -251,6 +261,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           TextFormField(
             controller: _passportNo,
+            validator: (value) => momValidator(value),
             onChanged: momProvider.setpassportNo,
             decoration: InputDecoration(
               labelText: "Passport Number",
@@ -262,7 +273,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           TextFormField(
             controller: _passportExpireDate,
-            //onChanged: formProvider.setmarriedDate,
+            validator: (value) => momValidator(value),
             onTap: () async {
               DateTime date = DateTime(2021);
               FocusScope.of(context).requestFocus(new FocusNode());
@@ -276,7 +287,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
               var dateparse = DateTime.parse(date.toIso8601String());
               _passportExpireDate.text =
                   "${dateparse.year}-${dateparse.month}-${dateparse.day}";
-              //formProvider.setmarriedDate(date.toIso8601String());
+              momProvider.setexpiredOn(date.toIso8601String());
             },
             decoration: InputDecoration(
               labelText: "Passport expired on",
@@ -288,6 +299,8 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           TextFormField(
             controller: _passportIssueIn,
+            validator: (value) => momValidator(value),
+            onChanged: momProvider.setissueAt,
             decoration: InputDecoration(
                 labelText: "Passport issue in",
                 floatingLabelBehavior: FloatingLabelBehavior.always),
@@ -296,12 +309,25 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             height: getProportionateScreenWidth(20),
           ),
           DropdownSearch<String>(
-            mode: Mode.MENU,
+            mode: Mode.DIALOG,
+            popupBackgroundColor: Colors.grey[200],
+            popupShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            validator: (value) => momValidator(value),
+            onChanged: momProvider.setnationality,
+            selectedItem: _nationalityCtl.text,
+            searchBoxDecoration: InputDecoration(
+              hintText: "Search country",
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.black,
+              ),
+            ),
+            showSearchBox: true,
             showSelectedItem: true,
-            items: countryList,
+            items: _countryList,
             label: 'Nationality',
-            searchBoxController: _nationalityCtl,
-            //onChanged: (value) => formProvider.setgender(value),
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -324,13 +350,24 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             height: getProportionateScreenWidth(20),
           ),
           DropdownSearch<String>(
-            mode: Mode.MENU,
+            mode: Mode.DIALOG,
+            popupBackgroundColor: Colors.grey[200],
+            popupShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            searchBoxDecoration: InputDecoration(
+              hintText: "Search type",
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.black,
+              ),
+            ),
+            showSearchBox: true,
+            onChanged: momProvider.sethouseType,
             validator: (value) => momValidator(value),
-            showSelectedItem: true,
-            items: maritalStatusList,
-            label: 'Housing Type',
             selectedItem: _houseTypeCtl.text,
-            onChanged: (value) => momProvider.sethouseType(value),
+            items: typeOfHouse,
+            label: "Housing Type",
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),

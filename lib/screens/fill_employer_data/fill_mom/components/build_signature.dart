@@ -33,7 +33,6 @@ class _BuildSignaturePageState extends State<BuildSignaturePage> {
     List<MultipartFile> multipartImageList = [];
     final String data = await storeSignature(context);
     if (data != null) {
-      print('co data');
       MultipartFile multipartFile = await MultipartFile.fromFile(
         data,
         contentType: MediaType("image", "png"),
@@ -48,7 +47,6 @@ class _BuildSignaturePageState extends State<BuildSignaturePage> {
       var response = await dio.post(AppUrl.uploadHelperImage, data: formData);
 
       if (response.statusCode == 200) {
-        print('singature is verified');
         final List<dynamic> responseData = response.data;
         for (var item in responseData) {
           Map<String, dynamic> responseItem = item;

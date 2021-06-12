@@ -157,20 +157,25 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
             validator: (value) => expectationValidate(value),
             popupBackgroundColor: Colors.grey[200],
             popupShape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(12),
             ),
             items: priorities,
+            showSelectedItem: true,
+            selectedItem: _firstPriorityCtl.text,
             label: '1st Priority',
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
             showSearchBox: true,
             searchBoxDecoration: InputDecoration(
-              suffixIcon: Icon(Icons.search),
+              hintText: 'Search duty',
+              prefixIcon: Icon(
+                Icons.search,
+                color: kTextColor,
+              ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: kTextColor)),
-              contentPadding: EdgeInsets.fromLTRB(25, 12, 8, 0),
             ),
           ),
           SizedBox(
@@ -178,21 +183,29 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
           ),
           DropdownSearch<String>(
             mode: Mode.DIALOG,
+            popupBackgroundColor: Colors.grey[200],
+            popupShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             onChanged: expectProvider.setSecondPriority,
             validator: (value) => expectationValidate(value),
             items: priorities,
+            selectedItem: _secondPriority.text,
             label: '2st Priority',
-            showClearButton: true,
+            showSelectedItem: true,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
             showSearchBox: true,
             searchBoxDecoration: InputDecoration(
-              suffixIcon: Icon(Icons.search),
+              hintText: 'Search Duty',
+              prefixIcon: Icon(
+                Icons.search,
+                color: kTextColor,
+              ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: kTextColor)),
-              contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 8),
             ),
           ),
           SizedBox(
@@ -200,6 +213,10 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
           ),
           DropdownSearch<String>(
             mode: Mode.DIALOG,
+            popupBackgroundColor: Colors.grey[200],
+            popupShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             validator: (value) => expectationValidate(value),
             onChanged: expectProvider.setThirdPriority,
             items: priorities,
@@ -208,12 +225,17 @@ class _BuildExpectationFormState extends State<BuildExpectationForm> {
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
             showSearchBox: true,
+            showSelectedItem: true,
+            selectedItem: _thirdPriority.text,
             searchBoxDecoration: InputDecoration(
-              suffixIcon: Icon(Icons.search),
+              hintText: 'Search Duty',
+              prefixIcon: Icon(
+                Icons.search,
+                color: kTextColor,
+              ),
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: kTextColor)),
-              contentPadding: EdgeInsets.fromLTRB(12, 12, 8, 8),
             ),
           ),
           SizedBox(
