@@ -277,48 +277,48 @@ class _BuildPicturesState extends State<BuildPictures>
     );
   }
 
-  GridView buildGridView(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: BouncingScrollPhysics(),
-      padding: EdgeInsets.all(12),
-      crossAxisCount: 2,
-      crossAxisSpacing: 15,
-      mainAxisSpacing: 15,
-      children: List.generate(
-        imgPath.length,
-        (index) {
-          String path = imgPath[index];
-          return Stack(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
-                        image: NetworkImage(AppUrl.getImage + path),
-                        fit: BoxFit.cover)),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Container(
-                  child: IconButton(
-                    icon: SvgPicture.asset(
-                      'assets/icons/Close.svg',
-                      height: 22,
-                      width: 22,
-                    ),
-                    color: Colors.red,
-                    onPressed: () {
-                      removeImage(path);
-                    },
-                  ),
+  Widget buildGridView(BuildContext context) {
+    return Consumer<HelperProvider>(builder: (context, provider, child) {
+      return GridView.count(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        padding: EdgeInsets.all(12),
+        crossAxisCount: 2,
+        crossAxisSpacing: 15,
+        mainAxisSpacing: 15,
+        children: List.generate(
+          provider.photoList.length,
+          (index) {
+            return Stack(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                          image: NetworkImage(AppUrl.getImage +
+                              provider.photoList[index].fileName),
+                          fit: BoxFit.cover)),
                 ),
-              )
-            ],
-          );
-        },
-      ),
-    );
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    child: IconButton(
+                      icon: SvgPicture.asset(
+                        'assets/icons/Close.svg',
+                        height: 22,
+                        width: 22,
+                      ),
+                      color: Colors.red,
+                      onPressed: () {},
+                    ),
+                  ),
+                )
+              ],
+            );
+          },
+        ),
+      );
+    });
   }
 
   @override

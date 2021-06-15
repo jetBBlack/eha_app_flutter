@@ -1,7 +1,7 @@
 import 'package:eha_app/constant.dart';
 import 'package:eha_app/models/helper.dart';
-import 'package:eha_app/screens/user_details/components/photo_view.dart';
-import 'package:eha_app/screens/user_details/user_detail_screen.dart';
+import 'package:eha_app/components/photo_view.dart';
+import 'package:eha_app/screens/user_details/helper_detail_screen.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:eha_app/util/app_url.dart';
 import 'package:flutter/material.dart';

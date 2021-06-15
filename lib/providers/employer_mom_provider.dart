@@ -13,11 +13,13 @@ class EmployerMomProvider extends ChangeNotifier {
   WorkPermitReceiverAddress workPermitReceiverAddress =
       new WorkPermitReceiverAddress();
   List<Photos> photosList = <Photos>[];
+  List<WorkPermitReceivers> wpList = <WorkPermitReceivers>[];
   WorkPermitReceivers workPermitReceivers = WorkPermitReceivers();
-  ContactNo contactNo = new ContactNo();
+  ContactNo contactNo = new ContactNo(countryId: "+65");
 
   //Form Key
   GlobalKey<FormState> wpFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> incomeFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> momFormKey = GlobalKey<FormState>();
   //mom
   String get name => mom.name;
@@ -217,13 +219,15 @@ class EmployerMomProvider extends ChangeNotifier {
   Future<void> createEmployerMomWithData(BuildContext context) async {
     mom.passport = passport;
     workPermitReceivers.contactNo = contactNo;
+    wpList.add(workPermitReceivers);
     newEmployerMom.mom = mom;
     newEmployerMom.incomeProof = incomeProof;
     newEmployerMom.workPermitReceiverAddress = workPermitReceiverAddress;
     newEmployerMom.photos = photosList;
-    newEmployerMom.workPermitReceivers.add(workPermitReceivers);
+    newEmployerMom.workPermitReceivers = wpList;
 
     if (momFormKey.currentState.validate() &&
+        incomeFormKey.currentState.validate() &&
         wpFormKey.currentState.validate()) {
       final Map<String, dynamic> successfulMessage =
           await _service.createEmployerMom(newEmployerMom);
@@ -232,9 +236,10 @@ class EmployerMomProvider extends ChangeNotifier {
         // prefs.setString('helper-id', successfulMessage['id'].toString());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            duration: Duration(seconds: 10),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            duration: Duration(seconds: 8),
             content: Text(
-              'Employer Created',
+              'Employer Mom Created',
               style: TextStyle(color: Colors.cyan, fontSize: 16),
             ),
           ),

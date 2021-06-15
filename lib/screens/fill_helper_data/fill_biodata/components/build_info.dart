@@ -17,6 +17,14 @@ class BuildPersonalInfoPage extends StatefulWidget {
 
 class _BuildPersonalInfoPageState extends State<BuildPersonalInfoPage>
     with AutomaticKeepAliveClientMixin {
+  // @override
+  // // void initState() {
+  // //   final HelperProvider initProvider =
+  // //       Provider.of<HelperProvider>(context, listen: false);
+  // //   super.initState();
+  // //   initProvider.initHelper();
+  // // }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -171,7 +179,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     super.initState();
     _name = TextEditingController(text: myProvider.name);
     _gender = TextEditingController(text: myProvider.gender);
-    _dateCtl = TextEditingController(text: myProvider.dayOfBirth);
+    _dateCtl = TextEditingController(text: myProvider.dayOfBirth.split('T')[0]);
     _maritalStatus = TextEditingController(text: myProvider.maritalStatus);
     _nationality = TextEditingController(text: myProvider.nationality);
     _birthCountry = TextEditingController(text: myProvider.birthCountry);
@@ -293,9 +301,8 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
             showSelectedItem: true,
             items: countryList,
             label: 'Birth Country',
-           selectedItem: _birthCountry.text,
+            selectedItem: _birthCountry.text,
             onChanged: formProvider.setbirthCountry,
-          
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),

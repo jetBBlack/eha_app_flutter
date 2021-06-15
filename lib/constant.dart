@@ -11,6 +11,9 @@ const kPrimaryGradientColor = LinearGradient(
 const kSecondaryColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
 const kShadowColor = Color(0xFFE6E6E6);
+const kPrimaryChatColor = Color(0xFF00BF6D);
+const kContentColorLightTheme = Color(0xFF1D1D35);
+const kContentColorDarkTheme = Color(0xFFF5FCF9);
 
 const kAnimationDuration = Duration(milliseconds: 200);
 

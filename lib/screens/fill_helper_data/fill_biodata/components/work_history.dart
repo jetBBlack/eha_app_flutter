@@ -43,7 +43,6 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _formKey = GlobalKey();
     _reasonCtl = TextEditingController();
@@ -54,7 +53,6 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _reasonCtl.dispose();
     _startDateCtl.dispose();
     _endDateCtl.dispose();
@@ -323,7 +321,7 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
               width: double.infinity,
               decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  border: Border.all(color: Colors.grey[300]),
+                  border: Border.all(color: Colors.grey[200]),
                   borderRadius: BorderRadius.circular(16)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -332,15 +330,15 @@ class _BuildEmploymentHistoryState extends State<BuildEmploymentHistory> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       Text(
-                        listHistory[index].startOn,
+                        listHistory[index].startOn.split('T')[0],
                         //'${DateFormat('MM/dd/yyyy').format(_startDate).toString()}',
-                        style: TextStyle(fontSize: 18, color: Colors.black),
+                        style: TextStyle(fontSize: 16, color: Colors.black),
                       ),
                       Text('-',
-                          style: TextStyle(fontSize: 18, color: Colors.black)),
-                      Text(listHistory[index].endOn,
+                          style: TextStyle(fontSize: 16, color: Colors.black)),
+                      Text(listHistory[index].endOn.split('T')[0],
                           //'${DateFormat('MM/dd/yyyy').format(_endDate).toString()}',
-                          style: TextStyle(fontSize: 18, color: Colors.black)),
+                          style: TextStyle(fontSize: 17, color: Colors.black)),
                     ],
                   ),
                   Padding(

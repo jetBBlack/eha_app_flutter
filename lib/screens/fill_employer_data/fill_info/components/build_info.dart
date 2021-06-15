@@ -544,6 +544,7 @@ class _BuildHouseInfoState extends State<BuildHouseInfo> {
   Widget build(BuildContext context) {
     final houseProvider = Provider.of<EmployerProvider>(context);
     return Form(
+      autovalidateMode: AutovalidateMode.always,
       key: houseProvider.houseFormKey,
       child: Column(
         children: [

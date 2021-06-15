@@ -180,7 +180,7 @@ class EmployerProvider extends ChangeNotifier {
 
   String get helperJoinOn => expectation.helperJoinOn;
   setHelperJoinOn(String date) {
-    expectation.firstPriority = date;
+    expectation.helperJoinOn = date;
     notifyListeners();
   }
 
@@ -220,9 +220,6 @@ class EmployerProvider extends ChangeNotifier {
   }
 
   Future<void> createEmployerWithData(BuildContext context) async {
-    for (var item in expectation.duties) {
-      print(item);
-    }
     personalInfo.ethnicGroup = ethnicGroup;
     familyMember.familyMembers = familyMembers;
     newEmployer.personalInfo = personalInfo;
@@ -230,27 +227,28 @@ class EmployerProvider extends ChangeNotifier {
     newEmployer.houseInfo = houseInfo;
     newEmployer.expectation = expectation;
     newEmployer.photo = photosList;
-    if (personalFormKey.currentState.validate() &&
-        expectationKey.currentState.validate() &&
-        houseFormKey.currentState.validate()) {
-      final Map<String, dynamic> successfulMessage =
-          await _service.createEmployer(newEmployer);
-      if (successfulMessage['status']) {
-        // SharedPreferences prefs = await SharedPreferences.getInstance();
-        // prefs.setString('helper-id', successfulMessage['id'].toString());
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            duration: Duration(seconds: 10),
-            content: Text(
-              'Employer Created',
-              style: TextStyle(color: Colors.cyan, fontSize: 16),
+    if (personalFormKey.currentState.validate()) {
+      if (houseFormKey.currentState.validate() &&
+          expectationKey.currentState.validate()) {
+        final Map<String, dynamic> successfulMessage =
+            await _service.createEmployer(newEmployer);
+        if (successfulMessage['status']) {
+          // SharedPreferences prefs = await SharedPreferences.getInstance();
+          // prefs.setString('helper-id', successfulMessage['id'].toString());
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              duration: Duration(seconds: 8),
+              content: Text(
+                'Employer Created',
+                style: TextStyle(color: Colors.cyan, fontSize: 16),
+              ),
             ),
-          ),
-        );
-      } else {
-        throw Exception('Failed to create Helper');
+          );
+        } else {
+          throw Exception('Failed to create Helper');
+        }
+        notifyListeners();
       }
-      notifyListeners();
     }
   }
 }

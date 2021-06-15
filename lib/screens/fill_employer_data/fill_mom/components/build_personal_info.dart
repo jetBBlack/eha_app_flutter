@@ -228,10 +228,12 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           DropdownSearch<String>(
             mode: Mode.MENU,
             showSelectedItem: true,
+            validator: (value) => momValidator(value),
+            selectedItem: _residentailStatus.text,
             items: residentailStatusList,
             label: 'Residentail Status',
             searchBoxController: _residentailStatus,
-            //onChanged: (value) => formProvider.setgender(value),
+            onChanged: (value) => momProvider.setresidentStatus(value),
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),
@@ -241,20 +243,12 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           ),
           TextFormField(
             controller: _finCtl,
+            validator: (value) => momValidator(value),
+            onChanged: (value) => momProvider.setnricOrFin(value),
             decoration: InputDecoration(
-                labelText: "FIN",
+                labelText: "NRIC or FIN",
                 hintText: "For example, A 123456 or A 1234567-",
                 floatingLabelBehavior: FloatingLabelBehavior.always),
-          ),
-          SizedBox(
-            height: getProportionateScreenWidth(20),
-          ),
-          TextFormField(
-            controller: _finCtl,
-            decoration: InputDecoration(
-              labelText: "NRIC",
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-            ),
           ),
           SizedBox(
             height: getProportionateScreenWidth(20),
@@ -338,10 +332,11 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
           DropdownSearch<String>(
             mode: Mode.MENU,
             showSelectedItem: true,
+            validator: (value) => momValidator(value),
+            selectedItem: _maritalStatusCtl.text,
             items: maritalStatusList,
             label: 'Marital Status',
-            searchBoxController: _maritalStatusCtl,
-            //onChanged: (value) => formProvider.setgender(value),
+            onChanged: (value) => momProvider.setmartialStatus(value),
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),

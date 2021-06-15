@@ -25,7 +25,9 @@ class _FillEmployerInfoScreenState extends State<FillEmployerInfoScreen> {
           actions: [
             TextButton(
               onPressed: () async {
-                await myProvider.createEmployerWithData(context);
+                await myProvider
+                    .createEmployerWithData(context)
+                    .then((value) => Navigator.pop(context));
               },
               child: Text(
                 'Save',

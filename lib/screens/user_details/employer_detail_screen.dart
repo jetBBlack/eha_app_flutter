@@ -1,11 +1,11 @@
-import 'package:eha_app/models/helper.dart';
-import 'package:eha_app/screens/user_details/components/photo_view.dart';
+import 'package:eha_app/models/employer.dart';
 import 'package:flutter/material.dart';
-import 'components/body.dart';
+import 'package:eha_app/screens/user_details/components/employer_body.dart';
+import '../../components/photo_view.dart';
 
-class UserDetailScreen extends StatelessWidget {
-  final HelperModel helper;
-  static String routeName = "/user-detail";
+class EmployerDetailScreen extends StatelessWidget {
+  final Employer employer;
+  static String routeName = "/employer-detail";
   final ButtonStyle raisedButtonStyle = ElevatedButton.styleFrom(
     minimumSize: Size(120, 40),
     padding: EdgeInsets.symmetric(horizontal: 16),
@@ -13,8 +13,8 @@ class UserDetailScreen extends StatelessWidget {
       borderRadius: BorderRadius.all(Radius.circular(5)),
     ),
   );
+  EmployerDetailScreen({Key key, this.employer}) : super(key: key);
 
-  UserDetailScreen({Key key, this.helper}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,9 +43,8 @@ class UserDetailScreen extends StatelessWidget {
           )
         ],
       ),
-      body: UserDetailInherited(
-        helperModel: helper,
-        child: Body(),
+      body: EmployerBody(
+        employer: employer,
       ),
       persistentFooterButtons: <Widget>[
         ElevatedButton(
@@ -55,7 +54,7 @@ class UserDetailScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => PhotoView(
-                            photos: helper.photo,
+                            photos: employer.photo,
                           )));
             },
             child: Text(
@@ -67,19 +66,5 @@ class UserDetailScreen extends StatelessWidget {
         )
       ],
     );
-  }
-}
-
-class UserDetailInherited extends InheritedWidget {
-  UserDetailInherited({Widget child, this.helperModel}) : super(child: child);
-  final HelperModel helperModel;
-
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    return false;
-  }
-
-  static UserDetailInherited of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<UserDetailInherited>();
   }
 }

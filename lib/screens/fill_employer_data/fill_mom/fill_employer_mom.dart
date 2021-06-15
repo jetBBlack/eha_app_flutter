@@ -22,7 +22,9 @@ class FillEmployerMomScreen extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () async {
-                await myProvider.createEmployerMomWithData(context);
+                await myProvider
+                    .createEmployerMomWithData(context)
+                    .then((value) => Navigator.pop(context));
               },
               child: Text(
                 'Save',

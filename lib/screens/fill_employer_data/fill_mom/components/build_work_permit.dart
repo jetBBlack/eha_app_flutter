@@ -132,6 +132,7 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
     final EmployerMomProvider wpProvider =
         Provider.of<EmployerMomProvider>(context);
     return Form(
+      key: wpProvider.wpFormKey,
       child: Column(
         children: [
           TextFormField(
@@ -183,21 +184,25 @@ class _BuildWorkPermitAddressState extends State<BuildWorkPermitAddress> {
             height: getProportionateScreenWidth(20),
           ),
           DropdownSearch<String>(
-            mode: Mode.MENU,
+            mode: Mode.DIALOG,
+            popupBackgroundColor: Colors.grey[200],
+            popupShape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             validator: (value) => wpValidator(value),
-            showSearchBox: true,
-            dialogMaxWidth: 7,
-            showSelectedItem: true,
+            onChanged: wpProvider.setcountry,
+            selectedItem: _countryCtl.text,
             searchBoxDecoration: InputDecoration(
+              hintText: "Search country",
               prefixIcon: Icon(
                 Icons.search,
                 color: Colors.black,
               ),
             ),
+            showSearchBox: true,
+            showSelectedItem: true,
             items: _countryList,
             label: 'Country',
-            searchBoxController: _countryCtl,
-            onChanged: wpProvider.setcountry,
             dropdownSearchDecoration: InputDecoration(
               contentPadding: EdgeInsets.only(left: 45, top: 10, bottom: 10),
             ),

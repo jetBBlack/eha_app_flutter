@@ -6,15 +6,37 @@ import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperProvider extends ChangeNotifier {
-  final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
-  HelperModel newHelper = new HelperModel(searchable: "true");
-  List<YesNoQuestions> yesNoQuestions = <YesNoQuestions>[];
-  List<Skills> skillList = <Skills>[];
-  List<EmploymentHistories> employmentHistories = <EmploymentHistories>[];
+  HelperService get _service => GetIt.I<HelperService>();
+  HelperModel newHelper;
+  List<YesNoQuestions> yesNoQuestions;
+  List<Skills> skillList;
+  List<EmploymentHistories> employmentHistories;
   List<Medicals> medicalInfo = <Medicals>[];
-  List<Photo> photoList = <Photo>[];
-  PersonalInfo personalInfo = new PersonalInfo();
-  OtherInfo otherInfo = new OtherInfo();
+  List<Photo> photoList;
+  PersonalInfo personalInfo;
+  OtherInfo otherInfo;
+
+  Future<void> initHelper() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String helperId = prefs.getString('helper-id');
+
+    print(helperId);
+    if (helperId != null) {
+      newHelper = await _service.getHelperbyId(helperId);
+      personalInfo = newHelper.personalInfo;
+      otherInfo = newHelper.otherInfo;
+      skillList = newHelper.skills;
+      yesNoQuestions = newHelper.yesNoQuestions;
+      employmentHistories = newHelper.employmentHistories;
+      medicalInfo = newHelper.medicals;
+      photoList = newHelper.photo;
+    } else {
+      newHelper = new HelperModel(searchable: "true");
+    }
+  }
+
+  //Form Key
+  final GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
 
   String get noLeavesPerMonth => otherInfo.noLeavesPerMonth;
   setnoLeavesPerMonth(String no) {
@@ -176,7 +198,6 @@ class HelperProvider extends ChangeNotifier {
     }
   }
 
-  HelperService get _service => GetIt.I<HelperService>();
   Future<void> createHelperWithData(BuildContext context) async {
     removeDuplicateItem(medicalInfo);
     removeDuplicateItem(yesNoQuestions);
@@ -214,4 +235,6 @@ class HelperProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> updateHelperWithData() {}
 }

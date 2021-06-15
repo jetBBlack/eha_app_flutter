@@ -1,11 +1,10 @@
-import 'package:eha_app/models/helper.dart';
 import 'package:eha_app/util/app_url.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
 class PhotoView extends StatelessWidget {
-  final List<Photo> photos;
+  final List photos;
   const PhotoView({Key key, this.photos}) : super(key: key);
 
   @override

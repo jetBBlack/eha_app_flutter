@@ -17,6 +17,18 @@ class FillBioDataScreen extends StatefulWidget {
 
 class _FillBioDataScreenState extends State<FillBioDataScreen> {
   PageController pageController = PageController(initialPage: 0);
+  // var initProvider;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   initProvider = Provider.of<HelperProvider>(context, listen: false);
+  //   initMethod();
+  // }
+
+  // void initMethod() async {
+  //   await initProvider.initHelper();
+  // }
 
   @override
   Widget build(BuildContext context) {

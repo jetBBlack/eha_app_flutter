@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:eha_app/models/employer_mom.dart';
 import 'package:eha_app/providers/employer_mom_provider.dart';
-import 'package:eha_app/providers/employer_provider.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:eha_app/util/app_url.dart';
 import 'package:flutter/material.dart';
@@ -134,6 +133,7 @@ class _BuildPicturesState extends State<BuildPictures>
         final List<dynamic> responseData = response.data;
         for (var item in responseData) {
           Map<String, dynamic> responseItem = item;
+          print(responseItem['fileName']);
           await imgProvider.setPhotosData(Photos(
             fileName: responseItem['fileName'],
             mimeType: responseItem['mimeType'],
@@ -268,7 +268,7 @@ class _BuildPicturesState extends State<BuildPictures>
   }
 
   Widget buildGridView(BuildContext context) {
-    return Consumer<EmployerProvider>(builder: (context, provider, child) {
+    return Consumer<EmployerMomProvider>(builder: (context, provider, child) {
       return GridView.count(
         shrinkWrap: true,
         physics: BouncingScrollPhysics(),
@@ -301,7 +301,7 @@ class _BuildPicturesState extends State<BuildPictures>
                       ),
                       color: Colors.red,
                       onPressed: () {
-                        provider.removePhotoData(index);
+                        provider.removePhotos(index);
                       },
                     ),
                   ),

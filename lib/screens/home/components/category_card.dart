@@ -19,8 +19,6 @@ class CategoryCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(13),
       child: Container(
-        width: 80,
-        height: 80,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(13),
@@ -38,13 +36,14 @@ class CategoryCard extends StatelessWidget {
           child: InkWell(
             onTap: press,
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: <Widget>[
                   Spacer(),
                   SvgPicture.asset(
                     svgSrc,
-                    height: 80,
+                    height: 70,
+                    width: 70,
                   ),
                   Spacer(),
                   Text(

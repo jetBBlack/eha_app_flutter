@@ -2,7 +2,7 @@ import 'package:eha_app/providers/social_auth.dart';
 import 'package:eha_app/screens/account/components/profile_pic.dart';
 import 'package:eha_app/screens/account/favorite_me_screen.dart';
 import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
-import 'package:eha_app/screens/user_details/user_detail_screen.dart';
+import 'package:eha_app/screens/user_details/helper_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

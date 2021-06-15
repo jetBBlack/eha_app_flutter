@@ -1,10 +1,12 @@
 import 'package:eha_app/screens/agency/agency_screen.dart';
+import 'package:eha_app/screens/chat/chat_page.dart';
 import 'package:eha_app/screens/employer/employer_screen.dart';
 import 'package:eha_app/screens/fill_employer_data/fill_info/fill_info_screen.dart';
 import 'package:eha_app/screens/fill_employer_data/fill_mom/fill_employer_mom.dart';
 import 'package:eha_app/screens/helper/helper_screen.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'category_card.dart';
 
 class Body extends StatelessWidget {
@@ -13,23 +15,36 @@ class Body extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: SizeConfig.screenHeight * .40,
+          height: SizeConfig.screenHeight * .45,
           decoration: BoxDecoration(
             color: Color(0xFFF5CEB8),
             image: DecorationImage(
-                image: AssetImage("assets/images/undraw_pilates_gpdb.png"),
-                alignment: Alignment.centerLeft),
+              image: AssetImage("assets/images/undraw_pilates_gpdb.png"),
+              alignment: Alignment.centerLeft,
+            ),
           ),
         ),
         SafeArea(
           child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: getProportionateScreenWidth(20)),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: getProportionateScreenWidth(20),
+                GestureDetector(
+                  onTap: () => Scaffold.of(context).openDrawer(),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 52,
+                      width: 52,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFF2BEA1),
+                        shape: BoxShape.circle,
+                      ),
+                      child: SvgPicture.asset("assets/icons/menu.svg"),
+                    ),
+                  ),
                 ),
                 Text(
                   "We provide domestic helper \nservice",
@@ -39,18 +54,18 @@ class Body extends StatelessWidget {
                       .copyWith(fontWeight: FontWeight.w900),
                 ),
                 SizedBox(
-                  height: getProportionateScreenWidth(35),
+                  height: getProportionateScreenWidth(20),
                 ),
                 Expanded(
                   child: GridView.count(
                     crossAxisCount: 2,
-                    childAspectRatio: .85,
+                    childAspectRatio: 1.08,
                     crossAxisSpacing: 20,
                     mainAxisSpacing: 20,
-                    children: [
+                    children: <Widget>[
                       CategoryCard(
                         title: "Find Helper",
-                        svgSrc: "assets/icons/team.svg",
+                        svgSrc: "assets/icons/maid-icon.svg",
                         press: () {
                           Navigator.pushNamed(context, HelperScreen.routeName);
                         },
@@ -88,11 +103,13 @@ class Body extends StatelessWidget {
                               context, FillEmployerMomScreen.routeName);
                         },
                       ),
-                      // CategoryCard(
-                      //   title: "Service",
-                      //   svgSrc: "assets/icons/service.svg",
-                      //   press: () {},
-                      // ),
+                      CategoryCard(
+                        title: "Message",
+                        svgSrc: "assets/icons/message.svg",
+                        press: () {
+                          Navigator.pushNamed(context, ChatPage.routeName);
+                        },
+                      ),
                     ],
                   ),
                 )

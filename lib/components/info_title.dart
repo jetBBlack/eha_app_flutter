@@ -17,8 +17,8 @@ class InfoTitle extends StatelessWidget {
       children: [
         SvgPicture.asset(
           icon,
-          height: 20,
-          width: 20,
+          height: 22,
+          width: 22,
           color: Colors.cyan,
         ),
         SizedBox(

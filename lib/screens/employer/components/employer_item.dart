@@ -1,40 +1,14 @@
-import 'package:eha_app/models/helper.dart';
-import 'package:eha_app/screens/user_details/helper_detail_screen.dart';
+import 'package:eha_app/models/employer.dart';
+import 'package:eha_app/screens/user_details/employer_detail_screen.dart';
 import 'package:eha_app/util/app_url.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:intl/intl.dart';
 
 import '../../../size_config.dart';
 
-class HelperItem extends StatefulWidget {
-  final HelperModel helper;
-  const HelperItem({Key key, this.helper}) : super(key: key);
-
-  @override
-  _HelperItemState createState() => _HelperItemState();
-}
-
-class _HelperItemState extends State<HelperItem> {
-  String computeAge(String dayOfBirth) {
-    String datePattern = "yyyy-MM-dd";
-
-    DateTime birthDate = DateFormat(datePattern).parse(dayOfBirth);
-    DateTime today = DateTime.now();
-
-    int ageDiff = today.year - birthDate.year;
-    return ageDiff.toString();
-  }
-
-  String mergeSkill(List skills) {
-    String result;
-    if (skills.length >= 2) {
-      result = skills[0].id + ", " + skills[1].id + "...";
-    } else {
-      result = skills[0].id + "...";
-    }
-    return result;
-  }
+class EmployerItem extends StatelessWidget {
+  final Employer employer;
+  const EmployerItem({Key key, @required this.employer}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,12 +17,12 @@ class _HelperItemState extends State<HelperItem> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => UserDetailScreen(
-                      helper: widget.helper,
+                builder: (BuildContext context) => EmployerDetailScreen(
+                      employer: employer,
                     )));
       },
       child: Container(
-        padding: EdgeInsets.fromLTRB(20, 15, 20, 15),
+        padding: EdgeInsets.fromLTRB(18, 15, 18, 15),
         margin: EdgeInsets.symmetric(vertical: 4),
         decoration: BoxDecoration(
             color: Colors.white,
@@ -62,8 +36,8 @@ class _HelperItemState extends State<HelperItem> {
                   width: 80,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: NetworkImage(AppUrl.getImage +
-                            widget.helper.photo.first.fileName),
+                        image: NetworkImage(
+                            AppUrl.getImage + employer.photo.first.fileName),
                         fit: BoxFit.cover),
                     borderRadius: BorderRadius.all(
                       Radius.circular(15),
@@ -72,34 +46,24 @@ class _HelperItemState extends State<HelperItem> {
                 ),
                 Expanded(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        RichText(
-                          text: TextSpan(
-                              text: widget.helper.personalInfo.name,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                              children: <TextSpan>[
-                                TextSpan(
-                                    text: " (" +
-                                        computeAge(widget.helper.dob) +
-                                        " year olds" +
-                                        ")",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold)),
-                              ]),
-                        ),
-                        Text('Domestic-helper',
-                            style: TextStyle(
-                              fontSize: 14,
+                        Text(
+                          employer.personalInfo.name,
+                          style: TextStyle(
+                              fontSize: 19,
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey,
-                            ))
+                              color: Colors.black),
+                        ),
+                        Text(
+                          "Religion: " + employer.personalInfo.religion,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black),
+                        ),
                       ],
                     ),
                   ),
@@ -134,11 +98,9 @@ class _HelperItemState extends State<HelperItem> {
                           color: Colors.green.shade600,
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      SizedBox(width: 10),
                       Text(
-                        widget.helper.personalInfo.nationality,
+                        employer.personalInfo.nationality,
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16,
@@ -147,19 +109,18 @@ class _HelperItemState extends State<HelperItem> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  width: 15,
-                ),
                 Expanded(
                   child: Container(
                     child: Center(
                       child: Text(
-                        mergeSkill(widget.helper.skills),
-                        style: TextStyle(fontSize: 14),
+                        "Offer Salary: " +
+                            r"$" +
+                            employer.expectation.offerSalary.toString(),
+                        style: TextStyle(fontSize: 16),
                       ),
                     ),
                   ),
-                ),
+                )
               ],
             )
           ],
