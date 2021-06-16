@@ -52,21 +52,21 @@ class HelperMomService {
     }
   }
 
-  Future updateHelperMom(String id, HelperMomModel helperMom) async {
+  Future updateHelperMom(HelperMomModel helperMom) async {
     var result;
-    final Map<String, dynamic> helperMomData = {
-      "mom": helperMom.mom,
-      "malaysia": helperMom.malaysia,
-      "spouse": helperMom.spouse,
-      "photo": helperMom.photo,
-      "signature": helperMom.signature,
-      "code": helperMom.code,
-      "id": id,
-    };
+    // final Map<String, dynamic> helperMomData = {
+    //   "mom": helperMom.mom,
+    //   "malaysia": helperMom.malaysia,
+    //   "spouse": helperMom.spouse,
+    //   "photo": helperMom.photo,
+    //   "signature": helperMom.signature,
+    //   "code": helperMom.code,
+    //   "id": id,
+    // };
 
     var response = await http.post(
       Uri.parse(AppUrl.updateHelper),
-      body: json.encode(helperMomData),
+      body: json.encode(helperMom.toJson()),
       headers: {'Content-Type': 'application/json'},
     );
 

@@ -73,7 +73,6 @@ class _BuildPicturesState extends State<BuildPictures>
   }
 
   int order = 1;
-  List<String> imgPath = <String>[];
   Future uploadMultipleImage() async {
     HelperProvider imgProvider =
         Provider.of<HelperProvider>(context, listen: false);
@@ -106,7 +105,7 @@ class _BuildPicturesState extends State<BuildPictures>
             mimeType: responseItem['mimeType'],
             order: order,
           ));
-          imgPath.add(responseItem['fileName'].toString());
+
           order++;
         }
       }
@@ -138,21 +137,20 @@ class _BuildPicturesState extends State<BuildPictures>
             mimeType: responseItem['mimeType'],
             order: order,
           ));
-          imgPath.add(responseItem['fileName'].toString());
         }
       }
     }
   }
 
-  void removeImage(String value) {
-    HelperProvider imgProvider =
-        Provider.of<HelperProvider>(context, listen: false);
-    imgProvider.removePhotoData(imgPath.indexOf(value));
-    setState(() {
-      imgPath.remove(value);
-      _isUploading = false;
-    });
-  }
+  // void removeImage(String value) {
+  //   HelperProvider imgProvider =
+  //       Provider.of<HelperProvider>(context, listen: false);
+  //   imgProvider.removePhotoData(imgPath.indexOf(value));
+  //   setState(() {
+  //     imgPath.remove(value);
+  //     _isUploading = false;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -309,7 +307,9 @@ class _BuildPicturesState extends State<BuildPictures>
                         width: 22,
                       ),
                       color: Colors.red,
-                      onPressed: () {},
+                      onPressed: () {
+                        provider.removePhotoData(index);
+                      },
                     ),
                   ),
                 )

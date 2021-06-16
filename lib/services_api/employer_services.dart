@@ -78,7 +78,7 @@ class EmployerService {
     }
   }
 
-  Future<Employer> getHelperbyId(String id) async {
+  Future<Employer> getEmployerbyId(String id) async {
     final Map<String, dynamic> idData = {
       'id': id,
     };

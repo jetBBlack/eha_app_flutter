@@ -274,9 +274,11 @@ class BuildWorkHistoy extends StatelessWidget {
           ListView.builder(
               padding: EdgeInsets.zero,
               shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
               itemCount: employmentHistory.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
+                  margin: EdgeInsets.only(bottom: 12),
                   width: double.infinity,
                   decoration: BoxDecoration(
                       color: Colors.grey[100],

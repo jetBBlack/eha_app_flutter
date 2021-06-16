@@ -3,8 +3,10 @@ import 'package:eha_app/services_api/helper_mom_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HelperMomProvider extends ChangeNotifier {
+  HelperMomService get _service => GetIt.I<HelperMomService>();
   final GlobalKey<FormState> globalHelperMomFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> globalHelperMomFormKey1 = GlobalKey<FormState>();
   final GlobalKey<FormState> globalHelperMomFormKey2 = GlobalKey<FormState>();
@@ -14,6 +16,18 @@ class HelperMomProvider extends ChangeNotifier {
   Spouse spouse = new Spouse();
   Malaysia malaysia = new Malaysia();
   List<Photo> photoList = <Photo>[];
+
+  void initHelperMom() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String helperMomId = prefs.getString('helperMom-id');
+    if (helperMomId != null) {
+      helperMom = await _service.getHelperMom(helperMomId);
+      mom = helperMom.mom;
+      spouse = helperMom.spouse;
+      malaysia = helperMom.malaysia;
+      photoList = helperMom.photo;
+    }
+  }
 
   String get name => mom.name;
   setname(String name) {
@@ -151,18 +165,17 @@ class HelperMomProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  HelperMomService get service => GetIt.I<HelperMomService>();
-
   Future createHelperWithData(BuildContext context) async {
     helperMom.mom = mom;
     helperMom.spouse = spouse;
     helperMom.malaysia = malaysia;
     helperMom.photo = photoList;
-    //SharedPreferences prefs = await SharedPreferences.getInstance();
     final Map<String, dynamic> successfulMessage =
-        await service.createHelper(helperMom);
+        await _service.createHelper(helperMom);
     print(successfulMessage['id']);
     if (successfulMessage['status']) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('helperMom-id', successfulMessage['id'].toString());
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
         'Helper-MOM Created',
@@ -172,7 +185,24 @@ class HelperMomProvider extends ChangeNotifier {
       notifyListeners();
       throw Exception('Failed to create Helper');
     }
-    print(successfulMessage['status']);
+    notifyListeners();
+  }
+
+  Future<void> updateHelperWithData(BuildContext context) async {
+    final bool successful = await _service.updateHelperMom(helperMom);
+    if (successful) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: 8),
+          content: Text(
+            'Your changes have been saved',
+            style: TextStyle(color: Colors.cyan, fontSize: 16),
+          ),
+        ),
+      );
+    } else {
+      throw Exception('Failed to update Helper Mom');
+    }
     notifyListeners();
   }
 }

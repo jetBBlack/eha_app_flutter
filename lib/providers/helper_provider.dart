@@ -8,18 +8,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HelperProvider extends ChangeNotifier {
   HelperService get _service => GetIt.I<HelperService>();
   HelperModel newHelper;
-  List<YesNoQuestions> yesNoQuestions;
-  List<Skills> skillList;
-  List<EmploymentHistories> employmentHistories;
+  List<YesNoQuestions> yesNoQuestions = <YesNoQuestions>[];
+  List<Skills> skillList = <Skills>[];
+  List<EmploymentHistories> employmentHistories = <EmploymentHistories>[];
   List<Medicals> medicalInfo = <Medicals>[];
-  List<Photo> photoList;
-  PersonalInfo personalInfo;
-  OtherInfo otherInfo;
+  List<Photo> photoList = <Photo>[];
+  PersonalInfo personalInfo = new PersonalInfo();
+  OtherInfo otherInfo = new OtherInfo();
 
   Future<void> initHelper() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String helperId = prefs.getString('helper-id');
-
     print(helperId);
     if (helperId != null) {
       newHelper = await _service.getHelperbyId(helperId);
@@ -30,6 +29,9 @@ class HelperProvider extends ChangeNotifier {
       employmentHistories = newHelper.employmentHistories;
       medicalInfo = newHelper.medicals;
       photoList = newHelper.photo;
+      for (var item in medicalInfo) {
+        print(item.id);
+      }
     } else {
       newHelper = new HelperModel(searchable: "true");
     }
@@ -191,7 +193,7 @@ class HelperProvider extends ChangeNotifier {
     for (int i = 0; i < items.length - 1; i++) {
       for (int j = i + 1; j < items.length; j++) {
         if (items[i].id == items[j].id && items[i].value == items[j].value) {
-          skillList.remove(skillList[i]);
+          items.remove(items[i]);
           break;
         }
       }
@@ -216,6 +218,7 @@ class HelperProvider extends ChangeNotifier {
     newHelper.skills = skillList;
     newHelper.otherInfo = otherInfo;
     newHelper.photo = photoList;
+
     final Map<String, dynamic> successfulMessage =
         await _service.createHelper(newHelper);
     if (successfulMessage['status']) {
@@ -223,9 +226,10 @@ class HelperProvider extends ChangeNotifier {
       prefs.setString('helper-id', successfulMessage['id'].toString());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          duration: Duration(seconds: 10),
+          duration: Duration(seconds: 8),
           content: Text(
             'Helper Created',
+            textAlign: TextAlign.center,
             style: TextStyle(color: Colors.cyan, fontSize: 16),
           ),
         ),
@@ -236,5 +240,21 @@ class HelperProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateHelperWithData() {}
+  Future<void> updateHelperWithData(BuildContext context) async {
+    final bool successful = await _service.updateHelper(newHelper);
+    if (successful) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: 8),
+          content: Text(
+            'Your changes have been saved',
+            style: TextStyle(color: Colors.cyan, fontSize: 16),
+          ),
+        ),
+      );
+    } else {
+      throw Exception('Failed to update Helper');
+    }
+    notifyListeners();
+  }
 }

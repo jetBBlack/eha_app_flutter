@@ -25,7 +25,6 @@ class _BuildPicturesPageState extends State<BuildPicturesPage>
   String error = 'No Error Dectected';
   bool _isUploading = false;
   bool _useCamera = false;
-  int counter = 0;
   Future<void> getImageFromGallery() async {
     _assets.clear();
     List<Asset> resultList = <Asset>[];
@@ -278,7 +277,6 @@ class _BuildPicturesPageState extends State<BuildPicturesPage>
   }
 
   Widget buildGridView(BuildContext context) {
-    counter++;
     return Consumer<HelperMomProvider>(
       builder: (context, provider, child) {
         return GridView.count(
@@ -312,7 +310,7 @@ class _BuildPicturesPageState extends State<BuildPicturesPage>
                         ),
                         color: Colors.red,
                         onPressed: () {
-                          provider.removePhotoData(counter);
+                          provider.removePhotoData(index);
                         },
                       ),
                     ),

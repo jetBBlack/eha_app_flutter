@@ -17,14 +17,6 @@ class BuildPersonalInfoPage extends StatefulWidget {
 
 class _BuildPersonalInfoPageState extends State<BuildPersonalInfoPage>
     with AutomaticKeepAliveClientMixin {
-  // @override
-  // // void initState() {
-  // //   final HelperProvider initProvider =
-  // //       Provider.of<HelperProvider>(context, listen: false);
-  // //   super.initState();
-  // //   initProvider.initHelper();
-  // // }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -179,7 +171,7 @@ class _BuildGeneralInfoState extends State<BuildGeneralInfo> {
     super.initState();
     _name = TextEditingController(text: myProvider.name);
     _gender = TextEditingController(text: myProvider.gender);
-    _dateCtl = TextEditingController(text: myProvider.dayOfBirth.split('T')[0]);
+    _dateCtl = TextEditingController(text: myProvider.dayOfBirth);
     _maritalStatus = TextEditingController(text: myProvider.maritalStatus);
     _nationality = TextEditingController(text: myProvider.nationality);
     _birthCountry = TextEditingController(text: myProvider.birthCountry);
@@ -441,162 +433,62 @@ class BuildYesNoForm extends StatefulWidget {
 }
 
 class _BuildYesNoFormState extends State<BuildYesNoForm> {
-  bool _canEatBeef = false;
-  bool _canEatPork = false;
-  bool _canHandlePork = false;
-  bool _canWashClothesbyHand = false;
-  bool _canCall = false;
-  bool _canNotCall = false;
-  bool _afraidDog = false;
-  bool _canWakeUpEarly = false;
+  List<String> questions = [
+    "Can eat beef",
+    "Can eat pork",
+    "Can handle pork",
+    "Can wash clothes by hand",
+    "Can you ensure that you will only emergency call or your employer call during your working hour",
+    "Can you let your employer to keep your phone during your working hour",
+    "Not afraid of dogs",
+    "Prepare to wake up as early as 5am",
+  ];
+  List<bool> questionValue = [];
+  @override
+  void initState() {
+    for (int i = 0; i < questions.length; i++) {
+      questionValue.add(false);
+    }
+    final yesNoQProvider = Provider.of<HelperProvider>(context, listen: false);
+    super.initState();
+    if (yesNoQProvider.yesNoQuestions != null) {
+      for (int i = 0; i < yesNoQProvider.yesNoQuestions.length; i++) {
+        for (int j = 0; j < questions.length; j++) {
+          if (yesNoQProvider.yesNoQuestions[i].id == questions[j]) {
+            questionValue[j] =
+                yesNoQProvider.yesNoQuestions[i].value.toLowerCase() == 'yes';
+          }
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final yesNoProvider = Provider.of<HelperProvider>(context, listen: false);
-    return Column(
-      children: [
-        SwitchListTile(
-          title: Text("Can eat beef"),
-          value: _canEatBeef,
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
+      itemCount: questions.length,
+      separatorBuilder: (BuildContext context, int index) => Divider(),
+      itemBuilder: (context, index) {
+        return SwitchListTile(
+          title: Text(questions[index]),
+          value: questionValue[index],
           onChanged: (value) {
             if (value == true) {
               yesNoProvider.setYesNoData(
-                  YesNoQuestions(id: 'Can eat beef', value: 'yes'));
+                  YesNoQuestions(id: questions[index], value: 'yes'));
             } else {
               yesNoProvider.removeYesNoData(
-                  YesNoQuestions(id: 'Can eat beef', value: 'yes'));
+                  YesNoQuestions(id: questions[index], value: 'yes'));
             }
             setState(() {
-              _canEatBeef = value;
+              questionValue[index] = value;
             });
           },
-        ),
-        Divider(),
-        SwitchListTile(
-          title: Text("Can eat pork"),
-          value: _canEatPork,
-          onChanged: (value) {
-            if (value == true) {
-              yesNoProvider.setYesNoData(
-                  YesNoQuestions(id: 'Can eat pork', value: 'yes'));
-            } else {
-              yesNoProvider.removeYesNoData(
-                  YesNoQuestions(id: 'Can eat pork', value: 'yes'));
-            }
-            setState(() {
-              _canEatPork = value;
-            });
-          },
-        ),
-        Divider(),
-        SwitchListTile(
-          title: Text("Can handle pork"),
-          value: _canHandlePork,
-          onChanged: (value) {
-            if (value == true) {
-              yesNoProvider.setYesNoData(
-                  YesNoQuestions(id: 'Can handle pork', value: 'yes'));
-            } else {
-              yesNoProvider.removeYesNoData(
-                  YesNoQuestions(id: 'Can handle pork', value: 'yes'));
-            }
-            setState(() {
-              _canHandlePork = value;
-            });
-          },
-        ),
-        Divider(),
-        SwitchListTile(
-          title: Text("Can wash clothes by hand"),
-          value: _canWashClothesbyHand,
-          onChanged: (value) {
-            if (value == true) {
-              yesNoProvider.setYesNoData(
-                  YesNoQuestions(id: 'Can wash clothes by hand', value: 'yes'));
-            } else {
-              yesNoProvider.removeYesNoData(
-                  YesNoQuestions(id: 'Can wash clothes by hand', value: 'yes'));
-            }
-            setState(() {
-              _canWashClothesbyHand = value;
-            });
-          },
-        ),
-        Divider(),
-        SwitchListTile(
-          title: Text(
-              "Can you ensure that you will only emergency call or your employer call during your working hour"),
-          value: _canCall,
-          onChanged: (value) {
-            if (value == true) {
-              yesNoProvider.setYesNoData(YesNoQuestions(
-                  id: 'Can you ensure that you will only emergency call or your employer call during your working hour',
-                  value: 'yes'));
-            } else {
-              yesNoProvider.removeYesNoData(YesNoQuestions(
-                  id: 'Can you ensure that you will only emergency call or your employer call during your working hour',
-                  value: 'yes'));
-            }
-            setState(() {
-              _canCall = value;
-            });
-          },
-        ),
-        Divider(),
-        SwitchListTile(
-          title: Text(
-              "Can you let your employer to keep your phone during your working hour"),
-          value: _canNotCall,
-          onChanged: (value) {
-            if (value == true) {
-              yesNoProvider.setYesNoData(YesNoQuestions(
-                  id: 'Can you let your employer to keep your phone during your working hour',
-                  value: 'yes'));
-            } else {
-              yesNoProvider.removeYesNoData(YesNoQuestions(
-                  id: 'Can you let your employer to keep your phone during your working hour',
-                  value: 'yes'));
-            }
-            setState(() {
-              _canNotCall = value;
-            });
-          },
-        ),
-        Divider(),
-        SwitchListTile(
-          title: Text("Not afraid of dogs"),
-          value: _afraidDog,
-          onChanged: (value) {
-            if (value == true) {
-              yesNoProvider.setYesNoData(
-                  YesNoQuestions(id: 'Not afraid of dogs', value: 'yes'));
-            } else {
-              yesNoProvider.removeYesNoData(
-                  YesNoQuestions(id: 'Not afraid of dogs', value: 'yes'));
-            }
-            setState(() {
-              _afraidDog = value;
-            });
-          },
-        ),
-        Divider(),
-        SwitchListTile(
-          title: Text("Prepare to wake up as early as 5am"),
-          value: _canWakeUpEarly,
-          onChanged: (value) {
-            setState(() {
-              _canWakeUpEarly = value;
-            });
-            if (value == true) {
-              yesNoProvider.setYesNoData(YesNoQuestions(
-                  id: 'Prepare to wake up as early as 5am', value: 'yes'));
-            } else {
-              yesNoProvider.removeYesNoData(YesNoQuestions(
-                  id: 'Prepare to wake up as early as 5am', value: 'yes'));
-            }
-          },
-        ),
-      ],
+        );
+      },
     );
   }
 }
@@ -627,14 +519,21 @@ class _BuildSkillLevelState extends State<BuildSkillLevel> {
     "Take care of infants (4-24 months)",
     "Take care of new-born baby",
   ];
-  List<String> selectedLevel = [];
-
+  var skillValue;
   @override
   void initState() {
-    for (int i = 0; i < skills.length; i++) {
-      selectedLevel.add(skillLevel.first);
-    }
+    skillValue = List.filled(skills.length, 'null');
+    final getSkillLevel = Provider.of<HelperProvider>(context, listen: false);
     super.initState();
+    if (getSkillLevel.skillList != null) {
+      for (int i = 0; i < getSkillLevel.skillList.length; i++) {
+        for (int j = 0; j < skills.length; j++) {
+          if (getSkillLevel.skillList[i].id == skills[j]) {
+            skillValue[j] = getSkillLevel.skillList[i].value;
+          }
+        }
+      }
+    }
   }
 
   @override
@@ -653,15 +552,16 @@ class _BuildSkillLevelState extends State<BuildSkillLevel> {
               child: Text(
                 skills[index],
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 19,
                     color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
             ),
             RadioButtonGroup(
+              picked: skillValue[index],
               labels: skillLevel,
               labelStyle: TextStyle(
-                fontSize: 16,
+                fontSize: 15,
               ),
               onChange: (String label, int index) {},
               onSelected: (String label) {
@@ -682,131 +582,60 @@ class BuildMedicalInfo extends StatefulWidget {
 }
 
 class _BuildMedicalInfoState extends State<BuildMedicalInfo> {
-  bool _asthma = false;
-  bool _diabetes = false;
-  bool _malaria = false;
-  bool _epilepsy = false;
-  bool _mentalIllness = false;
-  bool _operation = false;
-  bool _tuberculosis = false;
+  List<String> medicalList = [
+    "Asthmas",
+    "Diabetes",
+    "Malaria",
+    "Epilepsy",
+    "Mental Illness",
+    "Operation",
+    "Tuberculosis",
+  ];
+  List<bool> medicalValue = [];
+  @override
+  void initState() {
+    for (int i = 0; i < medicalList.length; i++) {
+      medicalValue.add(false);
+    }
+    final medicalProvider = Provider.of<HelperProvider>(context, listen: false);
+    super.initState();
+    if (medicalProvider.medicalInfo != null) {
+      for (int i = 0; i < medicalProvider.medicalInfo.length; i++) {
+        for (int j = 0; j < medicalList.length; j++) {
+          if (medicalProvider.medicalInfo[i].id == medicalList[j]) {
+            medicalValue[j] =
+                medicalProvider.medicalInfo[i].value.toLowerCase() == 'yes';
+          }
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final medicalProvider = Provider.of<HelperProvider>(context);
-    return Column(
-      children: [
-        SwitchListTile(
-          title: Text("Asthma"),
-          value: _asthma,
-          onChanged: (value) {
-            if (value == true) {
-              medicalProvider
-                  .setMedicalInfoData(Medicals(id: 'Asthmas', value: 'yes'));
-            } else if (value == false) {
-              medicalProvider.setFalseMedicalInfoData(
-                  Medicals(id: 'Asthmas', value: 'yes'));
-            }
-            setState(() {
-              _asthma = value;
-            });
-          },
-        ),
-        SwitchListTile(
-          title: Text("Diabetes"),
-          value: _diabetes,
-          onChanged: (value) {
-            if (value == true) {
-              medicalProvider
-                  .setMedicalInfoData(Medicals(id: 'Diabetes', value: 'yes'));
-            } else {
-              medicalProvider.setFalseMedicalInfoData(
-                  Medicals(id: 'Diabetes', value: 'yes'));
-            }
-            setState(() {
-              _diabetes = value;
-            });
-          },
-        ),
-        SwitchListTile(
-          title: Text("Epilepsy"),
-          value: _epilepsy,
-          onChanged: (value) {
-            if (value == true) {
-              medicalProvider
-                  .setMedicalInfoData(Medicals(id: 'Epilepsy', value: 'yes'));
-            } else {
-              medicalProvider.setFalseMedicalInfoData(
-                  Medicals(id: 'Epilepsy', value: 'yes'));
-            }
-            setState(() {
-              _epilepsy = value;
-            });
-          },
-        ),
-        SwitchListTile(
-          title: Text("Malaria"),
-          value: _malaria,
-          onChanged: (value) {
-            if (value == true) {
-              medicalProvider
-                  .setMedicalInfoData(Medicals(id: 'Malaria', value: 'yes'));
-            } else {
-              medicalProvider.setFalseMedicalInfoData(
-                  Medicals(id: 'Malaria', value: 'yes'));
-            }
-            setState(() {
-              _malaria = value;
-            });
-          },
-        ),
-        SwitchListTile(
-          title: Text("Mental Illness"),
-          value: _mentalIllness,
-          onChanged: (value) {
-            if (value == true) {
-              medicalProvider.setMedicalInfoData(
-                  Medicals(id: 'Mental Illness', value: 'yes'));
-            } else {
-              medicalProvider.setFalseMedicalInfoData(
-                  Medicals(id: 'Mental Illness', value: 'yes'));
-            }
-            setState(() {
-              _mentalIllness = value;
-            });
-          },
-        ),
-        SwitchListTile(
-          title: Text("Operation"),
-          value: _operation,
-          onChanged: (value) {
-            if (value == true) {
-              medicalProvider
-                  .setMedicalInfoData(Medicals(id: 'Operation', value: 'yes'));
-            } else {
-              medicalProvider.setFalseMedicalInfoData(
-                  Medicals(id: 'Operation', value: 'yes'));
-            }
-            setState(() {
-              _operation = value;
-            });
-          },
-        ),
-        SwitchListTile(
-          title: Text("Tuberculosis"),
-          value: _tuberculosis,
-          onChanged: (value) {
-            if (value == true) {
-              medicalProvider.setMedicalInfoData(
-                  Medicals(id: 'Tuberculosis', value: 'yes'));
-            } else {
-              medicalProvider.setFalseMedicalInfoData(
-                  Medicals(id: 'Tuberculosis', value: 'yes'));
-            }
-            setState(() {
-              _tuberculosis = value;
-            });
-          },
-        ),
-      ],
-    );
+    return ListView.separated(
+        shrinkWrap: true,
+        physics: BouncingScrollPhysics(),
+        itemBuilder: (BuildContext context, int index) {
+          return SwitchListTile(
+            title: Text(medicalList[index]),
+            value: medicalValue[index],
+            onChanged: (value) {
+              if (value == true) {
+                medicalProvider.setMedicalInfoData(
+                    Medicals(id: medicalList[index], value: 'yes'));
+              } else if (value == false) {
+                medicalProvider.setFalseMedicalInfoData(
+                    Medicals(id: medicalList[index], value: 'yes'));
+              }
+              setState(() {
+                medicalValue[index] = value;
+              });
+            },
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) => Divider(),
+        itemCount: medicalList.length);
   }
 }

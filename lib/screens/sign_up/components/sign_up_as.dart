@@ -95,9 +95,9 @@ class _SignUpAsScreenState extends State<SignUpAsScreen> {
               text: "Continue",
               press: () async {
                 if (_checkedE == true) {
-                  UserTypePreferences().saveType('employer');
+                  await UserTypePreferences().saveType('employer');
                 } else {
-                  UserTypePreferences().saveType('helper');
+                  await UserTypePreferences().saveType('helper');
                 }
                 Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => PhoneSignUpScreen()),

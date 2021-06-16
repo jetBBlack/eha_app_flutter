@@ -3,6 +3,7 @@ import 'package:eha_app/services_api/employer_services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EmployerProvider extends ChangeNotifier {
   EmployerService get _service => GetIt.I<EmployerService>();
@@ -19,6 +20,20 @@ class EmployerProvider extends ChangeNotifier {
   final GlobalKey<FormState> personalFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> houseFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> expectationKey = GlobalKey<FormState>();
+
+  void initEmployer() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String id = prefs.getString('employer-id');
+    if (id != null) {
+      newEmployer = await _service.getEmployerbyId(id);
+      personalInfo = newEmployer.personalInfo;
+      ethnicGroup = personalInfo.ethnicGroup;
+      familyMember = newEmployer.familyMember;
+      houseInfo = newEmployer.houseInfo;
+      photosList = newEmployer.photo;
+      expectation = newEmployer.expectation;
+    }
+  }
 
   //Personal Infomation
   String get name => personalInfo.name;
@@ -233,8 +248,8 @@ class EmployerProvider extends ChangeNotifier {
         final Map<String, dynamic> successfulMessage =
             await _service.createEmployer(newEmployer);
         if (successfulMessage['status']) {
-          // SharedPreferences prefs = await SharedPreferences.getInstance();
-          // prefs.setString('helper-id', successfulMessage['id'].toString());
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.setString('employer-id', successfulMessage['id'].toString());
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               duration: Duration(seconds: 8),
@@ -249,6 +264,23 @@ class EmployerProvider extends ChangeNotifier {
         }
         notifyListeners();
       }
+    }
+  }
+
+  Future<void> updateEmployerWithData(BuildContext context) async {
+    final bool succesful = await _service.updateEmployer(newEmployer);
+    if (succesful) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: Duration(seconds: 8),
+          content: Text(
+            'Your changes have been saved',
+            style: TextStyle(color: Colors.cyan, fontSize: 16),
+          ),
+        ),
+      );
+    } else {
+      throw Exception('Faild to update Info');
     }
   }
 }

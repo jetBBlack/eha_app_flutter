@@ -2,7 +2,7 @@ import 'package:eha_app/providers/employer_provider.dart';
 import 'package:eha_app/screens/fill_employer_data/fill_info/components/build_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'components/build_expectation.dart';
 import 'components/build_photos.dart';
 import 'components/build_setting.dart';
@@ -14,6 +14,18 @@ class FillEmployerInfoScreen extends StatefulWidget {
 }
 
 class _FillEmployerInfoScreenState extends State<FillEmployerInfoScreen> {
+  String id;
+  @override
+  void initState() {
+    super.initState();
+    getId();
+  }
+
+  void getId() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.getString('employer-id');
+  }
+
   @override
   Widget build(BuildContext context) {
     final myProvider = Provider.of<EmployerProvider>(context, listen: false);
@@ -25,9 +37,15 @@ class _FillEmployerInfoScreenState extends State<FillEmployerInfoScreen> {
           actions: [
             TextButton(
               onPressed: () async {
-                await myProvider
-                    .createEmployerWithData(context)
-                    .then((value) => Navigator.pop(context));
+                if (id == null) {
+                  await myProvider
+                      .createEmployerWithData(context)
+                      .then((value) => Navigator.pop(context));
+                } else {
+                  await myProvider
+                      .updateEmployerWithData(context)
+                      .then((value) => Navigator.pop(context));
+                }
               },
               child: Text(
                 'Save',

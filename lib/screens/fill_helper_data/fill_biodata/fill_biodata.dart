@@ -1,6 +1,7 @@
 import 'package:eha_app/providers/helper_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'components/build_info.dart';
 import 'components/build_other_info.dart';
 import 'components/build_pic.dart';
@@ -17,18 +18,18 @@ class FillBioDataScreen extends StatefulWidget {
 
 class _FillBioDataScreenState extends State<FillBioDataScreen> {
   PageController pageController = PageController(initialPage: 0);
-  // var initProvider;
+  String helperId;
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   initProvider = Provider.of<HelperProvider>(context, listen: false);
-  //   initMethod();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    getHelperId();
+  }
 
-  // void initMethod() async {
-  //   await initProvider.initHelper();
-  // }
+  void getHelperId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    helperId = prefs.getString('helper-id');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +43,15 @@ class _FillBioDataScreenState extends State<FillBioDataScreen> {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                await provider.createHelperWithData(context);
-                Navigator.pop(context);
+                if (helperId == null) {
+                  await provider
+                      .createHelperWithData(context)
+                      .then((value) => Navigator.pop(context));
+                } else {
+                  await provider
+                      .updateHelperWithData(context)
+                      .then((value) => Navigator.pop(context));
+                }
               },
               child: Text(
                 'Create',
