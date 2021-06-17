@@ -9,6 +9,7 @@ import 'package:eha_app/screens/fill_helper_data/fill_mom_data/fill_mom_data.dar
 import 'package:eha_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:eha_app/screens/helper/helper_screen.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
+import 'package:eha_app/screens/services/subscription_screen.dart';
 import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
 import 'package:eha_app/screens/sign_up/ask_screen.dart';
 import 'package:eha_app/screens/sign_up/phone_sign_up_screen.dart';
@@ -33,4 +34,5 @@ final Map<String, WidgetBuilder> routes = {
   HelperScreen.routeName: (context) => HelperScreen(),
   AgencyScreen.routeName: (context) => AgencyScreen(),
   ChatPage.routeName: (context) => ChatPage(),
+  SubscriptionScreen.routeName: (context) => SubscriptionScreen(),
 };

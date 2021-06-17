@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 ThemeData theme() {
   return ThemeData(
+    bottomSheetTheme: BottomSheetThemeData(backgroundColor: Colors.white),
     scaffoldBackgroundColor: Colors.white,
     fontFamily: "Muli",
     appBarTheme: appBarTheme(),

@@ -3,6 +3,7 @@ import 'package:eha_app/services_api/employer_mom_services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EmployerMomProvider extends ChangeNotifier {
   EmployerMomService get _service => GetIt.I<EmployerMomService>();
@@ -232,8 +233,8 @@ class EmployerMomProvider extends ChangeNotifier {
       final Map<String, dynamic> successfulMessage =
           await _service.createEmployerMom(newEmployerMom);
       if (successfulMessage['status']) {
-        // SharedPreferences prefs = await SharedPreferences.getInstance();
-        // prefs.setString('helper-id', successfulMessage['id'].toString());
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('employerMom-id', successfulMessage['id'].toString());
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             padding: EdgeInsets.symmetric(horizontal: 20),
@@ -248,6 +249,24 @@ class EmployerMomProvider extends ChangeNotifier {
         throw Exception('Failed to create Helper');
       }
       notifyListeners();
+    }
+  }
+
+  Future<void> updateEmployer(BuildContext context) async {
+    final bool succesful = await _service.updateEmployerMom(newEmployerMom);
+    if (succesful) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          duration: Duration(seconds: 7),
+          content: Text(
+            'Your changes have been saved',
+            style: TextStyle(color: Colors.cyan, fontSize: 16),
+          ),
+        ),
+      );
+    } else {
+      throw Exception('Faild to update Info');
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:eha_app/providers/social_auth.dart';
 import 'package:eha_app/screens/account/components/profile_pic.dart';
 import 'package:eha_app/screens/account/favorite_me_screen.dart';
+import 'package:eha_app/screens/services/subscription_screen.dart';
 import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
 import 'package:eha_app/screens/user_details/helper_detail_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,9 @@ class _BodyState extends State<Body> {
         AccountMenu(
           icon: 'assets/icons/subscription.svg',
           text: 'My Subscriptions',
-          press: () {},
+          press: () {
+            Navigator.pushNamed(context, SubscriptionScreen.routeName);
+          },
         ),
         AccountMenu(
           icon: 'assets/icons/heart add.svg',
