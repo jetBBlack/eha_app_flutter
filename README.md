@@ -1,4 +1,4 @@
-# eha_app
+# eha_flutter_app
 
 A new Flutter project.
 
