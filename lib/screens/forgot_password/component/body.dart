@@ -20,7 +20,7 @@ class Body extends StatelessWidget {
             children: [
               SizedBox(height: SizeConfig.screenHeight * 0.04),
               Text(
-                "Forgot Password 123",
+                "Forgot Password",
                 style: TextStyle(
                   fontSize: getProportionateScreenWidth(28),
                   color: Colors.white,
