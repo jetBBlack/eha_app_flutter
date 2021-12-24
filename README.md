@@ -1,4 +1,4 @@
-# eha_flutter_app Lam dep trai
+# eha_flutter_app
 
 A new Flutter project.
 
