@@ -1,5 +1,5 @@
 import 'package:eha_app/models/helper.dart';
-import 'package:eha_app/components/photo_view.dart';
+import 'package:eha_app/screens/services/subscription_screen.dart';
 import 'package:flutter/material.dart';
 import 'components/helper_body.dart';
 
@@ -47,25 +47,15 @@ class UserDetailScreen extends StatelessWidget {
         helperModel: helper,
         child: Body(),
       ),
-      persistentFooterButtons: <Widget>[
-        ElevatedButton(
-            style: raisedButtonStyle,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PhotoView(
-                            photos: helper.photo,
-                          )));
-            },
-            child: Text(
-              'Contact me',
-              style: TextStyle(fontSize: 18),
-            )),
-        SizedBox(
-          width: 15,
-        )
-      ],
+      bottomSheet: ElevatedButton(
+          style: raisedButtonStyle,
+          onPressed: () {
+            Navigator.pushNamed(context, SubscriptionScreen.routeName);
+          },
+          child: Text(
+            'Contact me',
+            style: TextStyle(fontSize: 18),
+          )),
     );
   }
 }

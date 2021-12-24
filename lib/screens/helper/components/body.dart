@@ -1,5 +1,6 @@
 import 'package:eha_app/models/helper.dart';
 import 'package:eha_app/screens/helper/components/helper_item.dart';
+import 'package:eha_app/screens/helper/helper_search.dart';
 import 'package:eha_app/services_api/helper_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,15 +50,19 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: getProportionateScreenWidth(60),
-                    height: getProportionateScreenHeight(60),
-                    padding: EdgeInsets.all(getProportionateScreenWidth(12)),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      shape: BoxShape.circle,
+                  GestureDetector(
+                    onTap: () =>
+                        Navigator.pushNamed(context, HelperSearch.routeName),
+                    child: Container(
+                      width: getProportionateScreenWidth(60),
+                      height: getProportionateScreenHeight(60),
+                      padding: EdgeInsets.all(getProportionateScreenWidth(12)),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        shape: BoxShape.circle,
+                      ),
+                      child: SvgPicture.asset('assets/icons/filter.svg'),
                     ),
-                    child: SvgPicture.asset('assets/icons/filter.svg'),
                   ),
                 ],
               ),
@@ -74,7 +79,7 @@ class _BodyState extends State<Body> {
                       return Center(child: new CircularProgressIndicator());
                     default:
                       if (snapshot.hasError) {
-                        return new Text('Error retrieving data');
+                        return Center(child: new Text('Error retrieving data'));
                       } else {
                         return Padding(
                           padding: EdgeInsets.symmetric(

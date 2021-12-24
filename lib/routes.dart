@@ -8,6 +8,7 @@ import 'package:eha_app/screens/fill_helper_data/fill_biodata/fill_biodata.dart'
 import 'package:eha_app/screens/fill_helper_data/fill_mom_data/fill_mom_data.dart';
 import 'package:eha_app/screens/forgot_password/forgot_password_screen.dart';
 import 'package:eha_app/screens/helper/helper_screen.dart';
+import 'package:eha_app/screens/helper/helper_search.dart';
 import 'package:eha_app/screens/home/home_screen.dart';
 import 'package:eha_app/screens/services/subscription_screen.dart';
 import 'package:eha_app/screens/sign_in/sign_in_screen.dart';
@@ -35,4 +36,5 @@ final Map<String, WidgetBuilder> routes = {
   AgencyScreen.routeName: (context) => AgencyScreen(),
   ChatPage.routeName: (context) => ChatPage(),
   SubscriptionScreen.routeName: (context) => SubscriptionScreen(),
+  HelperSearch.routeName: (context) => HelperSearch(),
 };

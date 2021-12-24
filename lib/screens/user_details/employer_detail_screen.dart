@@ -46,25 +46,21 @@ class EmployerDetailScreen extends StatelessWidget {
       body: EmployerBody(
         employer: employer,
       ),
-      persistentFooterButtons: <Widget>[
-        ElevatedButton(
-            style: raisedButtonStyle,
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PhotoView(
-                            photos: employer.photo,
-                          )));
-            },
-            child: Text(
-              'Contact me',
-              style: TextStyle(fontSize: 18),
-            )),
-        SizedBox(
-          width: 15,
-        )
-      ],
+      bottomSheet: ElevatedButton(
+        style: raisedButtonStyle,
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => PhotoView(
+                        photos: employer.photo,
+                      )));
+        },
+        child: Text(
+          'Contact me',
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
     );
   }
 }

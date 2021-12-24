@@ -1,10 +1,10 @@
+import 'package:eha_app/screens/helper/components/search_body.dart';
 import 'package:eha_app/size_config.dart';
 import 'package:flutter/material.dart';
-import 'components/search_body.dart';
 
-class HelperSearch extends StatelessWidget {
-  static String routeName = "/filters-helper";
-  const HelperSearch({Key key}) : super(key: key);
+class EmployerSearch extends StatelessWidget {
+  static String routeName = "/employer-search";
+  const EmployerSearch({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class HelperSearch extends StatelessWidget {
       ),
       body: SearchBody(),
       bottomSheet: Padding(
-        padding:  EdgeInsets.all(6.0),
+        padding: EdgeInsets.all(6.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -47,7 +47,8 @@ class HelperSearch extends StatelessWidget {
               style: ButtonStyle(
                 minimumSize: MaterialStateProperty.all<Size>(
                     Size(SizeConfig.screenWidth / 2 - 12, 55)),
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blueGrey[300]),
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.blueGrey[300]),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),

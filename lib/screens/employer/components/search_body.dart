@@ -1,5 +1,4 @@
 import 'package:eha_app/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchBody extends StatefulWidget {
@@ -10,23 +9,25 @@ class SearchBody extends StatefulWidget {
 }
 
 class _SearchBodyState extends State<SearchBody> {
-  final List<String> _nationality = [
-    "Filipino",
-    "Burman",
-    "India",
-    "Sri Lanka",
-    "Bangladesh",
-    "Malaysian",
-    "Indonesian",
-    "Chinese-HongKong",
-    "Chinese-Macau",
-    "Chinese-Taiwan",
-    "Thai",
-    "Korean"
+  List<String> _statusList = [
+    "Divorced",
+    "Married",
+    "Separated",
+    "Single",
+    "Widowed"
   ];
-
-  final List<String> _filters = <String>[];
-  var _ageRange = RangeValues(24, 40);
+  List<String> _filtersStatus = [];
+  List<String> _religionList = [
+    "Buddhist",
+    "Christian",
+    "Free Thinker",
+    "Hindu",
+    "Mulism",
+    "Sikh",
+    "Other"
+  ];
+  List<String> _filtersReligion = [];
+  var salaryRange = RangeValues(400, 800);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -72,26 +73,7 @@ class _SearchBodyState extends State<SearchBody> {
                   style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
                 Text(
-                  'AGE',
-                  style: TextStyle(fontSize: 16),
-                ),
-                RangeSlider(
-                  values: _ageRange,
-                  min: 18,
-                  max: 54,
-                  divisions: 18,
-                  labels: RangeLabels('${_ageRange.start}', '${_ageRange.end}'),
-                  onChanged: (RangeValues value) {
-                    setState(() {
-                      _ageRange = value;
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: getProportionateScreenWidth(20),
-                ),
-                Text(
-                  'NATIONALITY',
+                  'MARITAL STATUS',
                   style: TextStyle(fontSize: 16),
                 ),
                 SizedBox(
@@ -99,9 +81,10 @@ class _SearchBodyState extends State<SearchBody> {
                 ),
                 Wrap(
                   spacing: 10,
-                  children: List<Widget>.generate(_nationality.length, (index) {
-                    final name = _nationality[index];
-                    final isSelected = _filters.contains(_nationality[index]);
+                  children: List<Widget>.generate(_statusList.length, (index) {
+                    final name = _statusList[index];
+                    final isSelected =
+                        _filtersStatus.contains(_statusList[index]);
                     return FilterChip(
                         label: Text(name),
                         labelStyle: TextStyle(
@@ -116,14 +99,80 @@ class _SearchBodyState extends State<SearchBody> {
                         onSelected: (bool value) {
                           setState(() {
                             if (value) {
-                              _filters.add(_nationality[index]);
+                              _filtersStatus.add(_statusList[index]);
                             } else {
-                              _filters.remove(_nationality[index]);
+                              _filtersStatus.remove(_statusList[index]);
                             }
                           });
                         });
                   }),
-                )
+                ),
+                SizedBox(
+                  height: getProportionateScreenWidth(20),
+                ),
+                Text(
+                  'RELIGION',
+                  style: TextStyle(fontSize: 16),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Wrap(
+                  spacing: 10,
+                  children:
+                      List<Widget>.generate(_religionList.length, (index) {
+                    final name = _religionList[index];
+                    final isSelected =
+                        _filtersReligion.contains(_religionList[index]);
+                    return FilterChip(
+                        label: Text(name),
+                        labelStyle: TextStyle(
+                          color: isSelected
+                              ? Colors.white
+                              : Theme.of(context).textTheme.bodyText1.color,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        selected: isSelected,
+                        selectedColor: Colors.cyan,
+                        checkmarkColor: Colors.white,
+                        onSelected: (bool value) {
+                          setState(() {
+                            if (value) {
+                              _filtersReligion.add(_religionList[index]);
+                            } else {
+                              _filtersReligion.remove(_religionList[index]);
+                            }
+                          });
+                        });
+                  }),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      'RELIGION',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    Text(
+                      '400  1500' + r"$",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                RangeSlider(
+                    values: salaryRange,
+                    min: 400,
+                    max: 1500,
+                    divisions: 11,
+                    labels: RangeLabels(
+                        "${salaryRange.start}", "${salaryRange.end}"),
+                    onChanged: (RangeValues value) {
+                      setState(() {
+                        salaryRange = value;
+                      });
+                    })
               ],
             ),
           ),
